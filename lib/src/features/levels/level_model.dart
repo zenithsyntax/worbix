@@ -69,6 +69,8 @@ class Level {
     required this.gridSize,
     required this.questions,
   });
+  
+  int get unlockCost => (id - 1) * 50;
 
   factory Level.fromJson(Map<String, dynamic> json) {
     return Level(

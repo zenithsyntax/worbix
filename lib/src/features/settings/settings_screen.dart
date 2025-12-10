@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../store/user_progress_provider.dart';
+import '../gameplay/widgets/instructions_dialog.dart';
 
-class SettingsScreen extends StatefulWidget {
+class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
 
   @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
+  ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
-  bool _audioEnabled = true;
+class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
@@ -33,16 +35,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: ListView(
                 children: [
                     _SettingsTile(
-                        icon: _audioEnabled ? Icons.volume_up : Icons.volume_off,
+                        icon: ref.watch(userProgressProvider).soundEnabled ? Icons.volume_up : Icons.volume_off,
                         title: "Sound Effects",
                         trailing: Switch(
-                            value: _audioEnabled,
+                            value: ref.watch(userProgressProvider).soundEnabled,
                             activeColor: theme.colorScheme.primary,
                             onChanged: (val) {
-                                setState(() => _audioEnabled = val);
-                                // TODO: Persist preference
+                                ref.read(userProgressProvider.notifier).setSoundEnabled(val);
                             }
                         ),
+                    ),
+                    const SizedBox(height: 16),
+                    _SettingsTile(
+                        icon: Icons.help_outline,
+                        title: "Show Instructions Again",
+                        onTap: () {
+                            showDialog(context: context, builder: (_) => const InstructionsDialog());
+                        },
                     ),
                     const SizedBox(height: 16),
                     _SettingsTile(

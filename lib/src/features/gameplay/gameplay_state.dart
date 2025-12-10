@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import '../levels/level_model.dart';
 
-enum GameStatus { loading, playing, won, lost, paused }
+enum GameStatus { loading, playing, questionCompleted, won, lost, paused }
 
 class GameplayState {
   final Level? level;
@@ -14,6 +14,9 @@ class GameplayState {
   final List<int> selectedIndices; // Flat indices 0-35
   final List<List<String>> currentGrid; // 6x6 
 
+  final int currentQuestionDuration; // Seconds spent on current question
+  final int coinsEarnedLastQuestion;
+
   const GameplayState({
     this.level,
     this.status = GameStatus.loading,
@@ -22,6 +25,8 @@ class GameplayState {
     this.currentCoins = 0,
     this.selectedIndices = const [],
     this.currentGrid = const [],
+    this.currentQuestionDuration = 0,
+    this.coinsEarnedLastQuestion = 0,
   });
   
   GameplayState copyWith({
@@ -32,6 +37,8 @@ class GameplayState {
     int? currentCoins,
     List<int>? selectedIndices,
     List<List<String>>? currentGrid,
+    int? currentQuestionDuration,
+    int? coinsEarnedLastQuestion,
   }) {
     return GameplayState(
       level: level ?? this.level,
@@ -41,6 +48,8 @@ class GameplayState {
       currentCoins: currentCoins ?? this.currentCoins,
       selectedIndices: selectedIndices ?? this.selectedIndices,
       currentGrid: currentGrid ?? this.currentGrid,
+      currentQuestionDuration: currentQuestionDuration ?? this.currentQuestionDuration,
+      coinsEarnedLastQuestion: coinsEarnedLastQuestion ?? this.coinsEarnedLastQuestion,
     );
   }
 }

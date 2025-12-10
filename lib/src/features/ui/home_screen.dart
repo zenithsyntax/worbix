@@ -5,6 +5,7 @@ import '../levels/level_repository.dart';
 import '../store/user_progress_provider.dart';
 import '../gameplay/gameplay_screen.dart';
 import '../settings/settings_screen.dart';
+import '../ads/ad_service.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -31,7 +32,7 @@ class HomeScreen extends ConsumerWidget {
                     children: [
                         const Icon(Icons.monetization_on, color: Colors.yellowAccent),
                         const SizedBox(width: 4),
-                        Text("${userProgress.coins}", style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 18))
+                        Text("${userProgress.totalCoins}", style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 18))
                     ],
                 )
             ).animate().scale(duration: 400.ms, curve: Curves.easeOutBack),
@@ -59,12 +60,21 @@ class HomeScreen extends ConsumerWidget {
                 itemBuilder: (context, index) {
                     final level = levels[index];
                     final isLocked = level.id > userProgress.maxLevelUnlocked;
+                    final unlockCost = level.unlockCost;
+                    final hasEnoughCoins = userProgress.totalCoins >= unlockCost;
                     
                     return GestureDetector(
-                        onTap: isLocked ? null : () {
-                            Navigator.of(context).push(
+                        onTap: isLocked ? null : () async {
+                            await Navigator.of(context).push(
                                 MaterialPageRoute(builder: (_) => GameplayScreen(levelId: level.id))
                             );
+                            // Show ad when returning to home page
+                            adService.showInterstitialAd(
+                              onAdDismissed: () {
+                                // Ad dismissed, user is already on home page
+                              },
+                            );
+                            // The provider will automatically trigger rebuild when state changes
                         },
                         child: Container(
                             decoration: BoxDecoration(
@@ -77,7 +87,17 @@ class HomeScreen extends ConsumerWidget {
                             ),
                             alignment: Alignment.center,
                             child: isLocked 
-                                ? Icon(Icons.lock, color: Colors.white.withOpacity(0.5), size: 32) 
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                        Icon(Icons.lock, color: Colors.white.withOpacity(0.5), size: 32),
+                                        if (hasEnoughCoins && level.id == userProgress.maxLevelUnlocked + 1)
+                                            Padding(
+                                                padding: const EdgeInsets.only(top: 4),
+                                                child: Text("Tap!", style: TextStyle(color: Colors.green, fontSize: 10, fontWeight: FontWeight.bold)),
+                                            )
+                                    ],
+                                  )
                                 : Text("${level.id}", style: theme.textTheme.headlineLarge?.copyWith(
                                     color: theme.colorScheme.primary, fontWeight: FontWeight.bold
                                   )),

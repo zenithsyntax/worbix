@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'gameplay_state.dart';
-import '../levels/level_model.dart';
 import '../levels/level_repository.dart';
 import '../store/user_progress_provider.dart';
 
@@ -11,23 +10,55 @@ class GameplayController extends StateNotifier<GameplayState> {
   
   GameplayController(this.ref) : super(const GameplayState());
 
-  void loadLevel(int levelId) {
-    if (state.level?.id == levelId) return; 
-    
+  Future<void> loadLevel(int levelId) async {
+    // Determine where to start
     final levels = ref.read(levelRepositoryProvider).getAllLevels();
     final level = levels.firstWhere((l) => l.id == levelId, orElse: () => throw 'Level not found');
     
-    final firstQ = level.questions.first;
+    // Check saved progress
+    final userProgress = ref.read(userProgressProvider);
+    int startIndex = 0;
+    
+    // If resuming the level we were last on, resume from specific question
+    if (userProgress.lastPlayedLevelId == levelId) {
+        startIndex = userProgress.lastPlayedQuestionIndex;
+        
+        // Ensure we don't start on a question we already finished
+        // (Handles case where user quit after winning but before clicking Next)
+        final completed = userProgress.completedQuestions[levelId] ?? [];
+        while (startIndex < level.questions.length && completed.contains(level.questions[startIndex].qId)) {
+            startIndex++;
+        }
+        
+        if (startIndex >= level.questions.length) {
+            // Level is fully complete or we are at the end?
+            // If all questions are done, maybe we shouldn't reset to 0, but show "Level Complete" or just replay 0?
+            // User requested "Resume progress...". If level is done, maybe just let them replay?
+            // Or if unlocked next level, maybe we should have redirected them?
+            // Let's reset to 0 for replay purposes if they manually selected this level again.
+            // But if they just opened the app, we want them to go to the NEW level.
+            // However, loadLevel is called with a specific ID.
+            startIndex = 0; 
+        }
+    }
+    
+    final currentQ = level.questions[startIndex];
     
     state = GameplayState(
       level: level,
       status: GameStatus.playing,
-      currentQuestionIndex: 0,
-      timeLeft: level.timeLimit,
-      currentCoins: 0,
-      currentGrid: firstQ.grid, 
+      currentQuestionIndex: startIndex,
+      timeLeft: level.timeLimit, // Each question starts with full time limit
+      currentCoins: 0, // This is session coins? Or total? "Total coins earned (from all its questions)".
+                       // Let's assume this tracks coins earned IN THIS SESSION for the level.
+      currentGrid: currentQ.grid, 
       selectedIndices: [],
+      currentQuestionDuration: 0,
+      coinsEarnedLastQuestion: 0,
     );
+    
+    // Update saved position
+    ref.read(userProgressProvider.notifier).savePosition(levelId, startIndex);
     
     _startTimer();
   }
@@ -36,15 +67,26 @@ class GameplayController extends StateNotifier<GameplayState> {
     _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (state.status != GameStatus.playing) {
-        timer.cancel();
+        // Don't cancel here if we just pause? 
+        // Only cancel if game over/won. 
+        // If question completed, we pause timer? -> Yes status changed to questionCompleted.
         return;
       }
       
-      if (state.timeLeft <= 0) {
-        state = state.copyWith(status: GameStatus.lost);
-        timer.cancel();
-      } else {
-        state = state.copyWith(timeLeft: state.timeLeft - 1);
+      // Update duration (time spent on current question)
+      state = state.copyWith(currentQuestionDuration: state.currentQuestionDuration + 1);
+      
+      // Countdown timer for current question
+      if (state.timeLeft > 0) {
+          final newTimeLeft = state.timeLeft - 1;
+          state = state.copyWith(timeLeft: newTimeLeft);
+          
+          // Check if time ran out
+          if (newTimeLeft == 0) {
+              // Time's up for this question
+              state = state.copyWith(status: GameStatus.lost);
+              _timer?.cancel();
+          }
       }
     });
   }
@@ -120,7 +162,7 @@ class GameplayController extends StateNotifier<GameplayState> {
       _checkAnswer();
   }
 
-  void _checkAnswer() {
+  Future<void> _checkAnswer() async {
       if (state.level == null) return;
       final q = state.level!.questions[state.currentQuestionIndex];
       
@@ -134,38 +176,97 @@ class GameplayController extends StateNotifier<GameplayState> {
       
       if (word.toLowerCase() == q.answer.toLowerCase()) {
           // Correct!
-          final newCoins = state.currentCoins + q.coins;
-          ref.read(userProgressProvider.notifier).addCoins(q.coins);
           
-          if (state.currentQuestionIndex + 1 >= state.level!.questions.length) {
-              // Level Complete
-               final bonus = (state.timeLeft * 0.2).floor();
-               ref.read(userProgressProvider.notifier).addCoins(bonus);
-               ref.read(userProgressProvider.notifier).unlockLevel(state.level!.id + 1);
-               
-              state = state.copyWith(
-                  status: GameStatus.won,
-                  currentCoins: newCoins + bonus,
-                  selectedIndices: [],
-              );
-              _timer?.cancel();
-          } else {
-              // Next Question
-               final nextIndex = state.currentQuestionIndex + 1;
-              final nextQ = state.level!.questions[nextIndex];
-              
-              state = state.copyWith(
-                  currentQuestionIndex: nextIndex,
-                  currentCoins: newCoins,
-                  currentGrid: nextQ.grid, 
-                  selectedIndices: [],
+          // Calculate Coins based on remaining time (timer)
+          // More time left = more coins, less time left = fewer coins
+          // Formula: coinsEarned = maxCoins * (timeLeft / timeLimit)
+          // Ensure minimum of 1 coin
+          final maxCoins = q.coins;
+          final timeLimit = state.level!.timeLimit;
+          final timeLeft = state.timeLeft;
+          
+          // Calculate coins based on percentage of time remaining
+          // If timeLeft is 140 and timeLimit is 140, you get 100% of coins
+          // If timeLeft is 70 and timeLimit is 140, you get 50% of coins
+          final coinsEarned = (maxCoins * (timeLeft / timeLimit)).clamp(1.0, maxCoins.toDouble()).toInt();
+          
+          // Save Progress (replay can earn coins again as per requirements)
+          await ref.read(userProgressProvider.notifier).markQuestionCompleted(
+              levelId: state.level!.id, 
+              questionId: q.qId,
+              coinsEarned: coinsEarned,
+              allowReplayCoins: true, // Allow earning coins on replay
+          );
+          
+          // Save position to next question if it exists (for proper resume)
+          if (state.currentQuestionIndex + 1 < state.level!.questions.length) {
+              await ref.read(userProgressProvider.notifier).savePosition(
+                  state.level!.id, 
+                  state.currentQuestionIndex + 1
               );
           }
+          
+          state = state.copyWith(
+              status: GameStatus.questionCompleted,
+              currentCoins: state.currentCoins + coinsEarned,
+              coinsEarnedLastQuestion: coinsEarned,
+          );
+          // Timer naturally effectively pauses because status != playing
       } 
-      // Hints/Animation for wrong done via UI state observation usually, 
-      // but here we just wait for user to fix or reset.
-      // NOTE: User requested "Play gentle wrong animation...". 
-      // We can implement that if needed, but for now simple checking is robust.
+  }
+
+  void nextQuestion() {
+      if (state.level == null) return;
+      
+      if (state.currentQuestionIndex + 1 >= state.level!.questions.length) {
+          // Level Complete
+           // Ensure unlock check runs one more time after level completion
+           ref.read(userProgressProvider.notifier).checkAutoUnlock();
+           
+           state = state.copyWith(
+               status: GameStatus.won,
+               selectedIndices: [],
+           );
+           _timer?.cancel();
+      } else {
+          // Next Question
+           final nextIndex = state.currentQuestionIndex + 1;
+           final nextQ = state.level!.questions[nextIndex];
+           
+           // Update saved position
+           ref.read(userProgressProvider.notifier).savePosition(state.level!.id, nextIndex);
+           
+           // Reset timer to full time limit for the new question
+           state = state.copyWith(
+               status: GameStatus.playing,
+               currentQuestionIndex: nextIndex,
+               timeLeft: state.level!.timeLimit, // Reset timer to level's time limit
+               currentGrid: nextQ.grid, 
+               selectedIndices: [],
+               currentQuestionDuration: 0, // Reset duration counter
+               coinsEarnedLastQuestion: 0,
+           );
+           // Restart timer for the new question
+           _startTimer();
+      }
+  }
+  
+  void jumpToQuestion(int index) {
+      if (state.level == null || index < 0 || index >= state.level!.questions.length) return;
+      
+      final q = state.level!.questions[index];
+      // Reset timer to full time limit when jumping to a question
+      state = state.copyWith(
+          status: GameStatus.playing,
+          currentQuestionIndex: index,
+          timeLeft: state.level!.timeLimit, // Reset timer to level's time limit
+          currentGrid: q.grid,
+          selectedIndices: [],
+          currentQuestionDuration: 0, // Reset duration counter
+          coinsEarnedLastQuestion: 0,
+      );
+      // Restart timer for the question
+      _startTimer();
   }
 
   @override
