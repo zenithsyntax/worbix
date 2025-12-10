@@ -1,0 +1,5927 @@
+[
+  {
+    "id": 1,
+    "title": "Level 1 \u2014 Starters",
+    "timeLimit": 140,
+    "orientation": "6x6",
+    "gridSize": 36,
+    "questions": [
+      {
+        "q_id": 1,
+        "coins": 10,
+        "grid": [
+          [
+            "o",
+            "s",
+            "s",
+            "d",
+            "n",
+            "a"
+          ],
+          [
+            "i",
+            "p",
+            "n",
+            "t",
+            "e",
+            "h"
+          ],
+          [
+            "h",
+            "p",
+            "s",
+            "t",
+            "r",
+            "n"
+          ],
+          [
+            "l",
+            "e",
+            "n",
+            "o",
+            "i",
+            "e"
+          ],
+          [
+            "o",
+            "r",
+            "h",
+            "o",
+            "a",
+            "o"
+          ],
+          [
+            "y",
+            "p",
+            "p",
+            "a",
+            "h",
+            "s"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 5,
+              "col": 4
+            },
+            {
+              "row": 5,
+              "col": 3
+            },
+            {
+              "row": 5,
+              "col": 2
+            },
+            {
+              "row": 5,
+              "col": 1
+            },
+            {
+              "row": 5,
+              "col": 0
+            }
+          ]
+        },
+        "question": "I show up with a smile when you feel good inside.",
+        "answer": "happy"
+      },
+      {
+        "q_id": 2,
+        "coins": 8,
+        "grid": [
+          [
+            "a",
+            "e",
+            "h",
+            "a",
+            "r",
+            "b"
+          ],
+          [
+            "r",
+            "t",
+            "s",
+            "e",
+            "e",
+            "e"
+          ],
+          [
+            "k",
+            "h",
+            "d",
+            "a",
+            "q",
+            "l"
+          ],
+          [
+            "b",
+            "s",
+            "l",
+            "i",
+            "s",
+            "s"
+          ],
+          [
+            "t",
+            "n",
+            "o",
+            "h",
+            "h",
+            "a"
+          ],
+          [
+            "g",
+            "f",
+            "c",
+            "f",
+            "h",
+            "u"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 5,
+              "col": 2
+            },
+            {
+              "row": 4,
+              "col": 2
+            },
+            {
+              "row": 3,
+              "col": 2
+            },
+            {
+              "row": 2,
+              "col": 2
+            }
+          ]
+        },
+        "question": "I make you shiver and wear a jacket.",
+        "answer": "cold"
+      },
+      {
+        "q_id": 3,
+        "coins": 6,
+        "grid": [
+          [
+            "h",
+            "h",
+            "t",
+            "i",
+            "e",
+            "i"
+          ],
+          [
+            "l",
+            "d",
+            "e",
+            "u",
+            "e",
+            "s"
+          ],
+          [
+            "r",
+            "o",
+            "o",
+            "i",
+            "r",
+            "k"
+          ],
+          [
+            "d",
+            "h",
+            "t",
+            "l",
+            "a",
+            "i"
+          ],
+          [
+            "t",
+            "l",
+            "b",
+            "a",
+            "i",
+            "e"
+          ],
+          [
+            "a",
+            "c",
+            "f",
+            "p",
+            "c",
+            "j"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 5,
+              "col": 4
+            },
+            {
+              "row": 4,
+              "col": 3
+            },
+            {
+              "row": 3,
+              "col": 2
+            }
+          ]
+        },
+        "question": "I purr, chase mice, and love to nap in the sun.",
+        "answer": "cat"
+      },
+      {
+        "q_id": 4,
+        "coins": 6,
+        "grid": [
+          [
+            "e",
+            "h",
+            "m",
+            "n",
+            "u",
+            "r"
+          ],
+          [
+            "n",
+            "s",
+            "e",
+            "a",
+            "s",
+            "e"
+          ],
+          [
+            "s",
+            "p",
+            "i",
+            "n",
+            "g",
+            "o"
+          ],
+          [
+            "r",
+            "a",
+            "s",
+            "e",
+            "e",
+            "m"
+          ],
+          [
+            "r",
+            "a",
+            "e",
+            "a",
+            "c",
+            "u"
+          ],
+          [
+            "i",
+            "h",
+            "s",
+            "h",
+            "e",
+            "g"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 0,
+              "col": 5
+            },
+            {
+              "row": 0,
+              "col": 4
+            },
+            {
+              "row": 0,
+              "col": 3
+            }
+          ]
+        },
+        "question": "I'm faster than walking; you do me in races.",
+        "answer": "run"
+      },
+      {
+        "q_id": 5,
+        "coins": 6,
+        "grid": [
+          [
+            "e",
+            "v",
+            "k",
+            "i",
+            "x",
+            "s"
+          ],
+          [
+            "a",
+            "a",
+            "o",
+            "q",
+            "o",
+            "u"
+          ],
+          [
+            "t",
+            "u",
+            "i",
+            "e",
+            "o",
+            "i"
+          ],
+          [
+            "s",
+            "o",
+            "d",
+            "i",
+            "c",
+            "e"
+          ],
+          [
+            "w",
+            "t",
+            "n",
+            "t",
+            "i",
+            "n"
+          ],
+          [
+            "i",
+            "o",
+            "s",
+            "u",
+            "n",
+            "e"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 5,
+              "col": 2
+            },
+            {
+              "row": 5,
+              "col": 3
+            },
+            {
+              "row": 5,
+              "col": 4
+            }
+          ]
+        },
+        "question": "I light up the day and keep the Earth warm.",
+        "answer": "sun"
+      },
+      {
+        "q_id": 6,
+        "coins": 8,
+        "grid": [
+          [
+            "d",
+            "l",
+            "l",
+            "e",
+            "t",
+            "b"
+          ],
+          [
+            "u",
+            "i",
+            "b",
+            "l",
+            "u",
+            "e"
+          ],
+          [
+            "f",
+            "s",
+            "o",
+            "l",
+            "a",
+            "i"
+          ],
+          [
+            "n",
+            "r",
+            "p",
+            "r",
+            "l",
+            "w"
+          ],
+          [
+            "n",
+            "t",
+            "v",
+            "e",
+            "t",
+            "s"
+          ],
+          [
+            "n",
+            "c",
+            "m",
+            "e",
+            "e",
+            "s"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 1,
+              "col": 2
+            },
+            {
+              "row": 1,
+              "col": 3
+            },
+            {
+              "row": 1,
+              "col": 4
+            },
+            {
+              "row": 1,
+              "col": 5
+            }
+          ]
+        },
+        "question": "I'm a color, like the sky or the ocean.",
+        "answer": "blue"
+      },
+      {
+        "q_id": 7,
+        "coins": 8,
+        "grid": [
+          [
+            "r",
+            "n",
+            "i",
+            "i",
+            "s",
+            "e"
+          ],
+          [
+            "e",
+            "t",
+            "b",
+            "m",
+            "j",
+            "e"
+          ],
+          [
+            "a",
+            "t",
+            "b",
+            "a",
+            "a",
+            "e"
+          ],
+          [
+            "s",
+            "t",
+            "e",
+            "e",
+            "l",
+            "n"
+          ],
+          [
+            "r",
+            "t",
+            "a",
+            "s",
+            "t",
+            "l"
+          ],
+          [
+            "w",
+            "o",
+            "i",
+            "q",
+            "a",
+            "y"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 1,
+              "col": 2
+            },
+            {
+              "row": 2,
+              "col": 3
+            },
+            {
+              "row": 3,
+              "col": 4
+            },
+            {
+              "row": 4,
+              "col": 5
+            }
+          ]
+        },
+        "question": "I'm round and fun to kick, throw, or bounce.",
+        "answer": "ball"
+      },
+      {
+        "q_id": 8,
+        "coins": 9,
+        "grid": [
+          [
+            "e",
+            "e",
+            "a",
+            "s",
+            "d",
+            "f"
+          ],
+          [
+            "t",
+            "m",
+            "a",
+            "n",
+            "m",
+            "t"
+          ],
+          [
+            "i",
+            "a",
+            "n",
+            "e",
+            "j",
+            "k"
+          ],
+          [
+            "h",
+            "c",
+            "a",
+            "u",
+            "u",
+            "n"
+          ],
+          [
+            "n",
+            "l",
+            "m",
+            "o",
+            "m",
+            "w"
+          ],
+          [
+            "p",
+            "p",
+            "n",
+            "n",
+            "o",
+            "g"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 2,
+              "col": 4
+            },
+            {
+              "row": 3,
+              "col": 3
+            },
+            {
+              "row": 4,
+              "col": 2
+            },
+            {
+              "row": 5,
+              "col": 1
+            }
+          ]
+        },
+        "question": "I go up off the ground with both feet.",
+        "answer": "jump"
+      },
+      {
+        "q_id": 9,
+        "coins": 6,
+        "grid": [
+          [
+            "t",
+            "p",
+            "f",
+            "n",
+            "e",
+            "n"
+          ],
+          [
+            "a",
+            "o",
+            "m",
+            "o",
+            "n",
+            "o"
+          ],
+          [
+            "e",
+            "e",
+            "i",
+            "t",
+            "s",
+            "e"
+          ],
+          [
+            "f",
+            "g",
+            "o",
+            "e",
+            "a",
+            "a"
+          ],
+          [
+            "s",
+            "i",
+            "f",
+            "a",
+            "t",
+            "t"
+          ],
+          [
+            "i",
+            "i",
+            "t",
+            "e",
+            "i",
+            "o"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 2,
+              "col": 5
+            },
+            {
+              "row": 3,
+              "col": 5
+            },
+            {
+              "row": 4,
+              "col": 5
+            }
+          ]
+        },
+        "question": "You do this with food, three times a day.",
+        "answer": "eat"
+      },
+      {
+        "q_id": 10,
+        "coins": 12,
+        "grid": [
+          [
+            "m",
+            "a",
+            "a",
+            "t",
+            "r",
+            "s"
+          ],
+          [
+            "i",
+            "e",
+            "f",
+            "i",
+            "y",
+            "k"
+          ],
+          [
+            "a",
+            "o",
+            "a",
+            "r",
+            "b",
+            "i"
+          ],
+          [
+            "o",
+            "h",
+            "s",
+            "o",
+            "e",
+            "a"
+          ],
+          [
+            "c",
+            "e",
+            "t",
+            "d",
+            "s",
+            "o"
+          ],
+          [
+            "f",
+            "s",
+            "o",
+            "h",
+            "l",
+            "p"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 4,
+              "col": 0
+            },
+            {
+              "row": 3,
+              "col": 1
+            },
+            {
+              "row": 2,
+              "col": 2
+            },
+            {
+              "row": 1,
+              "col": 3
+            },
+            {
+              "row": 0,
+              "col": 4
+            }
+          ]
+        },
+        "question": "You sit on me to rest your legs. I have four legs.",
+        "answer": "chair"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Level 2 \u2014 Everyday",
+    "timeLimit": 130,
+    "orientation": "6x6",
+    "gridSize": 36,
+    "questions": [
+      {
+        "q_id": 1,
+        "coins": 10,
+        "grid": [
+          [
+            "t",
+            "a",
+            "s",
+            "t",
+            "t",
+            "b"
+          ],
+          [
+            "s",
+            "i",
+            "c",
+            "s",
+            "o",
+            "h"
+          ],
+          [
+            "o",
+            "t",
+            "e",
+            "o",
+            "e",
+            "r"
+          ],
+          [
+            "a",
+            "t",
+            "k",
+            "s",
+            "l",
+            "d"
+          ],
+          [
+            "r",
+            "a",
+            "o",
+            "e",
+            "s",
+            "r"
+          ],
+          [
+            "n",
+            "a",
+            "i",
+            "n",
+            "h",
+            "h"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 0,
+              "col": 5
+            },
+            {
+              "row": 1,
+              "col": 4
+            },
+            {
+              "row": 2,
+              "col": 3
+            },
+            {
+              "row": 3,
+              "col": 2
+            }
+          ]
+        },
+        "question": "I have pages and words \u2014 you read me for fun or facts.",
+        "answer": "book"
+      },
+      {
+        "q_id": 2,
+        "coins": 8,
+        "grid": [
+          [
+            "t",
+            "i",
+            "l",
+            "e",
+            "c",
+            "y"
+          ],
+          [
+            "i",
+            "m",
+            "z",
+            "i",
+            "k",
+            "e"
+          ],
+          [
+            "j",
+            "e",
+            "n",
+            "l",
+            "u",
+            "b"
+          ],
+          [
+            "l",
+            "i",
+            "i",
+            "r",
+            "n",
+            "n"
+          ],
+          [
+            "d",
+            "m",
+            "h",
+            "b",
+            "a",
+            "p"
+          ],
+          [
+            "e",
+            "a",
+            "h",
+            "k",
+            "i",
+            "s"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 4,
+              "col": 1
+            },
+            {
+              "row": 3,
+              "col": 2
+            },
+            {
+              "row": 2,
+              "col": 3
+            },
+            {
+              "row": 1,
+              "col": 4
+            }
+          ]
+        },
+        "question": "I'm white, cold, and come from cows.",
+        "answer": "milk"
+      },
+      {
+        "q_id": 3,
+        "coins": 8,
+        "grid": [
+          [
+            "l",
+            "o",
+            "e",
+            "a",
+            "a",
+            "d"
+          ],
+          [
+            "b",
+            "i",
+            "v",
+            "f",
+            "a",
+            "l"
+          ],
+          [
+            "o",
+            "e",
+            "o",
+            "e",
+            "m",
+            "v"
+          ],
+          [
+            "d",
+            "r",
+            "e",
+            "a",
+            "h",
+            "i"
+          ],
+          [
+            "v",
+            "e",
+            "e",
+            "r",
+            "c",
+            "i"
+          ],
+          [
+            "a",
+            "o",
+            "l",
+            "d",
+            "t",
+            "d"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 5,
+              "col": 4
+            },
+            {
+              "row": 4,
+              "col": 3
+            },
+            {
+              "row": 3,
+              "col": 2
+            },
+            {
+              "row": 2,
+              "col": 1
+            }
+          ]
+        },
+        "question": "I have roots, a trunk, and leaves \u2014 I give shade.",
+        "answer": "tree"
+      },
+      {
+        "q_id": 4,
+        "coins": 9,
+        "grid": [
+          [
+            "s",
+            "s",
+            "b",
+            "n",
+            "g",
+            "e"
+          ],
+          [
+            "s",
+            "x",
+            "t",
+            "e",
+            "l",
+            "i"
+          ],
+          [
+            "g",
+            "i",
+            "n",
+            "i",
+            "e",
+            "u"
+          ],
+          [
+            "d",
+            "p",
+            "m",
+            "r",
+            "r",
+            "i"
+          ],
+          [
+            "o",
+            "s",
+            "j",
+            "h",
+            "o",
+            "h"
+          ],
+          [
+            "b",
+            "t",
+            "t",
+            "a",
+            "t",
+            "g"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 4,
+              "col": 1
+            },
+            {
+              "row": 3,
+              "col": 2
+            },
+            {
+              "row": 2,
+              "col": 3
+            },
+            {
+              "row": 1,
+              "col": 4
+            },
+            {
+              "row": 0,
+              "col": 5
+            }
+          ]
+        },
+        "question": "I curve your lips upward when you're happy.",
+        "answer": "smile"
+      },
+      {
+        "q_id": 5,
+        "coins": 12,
+        "grid": [
+          [
+            "w",
+            "k",
+            "i",
+            "e",
+            "r",
+            "d"
+          ],
+          [
+            "r",
+            "m",
+            "n",
+            "v",
+            "r",
+            "o"
+          ],
+          [
+            "n",
+            "v",
+            "d",
+            "a",
+            "p",
+            "h"
+          ],
+          [
+            "l",
+            "c",
+            "e",
+            "r",
+            "o",
+            "n"
+          ],
+          [
+            "e",
+            "a",
+            "i",
+            "b",
+            "h",
+            "a"
+          ],
+          [
+            "t",
+            "o",
+            "l",
+            "a",
+            "i",
+            "f"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 4,
+              "col": 3
+            },
+            {
+              "row": 3,
+              "col": 3
+            },
+            {
+              "row": 2,
+              "col": 3
+            },
+            {
+              "row": 1,
+              "col": 3
+            },
+            {
+              "row": 0,
+              "col": 3
+            }
+          ]
+        },
+        "question": "I face danger without fear \u2014 like a firefighter or hero.",
+        "answer": "brave"
+      },
+      {
+        "q_id": 6,
+        "coins": 8,
+        "grid": [
+          [
+            "t",
+            "e",
+            "x",
+            "l",
+            "s",
+            "k"
+          ],
+          [
+            "a",
+            "a",
+            "h",
+            "t",
+            "i",
+            "a"
+          ],
+          [
+            "l",
+            "u",
+            "t",
+            "n",
+            "n",
+            "e"
+          ],
+          [
+            "v",
+            "i",
+            "d",
+            "n",
+            "f",
+            "c"
+          ],
+          [
+            "c",
+            "s",
+            "n",
+            "m",
+            "c",
+            "s"
+          ],
+          [
+            "h",
+            "t",
+            "i",
+            "i",
+            "l",
+            "d"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 0,
+              "col": 5
+            },
+            {
+              "row": 1,
+              "col": 4
+            },
+            {
+              "row": 2,
+              "col": 3
+            },
+            {
+              "row": 3,
+              "col": 2
+            }
+          ]
+        },
+        "question": "I show care and help others feel good.",
+        "answer": "kind"
+      },
+      {
+        "q_id": 7,
+        "coins": 9,
+        "grid": [
+          [
+            "i",
+            "h",
+            "f",
+            "m",
+            "i",
+            "o"
+          ],
+          [
+            "r",
+            "s",
+            "h",
+            "g",
+            "e",
+            "l"
+          ],
+          [
+            "s",
+            "h",
+            "o",
+            "d",
+            "a",
+            "o"
+          ],
+          [
+            "t",
+            "u",
+            "a",
+            "u",
+            "y",
+            "b"
+          ],
+          [
+            "e",
+            "u",
+            "g",
+            "e",
+            "y",
+            "q"
+          ],
+          [
+            "i",
+            "h",
+            "a",
+            "e",
+            "r",
+            "n"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 1,
+              "col": 5
+            },
+            {
+              "row": 2,
+              "col": 4
+            },
+            {
+              "row": 3,
+              "col": 3
+            },
+            {
+              "row": 4,
+              "col": 2
+            },
+            {
+              "row": 5,
+              "col": 1
+            }
+          ]
+        },
+        "question": "I come with joy, often with a big sound.",
+        "answer": "laugh"
+      },
+      {
+        "q_id": 8,
+        "coins": 11,
+        "grid": [
+          [
+            "t",
+            "i",
+            "s",
+            "l",
+            "y",
+            "o"
+          ],
+          [
+            "o",
+            "c",
+            "o",
+            "a",
+            "r",
+            "e"
+          ],
+          [
+            "t",
+            "o",
+            "a",
+            "r",
+            "a",
+            "s"
+          ],
+          [
+            "n",
+            "h",
+            "e",
+            "t",
+            "a",
+            "d"
+          ],
+          [
+            "e",
+            "o",
+            "w",
+            "n",
+            "c",
+            "g"
+          ],
+          [
+            "r",
+            "k",
+            "o",
+            "a",
+            "h",
+            "h"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 1,
+              "col": 1
+            },
+            {
+              "row": 2,
+              "col": 2
+            },
+            {
+              "row": 3,
+              "col": 3
+            },
+            {
+              "row": 4,
+              "col": 4
+            },
+            {
+              "row": 5,
+              "col": 5
+            }
+          ]
+        },
+        "question": "You do this to a ball or falling object with your hands.",
+        "answer": "catch"
+      },
+      {
+        "q_id": 9,
+        "coins": 12,
+        "grid": [
+          [
+            "c",
+            "b",
+            "e",
+            "s",
+            "l",
+            "e"
+          ],
+          [
+            "e",
+            "a",
+            "u",
+            "a",
+            "x",
+            "a"
+          ],
+          [
+            "h",
+            "o",
+            "t",
+            "i",
+            "t",
+            "o"
+          ],
+          [
+            "i",
+            "h",
+            "d",
+            "r",
+            "l",
+            "b"
+          ],
+          [
+            "n",
+            "a",
+            "o",
+            "m",
+            "d",
+            "d"
+          ],
+          [
+            "m",
+            "s",
+            "l",
+            "e",
+            "o",
+            "a"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 0,
+              "col": 1
+            },
+            {
+              "row": 1,
+              "col": 2
+            },
+            {
+              "row": 2,
+              "col": 3
+            },
+            {
+              "row": 3,
+              "col": 4
+            },
+            {
+              "row": 4,
+              "col": 5
+            }
+          ]
+        },
+        "question": "You do this with blocks or bricks to make something tall.",
+        "answer": "build"
+      },
+      {
+        "q_id": 10,
+        "coins": 8,
+        "grid": [
+          [
+            "l",
+            "e",
+            "o",
+            "t",
+            "k",
+            "a"
+          ],
+          [
+            "h",
+            "n",
+            "n",
+            "p",
+            "o",
+            "a"
+          ],
+          [
+            "t",
+            "v",
+            "l",
+            "d",
+            "a",
+            "h"
+          ],
+          [
+            "t",
+            "a",
+            "n",
+            "y",
+            "s",
+            "s"
+          ],
+          [
+            "r",
+            "f",
+            "d",
+            "a",
+            "t",
+            "d"
+          ],
+          [
+            "s",
+            "s",
+            "w",
+            "l",
+            "h",
+            "u"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 5,
+              "col": 2
+            },
+            {
+              "row": 4,
+              "col": 3
+            },
+            {
+              "row": 3,
+              "col": 4
+            },
+            {
+              "row": 2,
+              "col": 5
+            }
+          ]
+        },
+        "question": "You do this with soap and water to get clean.",
+        "answer": "wash"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Level 3 \u2014 Think & Act",
+    "timeLimit": 120,
+    "orientation": "6x6",
+    "gridSize": 36,
+    "questions": [
+      {
+        "q_id": 1,
+        "coins": 12,
+        "grid": [
+          [
+            "j",
+            "i",
+            "n",
+            "e",
+            "i",
+            "t"
+          ],
+          [
+            "i",
+            "w",
+            "r",
+            "c",
+            "e",
+            "c"
+          ],
+          [
+            "u",
+            "e",
+            "w",
+            "n",
+            "l",
+            "m"
+          ],
+          [
+            "t",
+            "t",
+            "u",
+            "i",
+            "w",
+            "o"
+          ],
+          [
+            "o",
+            "i",
+            "m",
+            "n",
+            "o",
+            "i"
+          ],
+          [
+            "e",
+            "b",
+            "p",
+            "r",
+            "a",
+            "s"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 1,
+              "col": 5
+            },
+            {
+              "row": 2,
+              "col": 4
+            },
+            {
+              "row": 3,
+              "col": 3
+            },
+            {
+              "row": 4,
+              "col": 2
+            },
+            {
+              "row": 5,
+              "col": 1
+            }
+          ]
+        },
+        "question": "I go up a ladder, tree, or mountain.",
+        "answer": "climb"
+      },
+      {
+        "q_id": 2,
+        "coins": 10,
+        "grid": [
+          [
+            "g",
+            "f",
+            "e",
+            "r",
+            "e",
+            "t"
+          ],
+          [
+            "l",
+            "a",
+            "a",
+            "h",
+            "s",
+            "g"
+          ],
+          [
+            "k",
+            "s",
+            "s",
+            "n",
+            "a",
+            "a"
+          ],
+          [
+            "f",
+            "t",
+            "t",
+            "i",
+            "i",
+            "a"
+          ],
+          [
+            "t",
+            "p",
+            "s",
+            "t",
+            "r",
+            "e"
+          ],
+          [
+            "d",
+            "l",
+            "e",
+            "e",
+            "n",
+            "s"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 0,
+              "col": 1
+            },
+            {
+              "row": 1,
+              "col": 1
+            },
+            {
+              "row": 2,
+              "col": 1
+            },
+            {
+              "row": 3,
+              "col": 1
+            }
+          ]
+        },
+        "question": "I move quickly, like a cheetah or a race car.",
+        "answer": "fast"
+      },
+      {
+        "q_id": 3,
+        "coins": 9,
+        "grid": [
+          [
+            "s",
+            "r",
+            "e",
+            "t",
+            "n",
+            "u"
+          ],
+          [
+            "p",
+            "e",
+            "e",
+            "h",
+            "t",
+            "s"
+          ],
+          [
+            "x",
+            "j",
+            "l",
+            "t",
+            "h",
+            "i"
+          ],
+          [
+            "e",
+            "m",
+            "v",
+            "o",
+            "n",
+            "a"
+          ],
+          [
+            "i",
+            "l",
+            "t",
+            "t",
+            "n",
+            "w"
+          ],
+          [
+            "r",
+            "a",
+            "e",
+            "i",
+            "u",
+            "s"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 2,
+              "col": 4
+            },
+            {
+              "row": 3,
+              "col": 3
+            },
+            {
+              "row": 4,
+              "col": 2
+            }
+          ]
+        },
+        "question": "I can burn, boil, or melt \u2014 opposite of cold.",
+        "answer": "hot"
+      },
+      {
+        "q_id": 4,
+        "coins": 10,
+        "grid": [
+          [
+            "a",
+            "a",
+            "a",
+            "a",
+            "y",
+            "r"
+          ],
+          [
+            "e",
+            "o",
+            "b",
+            "s",
+            "o",
+            "l"
+          ],
+          [
+            "a",
+            "e",
+            "a",
+            "r",
+            "s",
+            "s"
+          ],
+          [
+            "x",
+            "t",
+            "g",
+            "t",
+            "g",
+            "b"
+          ],
+          [
+            "n",
+            "r",
+            "p",
+            "o",
+            "c",
+            "v"
+          ],
+          [
+            "f",
+            "i",
+            "d",
+            "i",
+            "l",
+            "e"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 5,
+              "col": 2
+            },
+            {
+              "row": 4,
+              "col": 3
+            },
+            {
+              "row": 3,
+              "col": 4
+            }
+          ]
+        },
+        "question": "I bark, wag my tail, and love bones.",
+        "answer": "dog"
+      },
+      {
+        "q_id": 5,
+        "coins": 12,
+        "grid": [
+          [
+            "r",
+            "b",
+            "m",
+            "d",
+            "e",
+            "r"
+          ],
+          [
+            "w",
+            "e",
+            "e",
+            "i",
+            "l",
+            "s"
+          ],
+          [
+            "o",
+            "r",
+            "g",
+            "l",
+            "h",
+            "a"
+          ],
+          [
+            "t",
+            "e",
+            "f",
+            "r",
+            "m",
+            "h"
+          ],
+          [
+            "o",
+            "o",
+            "r",
+            "o",
+            "e",
+            "y"
+          ],
+          [
+            "n",
+            "n",
+            "r",
+            "m",
+            "s",
+            "t"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 0,
+              "col": 0
+            },
+            {
+              "row": 1,
+              "col": 1
+            },
+            {
+              "row": 2,
+              "col": 2
+            },
+            {
+              "row": 3,
+              "col": 3
+            },
+            {
+              "row": 4,
+              "col": 4
+            },
+            {
+              "row": 5,
+              "col": 5
+            }
+          ]
+        },
+        "question": "A heavy feeling after making a mistake.",
+        "answer": "regret"
+      },
+      {
+        "q_id": 10,
+        "coins": 10,
+        "grid": [
+          [
+            "g",
+            "p",
+            "v",
+            "n",
+            "r",
+            "n"
+          ],
+          [
+            "k",
+            "r",
+            "m",
+            "e",
+            "o",
+            "t"
+          ],
+          [
+            "r",
+            "n",
+            "a",
+            "s",
+            "f",
+            "r"
+          ],
+          [
+            "i",
+            "u",
+            "i",
+            "n",
+            "a",
+            "u"
+          ],
+          [
+            "v",
+            "u",
+            "o",
+            "h",
+            "u",
+            "a"
+          ],
+          [
+            "c",
+            "d",
+            "s",
+            "n",
+            "t",
+            "a"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 5,
+              "col": 4
+            },
+            {
+              "row": 4,
+              "col": 3
+            },
+            {
+              "row": 3,
+              "col": 2
+            },
+            {
+              "row": 2,
+              "col": 1
+            },
+            {
+              "row": 1,
+              "col": 0
+            }
+          ]
+        },
+        "question": "You do this with your brain when solving a puzzle.",
+        "answer": "think"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Level 4 \u2014 Advanced",
+    "timeLimit": 100,
+    "orientation": "6x6",
+    "gridSize": 36,
+    "questions": [
+      {
+        "q_id": 3,
+        "coins": 12,
+        "grid": [
+          [
+            "n",
+            "d",
+            "n",
+            "i",
+            "e",
+            "r"
+          ],
+          [
+            "t",
+            "t",
+            "j",
+            "y",
+            "e",
+            "m"
+          ],
+          [
+            "b",
+            "s",
+            "y",
+            "d",
+            "h",
+            "r"
+          ],
+          [
+            "u",
+            "e",
+            "n",
+            "r",
+            "h",
+            "c"
+          ],
+          [
+            "o",
+            "e",
+            "r",
+            "h",
+            "h",
+            "h"
+          ],
+          [
+            "d",
+            "e",
+            "y",
+            "a",
+            "c",
+            "t"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 5,
+              "col": 0
+            },
+            {
+              "row": 4,
+              "col": 0
+            },
+            {
+              "row": 3,
+              "col": 0
+            },
+            {
+              "row": 2,
+              "col": 0
+            },
+            {
+              "row": 1,
+              "col": 0
+            }
+          ]
+        },
+        "question": "A feeling that something might not be true or right.",
+        "answer": "doubt"
+      },
+      {
+        "q_id": 10,
+        "coins": 12,
+        "grid": [
+          [
+            "n",
+            "p",
+            "e",
+            "a",
+            "e",
+            "h"
+          ],
+          [
+            "u",
+            "s",
+            "y",
+            "l",
+            "s",
+            "s"
+          ],
+          [
+            "s",
+            "o",
+            "o",
+            "h",
+            "e",
+            "h"
+          ],
+          [
+            "d",
+            "l",
+            "m",
+            "n",
+            "c",
+            "f"
+          ],
+          [
+            "l",
+            "v",
+            "u",
+            "t",
+            "t",
+            "o"
+          ],
+          [
+            "i",
+            "e",
+            "t",
+            "o",
+            "d",
+            "l"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 1,
+              "col": 1
+            },
+            {
+              "row": 2,
+              "col": 1
+            },
+            {
+              "row": 3,
+              "col": 1
+            },
+            {
+              "row": 4,
+              "col": 1
+            },
+            {
+              "row": 5,
+              "col": 1
+            }
+          ]
+        },
+        "question": "To find an answer to a problem or puzzle.",
+        "answer": "solve"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "title": "Level 6 \u2014 Logic Build",
+    "timeLimit": 80,
+    "orientation": "6x6",
+    "gridSize": 36,
+    "questions": [
+      {
+        "q_id": 1,
+        "coins": 14,
+        "grid": [
+          [
+            "u",
+            "r",
+            "n",
+            "p",
+            "d",
+            "s"
+          ],
+          [
+            "r",
+            "i",
+            "n",
+            "r",
+            "e",
+            "s"
+          ],
+          [
+            "e",
+            "o",
+            "a",
+            "c",
+            "a",
+            "o"
+          ],
+          [
+            "n",
+            "n",
+            "r",
+            "s",
+            "r",
+            "n"
+          ],
+          [
+            "n",
+            "e",
+            "t",
+            "y",
+            "y",
+            "w"
+          ],
+          [
+            "t",
+            "r",
+            "a",
+            "o",
+            "i",
+            "s"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 0,
+              "col": 5
+            },
+            {
+              "row": 1,
+              "col": 4
+            },
+            {
+              "row": 2,
+              "col": 3
+            },
+            {
+              "row": 3,
+              "col": 2
+            },
+            {
+              "row": 4,
+              "col": 1
+            },
+            {
+              "row": 5,
+              "col": 0
+            }
+          ]
+        },
+        "question": "Something not told to everyone.",
+        "answer": "secret"
+      },
+      {
+        "q_id": 3,
+        "coins": 12,
+        "grid": [
+          [
+            "s",
+            "o",
+            "m",
+            "t",
+            "r",
+            "t"
+          ],
+          [
+            "s",
+            "t",
+            "u",
+            "r",
+            "a",
+            "e"
+          ],
+          [
+            "e",
+            "o",
+            "m",
+            "t",
+            "e",
+            "y"
+          ],
+          [
+            "t",
+            "i",
+            "b",
+            "n",
+            "e",
+            "t"
+          ],
+          [
+            "h",
+            "t",
+            "l",
+            "e",
+            "s",
+            "t"
+          ],
+          [
+            "k",
+            "l",
+            "e",
+            "n",
+            "y",
+            "y"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 0,
+              "col": 2
+            },
+            {
+              "row": 1,
+              "col": 2
+            },
+            {
+              "row": 2,
+              "col": 2
+            },
+            {
+              "row": 3,
+              "col": 2
+            },
+            {
+              "row": 4,
+              "col": 2
+            },
+            {
+              "row": 5,
+              "col": 2
+            }
+          ]
+        },
+        "question": "Speaking so softly that words cannot be understood.",
+        "answer": "mumble"
+      },
+      {
+        "q_id": 4,
+        "coins": 12,
+        "grid": [
+          [
+            "i",
+            "i",
+            "i",
+            "b",
+            "l",
+            "e"
+          ],
+          [
+            "e",
+            "r",
+            "o",
+            "n",
+            "g",
+            "i"
+          ],
+          [
+            "l",
+            "o",
+            "s",
+            "n",
+            "e",
+            "a"
+          ],
+          [
+            "r",
+            "l",
+            "n",
+            "h",
+            "n",
+            "h"
+          ],
+          [
+            "d",
+            "o",
+            "c",
+            "e",
+            "d",
+            "a"
+          ],
+          [
+            "s",
+            "i",
+            "e",
+            "n",
+            "e",
+            "l"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 1,
+              "col": 5
+            },
+            {
+              "row": 1,
+              "col": 4
+            },
+            {
+              "row": 1,
+              "col": 3
+            },
+            {
+              "row": 1,
+              "col": 2
+            },
+            {
+              "row": 1,
+              "col": 1
+            },
+            {
+              "row": 1,
+              "col": 0
+            }
+          ]
+        },
+        "question": "Choosing not to pay attention to someone or something.",
+        "answer": "ignore"
+      },
+      {
+        "q_id": 5,
+        "coins": 13,
+        "grid": [
+          [
+            "i",
+            "r",
+            "t",
+            "a",
+            "i",
+            "r"
+          ],
+          [
+            "t",
+            "e",
+            "g",
+            "a",
+            "u",
+            "r"
+          ],
+          [
+            "v",
+            "d",
+            "b",
+            "e",
+            "o",
+            "l"
+          ],
+          [
+            "i",
+            "n",
+            "f",
+            "d",
+            "y",
+            "i"
+          ],
+          [
+            "n",
+            "a",
+            "m",
+            "l",
+            "l",
+            "s"
+          ],
+          [
+            "d",
+            "w",
+            "a",
+            "n",
+            "a",
+            "e"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 5,
+              "col": 1
+            },
+            {
+              "row": 4,
+              "col": 1
+            },
+            {
+              "row": 3,
+              "col": 1
+            },
+            {
+              "row": 2,
+              "col": 1
+            },
+            {
+              "row": 1,
+              "col": 1
+            },
+            {
+              "row": 0,
+              "col": 1
+            }
+          ]
+        },
+        "question": "Moving without a clear direction or purpose.",
+        "answer": "wander"
+      },
+      {
+        "q_id": 6,
+        "coins": 13,
+        "grid": [
+          [
+            "s",
+            "o",
+            "c",
+            "n",
+            "h",
+            "n"
+          ],
+          [
+            "l",
+            "l",
+            "o",
+            "r",
+            "t",
+            "s"
+          ],
+          [
+            "t",
+            "d",
+            "o",
+            "a",
+            "a",
+            "p"
+          ],
+          [
+            "t",
+            "o",
+            "h",
+            "m",
+            "n",
+            "i"
+          ],
+          [
+            "a",
+            "h",
+            "u",
+            "l",
+            "j",
+            "t"
+          ],
+          [
+            "s",
+            "g",
+            "c",
+            "h",
+            "i",
+            "s"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 1,
+              "col": 5
+            },
+            {
+              "row": 1,
+              "col": 4
+            },
+            {
+              "row": 1,
+              "col": 3
+            },
+            {
+              "row": 1,
+              "col": 2
+            },
+            {
+              "row": 1,
+              "col": 1
+            },
+            {
+              "row": 1,
+              "col": 0
+            }
+          ]
+        },
+        "question": "Walking in a slow, relaxed way.",
+        "answer": "stroll"
+      },
+      {
+        "q_id": 7,
+        "coins": 10,
+        "grid": [
+          [
+            "n",
+            "g",
+            "a",
+            "e",
+            "p",
+            "n"
+          ],
+          [
+            "s",
+            "c",
+            "h",
+            "d",
+            "a",
+            "o"
+          ],
+          [
+            "h",
+            "t",
+            "r",
+            "e",
+            "u",
+            "a"
+          ],
+          [
+            "c",
+            "h",
+            "d",
+            "e",
+            "s",
+            "s"
+          ],
+          [
+            "s",
+            "o",
+            "n",
+            "r",
+            "e",
+            "n"
+          ],
+          [
+            "s",
+            "n",
+            "a",
+            "a",
+            "t",
+            "o"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 0,
+              "col": 4
+            },
+            {
+              "row": 1,
+              "col": 4
+            },
+            {
+              "row": 2,
+              "col": 4
+            },
+            {
+              "row": 3,
+              "col": 4
+            },
+            {
+              "row": 4,
+              "col": 4
+            }
+          ]
+        },
+        "question": "To stop briefly.",
+        "answer": "pause"
+      },
+      {
+        "q_id": 10,
+        "coins": 12,
+        "grid": [
+          [
+            "s",
+            "t",
+            "o",
+            "t",
+            "b",
+            "u"
+          ],
+          [
+            "d",
+            "d",
+            "r",
+            "e",
+            "h",
+            "s"
+          ],
+          [
+            "l",
+            "e",
+            "m",
+            "u",
+            "t",
+            "s"
+          ],
+          [
+            "n",
+            "r",
+            "l",
+            "r",
+            "s",
+            "l"
+          ],
+          [
+            "r",
+            "c",
+            "a",
+            "e",
+            "n",
+            "g"
+          ],
+          [
+            "l",
+            "t",
+            "c",
+            "a",
+            "e",
+            "e"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 5,
+              "col": 2
+            },
+            {
+              "row": 4,
+              "col": 2
+            },
+            {
+              "row": 3,
+              "col": 2
+            },
+            {
+              "row": 2,
+              "col": 2
+            }
+          ]
+        },
+        "question": "Free from agitation or strong emotion.",
+        "answer": "calm"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "title": "Level 7 \u2014 Emotion Mastery",
+    "timeLimit": 75,
+    "orientation": "6x6",
+    "gridSize": 36,
+    "questions": [
+      {
+        "q_id": 3,
+        "coins": 14,
+        "grid": [
+          [
+            "c",
+            "s",
+            "g",
+            "m",
+            "r",
+            "k"
+          ],
+          [
+            "h",
+            "f",
+            "h",
+            "t",
+            "c",
+            "h"
+          ],
+          [
+            "d",
+            "e",
+            "s",
+            "e",
+            "i",
+            "e"
+          ],
+          [
+            "t",
+            "e",
+            "l",
+            "t",
+            "t",
+            "d"
+          ],
+          [
+            "b",
+            "i",
+            "t",
+            "t",
+            "e",
+            "r"
+          ],
+          [
+            "e",
+            "o",
+            "i",
+            "s",
+            "t",
+            "s"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 4,
+              "col": 0
+            },
+            {
+              "row": 4,
+              "col": 1
+            },
+            {
+              "row": 4,
+              "col": 2
+            },
+            {
+              "row": 4,
+              "col": 3
+            },
+            {
+              "row": 4,
+              "col": 4
+            },
+            {
+              "row": 4,
+              "col": 5
+            }
+          ]
+        },
+        "question": "A strong harsh feeling caused by pain or unfairness.",
+        "answer": "bitter"
+      },
+      {
+        "q_id": 6,
+        "coins": 14,
+        "grid": [
+          [
+            "r",
+            "s",
+            "i",
+            "r",
+            "o",
+            "i"
+          ],
+          [
+            "u",
+            "s",
+            "a",
+            "a",
+            "n",
+            "l"
+          ],
+          [
+            "n",
+            "p",
+            "i",
+            "s",
+            "c",
+            "s"
+          ],
+          [
+            "t",
+            "i",
+            "i",
+            "g",
+            "b",
+            "i"
+          ],
+          [
+            "i",
+            "s",
+            "h",
+            "e",
+            "d",
+            "i"
+          ],
+          [
+            "t",
+            "l",
+            "h",
+            "r",
+            "r",
+            "b"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 0,
+              "col": 5
+            },
+            {
+              "row": 1,
+              "col": 4
+            },
+            {
+              "row": 2,
+              "col": 3
+            },
+            {
+              "row": 3,
+              "col": 2
+            },
+            {
+              "row": 4,
+              "col": 1
+            },
+            {
+              "row": 5,
+              "col": 0
+            }
+          ]
+        },
+        "question": "To strongly say something again and again until accepted.",
+        "answer": "insist"
+      },
+      {
+        "q_id": 7,
+        "coins": 15,
+        "grid": [
+          [
+            "e",
+            "s",
+            "u",
+            "c",
+            "c",
+            "a"
+          ],
+          [
+            "v",
+            "r",
+            "y",
+            "a",
+            "f",
+            "t"
+          ],
+          [
+            "n",
+            "e",
+            "a",
+            "r",
+            "u",
+            "r"
+          ],
+          [
+            "t",
+            "j",
+            "g",
+            "s",
+            "h",
+            "e"
+          ],
+          [
+            "n",
+            "i",
+            "b",
+            "d",
+            "a",
+            "o"
+          ],
+          [
+            "a",
+            "u",
+            "t",
+            "w",
+            "p",
+            "o"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 0,
+              "col": 5
+            },
+            {
+              "row": 0,
+              "col": 4
+            },
+            {
+              "row": 0,
+              "col": 3
+            },
+            {
+              "row": 0,
+              "col": 2
+            },
+            {
+              "row": 0,
+              "col": 1
+            },
+            {
+              "row": 0,
+              "col": 0
+            }
+          ]
+        },
+        "question": "Saying that someone is guilty of a wrong action.",
+        "answer": "accuse"
+      },
+      {
+        "q_id": 10,
+        "coins": 14,
+        "grid": [
+          [
+            "a",
+            "e",
+            "t",
+            "l",
+            "a",
+            "g"
+          ],
+          [
+            "p",
+            "t",
+            "m",
+            "a",
+            "o",
+            "o"
+          ],
+          [
+            "l",
+            "n",
+            "f",
+            "g",
+            "i",
+            "b"
+          ],
+          [
+            "t",
+            "g",
+            "r",
+            "a",
+            "n",
+            "o"
+          ],
+          [
+            "l",
+            "c",
+            "f",
+            "a",
+            "r",
+            "a"
+          ],
+          [
+            "g",
+            "l",
+            "a",
+            "n",
+            "c",
+            "e"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 5,
+              "col": 0
+            },
+            {
+              "row": 5,
+              "col": 1
+            },
+            {
+              "row": 5,
+              "col": 2
+            },
+            {
+              "row": 5,
+              "col": 3
+            },
+            {
+              "row": 5,
+              "col": 4
+            },
+            {
+              "row": 5,
+              "col": 5
+            }
+          ]
+        },
+        "question": "A very quick look.",
+        "answer": "glance"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "title": "Level 8 \u2014 Precision",
+    "timeLimit": 70,
+    "orientation": "6x6",
+    "gridSize": 36,
+    "questions": [
+      {
+        "q_id": 1,
+        "coins": 15,
+        "grid": [
+          [
+            "n",
+            "v",
+            "a",
+            "j",
+            "u",
+            "t"
+          ],
+          [
+            "o",
+            "r",
+            "u",
+            "i",
+            "r",
+            "i"
+          ],
+          [
+            "e",
+            "n",
+            "s",
+            "t",
+            "i",
+            "m"
+          ],
+          [
+            "d",
+            "m",
+            "f",
+            "d",
+            "s",
+            "r"
+          ],
+          [
+            "m",
+            "f",
+            "e",
+            "i",
+            "k",
+            "p"
+          ],
+          [
+            "e",
+            "t",
+            "t",
+            "t",
+            "y",
+            "n"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 1,
+              "col": 4
+            },
+            {
+              "row": 2,
+              "col": 4
+            },
+            {
+              "row": 3,
+              "col": 4
+            },
+            {
+              "row": 4,
+              "col": 4
+            },
+            {
+              "row": 5,
+              "col": 4
+            }
+          ]
+        },
+        "question": "Full of danger or chances of something going wrong.",
+        "answer": "risky"
+      },
+      {
+        "q_id": 2,
+        "coins": 16,
+        "grid": [
+          [
+            "r",
+            "p",
+            "v",
+            "e",
+            "p",
+            "a"
+          ],
+          [
+            "a",
+            "e",
+            "n",
+            "o",
+            "a",
+            "p"
+          ],
+          [
+            "p",
+            "t",
+            "g",
+            "o",
+            "e",
+            "u"
+          ],
+          [
+            "t",
+            "e",
+            "a",
+            "n",
+            "s",
+            "e"
+          ],
+          [
+            "i",
+            "m",
+            "n",
+            "e",
+            "a",
+            "s"
+          ],
+          [
+            "r",
+            "h",
+            "m",
+            "n",
+            "t",
+            "d"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 5,
+              "col": 5
+            },
+            {
+              "row": 4,
+              "col": 4
+            },
+            {
+              "row": 3,
+              "col": 3
+            },
+            {
+              "row": 2,
+              "col": 2
+            },
+            {
+              "row": 1,
+              "col": 1
+            },
+            {
+              "row": 0,
+              "col": 0
+            }
+          ]
+        },
+        "question": "A risk that can hurt you.",
+        "answer": "danger"
+      },
+      {
+        "q_id": 6,
+        "coins": 15,
+        "grid": [
+          [
+            "d",
+            "t",
+            "i",
+            "i",
+            "e",
+            "u"
+          ],
+          [
+            "o",
+            "h",
+            "b",
+            "a",
+            "t",
+            "e"
+          ],
+          [
+            "a",
+            "e",
+            "t",
+            "h",
+            "a",
+            "i"
+          ],
+          [
+            "e",
+            "a",
+            "t",
+            "d",
+            "e",
+            "i"
+          ],
+          [
+            "e",
+            "o",
+            "o",
+            "i",
+            "r",
+            "d"
+          ],
+          [
+            "h",
+            "g",
+            "e",
+            "m",
+            "c",
+            "y"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 5,
+              "col": 4
+            },
+            {
+              "row": 4,
+              "col": 4
+            },
+            {
+              "row": 3,
+              "col": 4
+            },
+            {
+              "row": 2,
+              "col": 4
+            },
+            {
+              "row": 1,
+              "col": 4
+            },
+            {
+              "row": 0,
+              "col": 4
+            }
+          ]
+        },
+        "question": "To bring something new into existence.",
+        "answer": "create"
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "title": "Level 11 \u2014 Reflection",
+    "timeLimit": 80,
+    "orientation": "6x6",
+    "gridSize": 36,
+    "questions": [
+      {
+        "q_id": 1,
+        "coins": 14,
+        "grid": [
+          [
+            "k",
+            "g",
+            "c",
+            "e",
+            "n",
+            "s"
+          ],
+          [
+            "t",
+            "e",
+            "r",
+            "g",
+            "e",
+            "r"
+          ],
+          [
+            "o",
+            "a",
+            "o",
+            "o",
+            "u",
+            "n"
+          ],
+          [
+            "e",
+            "d",
+            "s",
+            "e",
+            "n",
+            "a"
+          ],
+          [
+            "s",
+            "l",
+            "a",
+            "o",
+            "n",
+            "p"
+          ],
+          [
+            "e",
+            "i",
+            "g",
+            "p",
+            "r",
+            "c"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 1,
+              "col": 5
+            },
+            {
+              "row": 1,
+              "col": 4
+            },
+            {
+              "row": 1,
+              "col": 3
+            },
+            {
+              "row": 1,
+              "col": 2
+            },
+            {
+              "row": 1,
+              "col": 1
+            },
+            {
+              "row": 1,
+              "col": 0
+            }
+          ]
+        },
+        "question": "A heavy feeling after making a mistake.",
+        "answer": "regret"
+      },
+      {
+        "q_id": 5,
+        "coins": 13,
+        "grid": [
+          [
+            "f",
+            "t",
+            "i",
+            "t",
+            "d",
+            "s"
+          ],
+          [
+            "t",
+            "t",
+            "h",
+            "e",
+            "e",
+            "i"
+          ],
+          [
+            "t",
+            "t",
+            "y",
+            "c",
+            "l",
+            "n"
+          ],
+          [
+            "p",
+            "p",
+            "r",
+            "j",
+            "o",
+            "l"
+          ],
+          [
+            "l",
+            "e",
+            "i",
+            "r",
+            "o",
+            "s"
+          ],
+          [
+            "t",
+            "d",
+            "n",
+            "n",
+            "f",
+            "n"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 0,
+              "col": 5
+            },
+            {
+              "row": 1,
+              "col": 4
+            },
+            {
+              "row": 2,
+              "col": 3
+            },
+            {
+              "row": 3,
+              "col": 2
+            },
+            {
+              "row": 4,
+              "col": 1
+            },
+            {
+              "row": 5,
+              "col": 0
+            }
+          ]
+        },
+        "question": "Something not told to everyone.",
+        "answer": "secret"
+      },
+      {
+        "q_id": 7,
+        "coins": 12,
+        "grid": [
+          [
+            "f",
+            "i",
+            "m",
+            "i",
+            "n",
+            "s"
+          ],
+          [
+            "t",
+            "h",
+            "u",
+            "e",
+            "e",
+            "o"
+          ],
+          [
+            "e",
+            "i",
+            "m",
+            "s",
+            "s",
+            "e"
+          ],
+          [
+            "f",
+            "e",
+            "b",
+            "e",
+            "r",
+            "f"
+          ],
+          [
+            "t",
+            "t",
+            "l",
+            "f",
+            "w",
+            "z"
+          ],
+          [
+            "l",
+            "d",
+            "e",
+            "a",
+            "t",
+            "n"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 0,
+              "col": 2
+            },
+            {
+              "row": 1,
+              "col": 2
+            },
+            {
+              "row": 2,
+              "col": 2
+            },
+            {
+              "row": 3,
+              "col": 2
+            },
+            {
+              "row": 4,
+              "col": 2
+            },
+            {
+              "row": 5,
+              "col": 2
+            }
+          ]
+        },
+        "question": "Speaking so softly that words cannot be understood.",
+        "answer": "mumble"
+      },
+      {
+        "q_id": 8,
+        "coins": 12,
+        "grid": [
+          [
+            "i",
+            "l",
+            "f",
+            "h",
+            "n",
+            "u"
+          ],
+          [
+            "i",
+            "g",
+            "s",
+            "o",
+            "m",
+            "o"
+          ],
+          [
+            "y",
+            "s",
+            "n",
+            "o",
+            "a",
+            "i"
+          ],
+          [
+            "i",
+            "t",
+            "o",
+            "o",
+            "t",
+            "l"
+          ],
+          [
+            "t",
+            "s",
+            "s",
+            "t",
+            "r",
+            "e"
+          ],
+          [
+            "a",
+            "t",
+            "w",
+            "a",
+            "t",
+            "e"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 0,
+              "col": 0
+            },
+            {
+              "row": 1,
+              "col": 1
+            },
+            {
+              "row": 2,
+              "col": 2
+            },
+            {
+              "row": 3,
+              "col": 3
+            },
+            {
+              "row": 4,
+              "col": 4
+            },
+            {
+              "row": 5,
+              "col": 5
+            }
+          ]
+        },
+        "question": "Choosing not to pay attention to someone or something.",
+        "answer": "ignore"
+      },
+      {
+        "q_id": 9,
+        "coins": 13,
+        "grid": [
+          [
+            "e",
+            "l",
+            "w",
+            "n",
+            "r",
+            "f"
+          ],
+          [
+            "f",
+            "h",
+            "o",
+            "r",
+            "n",
+            "h"
+          ],
+          [
+            "a",
+            "o",
+            "e",
+            "t",
+            "i",
+            "a"
+          ],
+          [
+            "n",
+            "r",
+            "h",
+            "s",
+            "a",
+            "s"
+          ],
+          [
+            "w",
+            "a",
+            "n",
+            "d",
+            "e",
+            "r"
+          ],
+          [
+            "p",
+            "f",
+            "d",
+            "t",
+            "e",
+            "u"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 4,
+              "col": 0
+            },
+            {
+              "row": 4,
+              "col": 1
+            },
+            {
+              "row": 4,
+              "col": 2
+            },
+            {
+              "row": 4,
+              "col": 3
+            },
+            {
+              "row": 4,
+              "col": 4
+            },
+            {
+              "row": 4,
+              "col": 5
+            }
+          ]
+        },
+        "question": "Moving without a clear direction or purpose.",
+        "answer": "wander"
+      },
+      {
+        "q_id": 10,
+        "coins": 13,
+        "grid": [
+          [
+            "a",
+            "f",
+            "a",
+            "a",
+            "a",
+            "s"
+          ],
+          [
+            "o",
+            "p",
+            "s",
+            "o",
+            "o",
+            "t"
+          ],
+          [
+            "f",
+            "h",
+            "f",
+            "h",
+            "d",
+            "r"
+          ],
+          [
+            "n",
+            "e",
+            "h",
+            "a",
+            "s",
+            "o"
+          ],
+          [
+            "n",
+            "n",
+            "c",
+            "a",
+            "o",
+            "l"
+          ],
+          [
+            "i",
+            "i",
+            "r",
+            "e",
+            "h",
+            "l"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 0,
+              "col": 5
+            },
+            {
+              "row": 1,
+              "col": 5
+            },
+            {
+              "row": 2,
+              "col": 5
+            },
+            {
+              "row": 3,
+              "col": 5
+            },
+            {
+              "row": 4,
+              "col": 5
+            },
+            {
+              "row": 5,
+              "col": 5
+            }
+          ]
+        },
+        "question": "Walking in a slow, relaxed way.",
+        "answer": "stroll"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "title": "Level 12 \u2014 Social Skills",
+    "timeLimit": 78,
+    "orientation": "6x6",
+    "gridSize": 36,
+    "questions": [
+      {
+        "q_id": 2,
+        "coins": 15,
+        "grid": [
+          [
+            "t",
+            "n",
+            "e",
+            "t",
+            "c",
+            "d"
+          ],
+          [
+            "l",
+            "a",
+            "s",
+            "s",
+            "d",
+            "t"
+          ],
+          [
+            "l",
+            "l",
+            "l",
+            "d",
+            "u",
+            "n"
+          ],
+          [
+            "o",
+            "n",
+            "d",
+            "o",
+            "g",
+            "w"
+          ],
+          [
+            "i",
+            "n",
+            "s",
+            "i",
+            "s",
+            "t"
+          ],
+          [
+            "m",
+            "h",
+            "l",
+            "i",
+            "e",
+            "r"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 4,
+              "col": 0
+            },
+            {
+              "row": 4,
+              "col": 1
+            },
+            {
+              "row": 4,
+              "col": 2
+            },
+            {
+              "row": 4,
+              "col": 3
+            },
+            {
+              "row": 4,
+              "col": 4
+            },
+            {
+              "row": 4,
+              "col": 5
+            }
+          ]
+        },
+        "question": "To strongly say something again and again until accepted.",
+        "answer": "insist"
+      },
+      {
+        "q_id": 3,
+        "coins": 16,
+        "grid": [
+          [
+            "t",
+            "o",
+            "e",
+            "s",
+            "i",
+            "e"
+          ],
+          [
+            "i",
+            "s",
+            "o",
+            "s",
+            "s",
+            "i"
+          ],
+          [
+            "h",
+            "o",
+            "v",
+            "u",
+            "i",
+            "h"
+          ],
+          [
+            "i",
+            "i",
+            "c",
+            "n",
+            "n",
+            "y"
+          ],
+          [
+            "t",
+            "c",
+            "l",
+            "o",
+            "c",
+            "r"
+          ],
+          [
+            "a",
+            "h",
+            "s",
+            "e",
+            "n",
+            "e"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 5,
+              "col": 0
+            },
+            {
+              "row": 4,
+              "col": 1
+            },
+            {
+              "row": 3,
+              "col": 2
+            },
+            {
+              "row": 2,
+              "col": 3
+            },
+            {
+              "row": 1,
+              "col": 4
+            },
+            {
+              "row": 0,
+              "col": 5
+            }
+          ]
+        },
+        "question": "Saying that someone is guilty of a wrong action.",
+        "answer": "accuse"
+      },
+      {
+        "q_id": 6,
+        "coins": 13,
+        "grid": [
+          [
+            "d",
+            "t",
+            "t",
+            "s",
+            "a",
+            "e"
+          ],
+          [
+            "i",
+            "i",
+            "t",
+            "u",
+            "c",
+            "l"
+          ],
+          [
+            "o",
+            "l",
+            "h",
+            "n",
+            "i",
+            "d"
+          ],
+          [
+            "i",
+            "w",
+            "a",
+            "n",
+            "c",
+            "w"
+          ],
+          [
+            "r",
+            "l",
+            "s",
+            "t",
+            "o",
+            "m"
+          ],
+          [
+            "g",
+            "b",
+            "s",
+            "s",
+            "a",
+            "n"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 5,
+              "col": 0
+            },
+            {
+              "row": 4,
+              "col": 1
+            },
+            {
+              "row": 3,
+              "col": 2
+            },
+            {
+              "row": 2,
+              "col": 3
+            },
+            {
+              "row": 1,
+              "col": 4
+            },
+            {
+              "row": 0,
+              "col": 5
+            }
+          ]
+        },
+        "question": "A very quick look.",
+        "answer": "glance"
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "title": "Level 13 \u2014 Observation",
+    "timeLimit": 76,
+    "orientation": "6x6",
+    "gridSize": 36,
+    "questions": [
+      {
+        "q_id": 2,
+        "coins": 14,
+        "grid": [
+          [
+            "f",
+            "n",
+            "i",
+            "e",
+            "t",
+            "q"
+          ],
+          [
+            "a",
+            "n",
+            "a",
+            "c",
+            "c",
+            "n"
+          ],
+          [
+            "d",
+            "h",
+            "e",
+            "i",
+            "b",
+            "u"
+          ],
+          [
+            "p",
+            "s",
+            "u",
+            "t",
+            "d",
+            "a"
+          ],
+          [
+            "a",
+            "e",
+            "o",
+            "o",
+            "f",
+            "i"
+          ],
+          [
+            "y",
+            "e",
+            "o",
+            "n",
+            "r",
+            "y"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 5,
+              "col": 3
+            },
+            {
+              "row": 4,
+              "col": 3
+            },
+            {
+              "row": 3,
+              "col": 3
+            },
+            {
+              "row": 2,
+              "col": 3
+            },
+            {
+              "row": 1,
+              "col": 3
+            },
+            {
+              "row": 0,
+              "col": 3
+            }
+          ]
+        },
+        "question": "Suddenly seeing something you didn\u2019t see before.",
+        "answer": "notice"
+      },
+      {
+        "q_id": 5,
+        "coins": 15,
+        "grid": [
+          [
+            "g",
+            "u",
+            "o",
+            "e",
+            "r",
+            "s"
+          ],
+          [
+            "t",
+            "l",
+            "d",
+            "v",
+            "s",
+            "a"
+          ],
+          [
+            "a",
+            "e",
+            "a",
+            "d",
+            "c",
+            "l"
+          ],
+          [
+            "r",
+            "o",
+            "i",
+            "n",
+            "n",
+            "l"
+          ],
+          [
+            "o",
+            "s",
+            "e",
+            "s",
+            "c",
+            "a"
+          ],
+          [
+            "l",
+            "s",
+            "s",
+            "s",
+            "s",
+            "e"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 0,
+              "col": 0
+            },
+            {
+              "row": 1,
+              "col": 1
+            },
+            {
+              "row": 2,
+              "col": 2
+            },
+            {
+              "row": 3,
+              "col": 3
+            },
+            {
+              "row": 4,
+              "col": 4
+            },
+            {
+              "row": 5,
+              "col": 5
+            }
+          ]
+        },
+        "question": "A very quick look.",
+        "answer": "glance"
+      },
+      {
+        "q_id": 7,
+        "coins": 14,
+        "grid": [
+          [
+            "g",
+            "e",
+            "r",
+            "s",
+            "l",
+            "t"
+          ],
+          [
+            "c",
+            "n",
+            "n",
+            "m",
+            "h",
+            "a"
+          ],
+          [
+            "t",
+            "o",
+            "t",
+            "n",
+            "t",
+            "p"
+          ],
+          [
+            "s",
+            "u",
+            "r",
+            "v",
+            "e",
+            "y"
+          ],
+          [
+            "o",
+            "o",
+            "c",
+            "n",
+            "a",
+            "a"
+          ],
+          [
+            "c",
+            "s",
+            "m",
+            "e",
+            "f",
+            "o"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 3,
+              "col": 0
+            },
+            {
+              "row": 3,
+              "col": 1
+            },
+            {
+              "row": 3,
+              "col": 2
+            },
+            {
+              "row": 3,
+              "col": 3
+            },
+            {
+              "row": 3,
+              "col": 4
+            },
+            {
+              "row": 3,
+              "col": 5
+            }
+          ]
+        },
+        "question": "To inspect broadly or get an overview.",
+        "answer": "survey"
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "title": "Level 14 \u2014 Risk & Resolve",
+    "timeLimit": 74,
+    "orientation": "6x6",
+    "gridSize": 36,
+    "questions": [
+      {
+        "q_id": 1,
+        "coins": 16,
+        "grid": [
+          [
+            "r",
+            "f",
+            "n",
+            "t",
+            "s",
+            "i"
+          ],
+          [
+            "y",
+            "i",
+            "r",
+            "a",
+            "u",
+            "s"
+          ],
+          [
+            "u",
+            "f",
+            "s",
+            "i",
+            "o",
+            "h"
+          ],
+          [
+            "m",
+            "r",
+            "e",
+            "k",
+            "m",
+            "m"
+          ],
+          [
+            "t",
+            "o",
+            "o",
+            "v",
+            "y",
+            "l"
+          ],
+          [
+            "m",
+            "w",
+            "i",
+            "n",
+            "a",
+            "r"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 0,
+              "col": 0
+            },
+            {
+              "row": 1,
+              "col": 1
+            },
+            {
+              "row": 2,
+              "col": 2
+            },
+            {
+              "row": 3,
+              "col": 3
+            },
+            {
+              "row": 4,
+              "col": 4
+            }
+          ]
+        },
+        "question": "Full of danger or chances of something going wrong.",
+        "answer": "risky"
+      },
+      {
+        "q_id": 2,
+        "coins": 17,
+        "grid": [
+          [
+            "r",
+            "l",
+            "u",
+            "d",
+            "n",
+            "o"
+          ],
+          [
+            "s",
+            "e",
+            "i",
+            "t",
+            "h",
+            "e"
+          ],
+          [
+            "s",
+            "y",
+            "g",
+            "r",
+            "r",
+            "s"
+          ],
+          [
+            "n",
+            "s",
+            "n",
+            "n",
+            "l",
+            "l"
+          ],
+          [
+            "e",
+            "e",
+            "b",
+            "u",
+            "a",
+            "t"
+          ],
+          [
+            "t",
+            "e",
+            "t",
+            "i",
+            "s",
+            "d"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 5,
+              "col": 5
+            },
+            {
+              "row": 4,
+              "col": 4
+            },
+            {
+              "row": 3,
+              "col": 3
+            },
+            {
+              "row": 2,
+              "col": 2
+            },
+            {
+              "row": 1,
+              "col": 1
+            },
+            {
+              "row": 0,
+              "col": 0
+            }
+          ]
+        },
+        "question": "A risk that can hurt you.",
+        "answer": "danger"
+      },
+      {
+        "q_id": 3,
+        "coins": 16,
+        "grid": [
+          [
+            "p",
+            "a",
+            "n",
+            "i",
+            "c",
+            "e"
+          ],
+          [
+            "o",
+            "d",
+            "h",
+            "n",
+            "r",
+            "e"
+          ],
+          [
+            "e",
+            "b",
+            "f",
+            "c",
+            "a",
+            "z"
+          ],
+          [
+            "e",
+            "e",
+            "t",
+            "n",
+            "c",
+            "n"
+          ],
+          [
+            "y",
+            "t",
+            "n",
+            "o",
+            "h",
+            "a"
+          ],
+          [
+            "g",
+            "j",
+            "f",
+            "h",
+            "u",
+            "o"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 0,
+              "col": 0
+            },
+            {
+              "row": 0,
+              "col": 1
+            },
+            {
+              "row": 0,
+              "col": 2
+            },
+            {
+              "row": 0,
+              "col": 3
+            },
+            {
+              "row": 0,
+              "col": 4
+            }
+          ]
+        },
+        "question": "A sudden rush of fear that makes clear thinking hard.",
+        "answer": "panic"
+      },
+      {
+        "q_id": 4,
+        "coins": 18,
+        "grid": [
+          [
+            "t",
+            "h",
+            "i",
+            "x",
+            "r",
+            "o"
+          ],
+          [
+            "t",
+            "d",
+            "s",
+            "i",
+            "d",
+            "n"
+          ],
+          [
+            "m",
+            "d",
+            "e",
+            "n",
+            "c",
+            "m"
+          ],
+          [
+            "e",
+            "l",
+            "r",
+            "a",
+            "j",
+            "z"
+          ],
+          [
+            "r",
+            "e",
+            "s",
+            "c",
+            "u",
+            "e"
+          ],
+          [
+            "h",
+            "n",
+            "h",
+            "s",
+            "n",
+            "t"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 4,
+              "col": 0
+            },
+            {
+              "row": 4,
+              "col": 1
+            },
+            {
+              "row": 4,
+              "col": 2
+            },
+            {
+              "row": 4,
+              "col": 3
+            },
+            {
+              "row": 4,
+              "col": 4
+            },
+            {
+              "row": 4,
+              "col": 5
+            }
+          ]
+        },
+        "question": "Helping someone escape from danger.",
+        "answer": "rescue"
+      },
+      {
+        "q_id": 5,
+        "coins": 16,
+        "grid": [
+          [
+            "v",
+            "n",
+            "a",
+            "n",
+            "a",
+            "e"
+          ],
+          [
+            "t",
+            "t",
+            "v",
+            "o",
+            "p",
+            "a"
+          ],
+          [
+            "a",
+            "h",
+            "u",
+            "a",
+            "u",
+            "e"
+          ],
+          [
+            "m",
+            "d",
+            "c",
+            "u",
+            "r",
+            "a"
+          ],
+          [
+            "n",
+            "s",
+            "e",
+            "s",
+            "t",
+            "g"
+          ],
+          [
+            "e",
+            "i",
+            "m",
+            "t",
+            "d",
+            "i"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 5,
+              "col": 0
+            },
+            {
+              "row": 4,
+              "col": 1
+            },
+            {
+              "row": 3,
+              "col": 2
+            },
+            {
+              "row": 2,
+              "col": 3
+            },
+            {
+              "row": 1,
+              "col": 4
+            },
+            {
+              "row": 0,
+              "col": 5
+            }
+          ]
+        },
+        "question": "Getting out of trouble or a trap.",
+        "answer": "escape"
+      },
+      {
+        "q_id": 6,
+        "coins": 17,
+        "grid": [
+          [
+            "a",
+            "u",
+            "n",
+            "h",
+            "a",
+            "r"
+          ],
+          [
+            "a",
+            "f",
+            "p",
+            "f",
+            "i",
+            "d"
+          ],
+          [
+            "h",
+            "o",
+            "t",
+            "a",
+            "r",
+            "v"
+          ],
+          [
+            "d",
+            "i",
+            "p",
+            "w",
+            "i",
+            "t"
+          ],
+          [
+            "b",
+            "e",
+            "l",
+            "i",
+            "e",
+            "h"
+          ],
+          [
+            "r",
+            "a",
+            "c",
+            "m",
+            "a",
+            "l"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 5,
+              "col": 0
+            },
+            {
+              "row": 4,
+              "col": 1
+            },
+            {
+              "row": 3,
+              "col": 2
+            },
+            {
+              "row": 2,
+              "col": 3
+            },
+            {
+              "row": 1,
+              "col": 4
+            },
+            {
+              "row": 0,
+              "col": 5
+            }
+          ]
+        },
+        "question": "Fixing something that is broken.",
+        "answer": "repair"
+      },
+      {
+        "q_id": 8,
+        "coins": 16,
+        "grid": [
+          [
+            "d",
+            "o",
+            "a",
+            "d",
+            "s",
+            "d"
+          ],
+          [
+            "e",
+            "n",
+            "w",
+            "v",
+            "g",
+            "h"
+          ],
+          [
+            "f",
+            "l",
+            "s",
+            "a",
+            "d",
+            "o"
+          ],
+          [
+            "e",
+            "a",
+            "a",
+            "o",
+            "i",
+            "t"
+          ],
+          [
+            "n",
+            "n",
+            "r",
+            "l",
+            "r",
+            "b"
+          ],
+          [
+            "d",
+            "n",
+            "e",
+            "h",
+            "l",
+            "e"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 0,
+              "col": 0
+            },
+            {
+              "row": 1,
+              "col": 0
+            },
+            {
+              "row": 2,
+              "col": 0
+            },
+            {
+              "row": 3,
+              "col": 0
+            },
+            {
+              "row": 4,
+              "col": 0
+            },
+            {
+              "row": 5,
+              "col": 0
+            }
+          ]
+        },
+        "question": "To guard or support against attack or harm.",
+        "answer": "defend"
+      },
+      {
+        "q_id": 10,
+        "coins": 17,
+        "grid": [
+          [
+            "u",
+            "h",
+            "c",
+            "k",
+            "y",
+            "s"
+          ],
+          [
+            "h",
+            "y",
+            "h",
+            "i",
+            "a",
+            "r"
+          ],
+          [
+            "o",
+            "o",
+            "s",
+            "f",
+            "n",
+            "o"
+          ],
+          [
+            "s",
+            "o",
+            "e",
+            "t",
+            "t",
+            "o"
+          ],
+          [
+            "t",
+            "t",
+            "e",
+            "n",
+            "n",
+            "i"
+          ],
+          [
+            "y",
+            "a",
+            "l",
+            "t",
+            "d",
+            "o"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 0,
+              "col": 5
+            },
+            {
+              "row": 1,
+              "col": 4
+            },
+            {
+              "row": 2,
+              "col": 3
+            },
+            {
+              "row": 3,
+              "col": 2
+            },
+            {
+              "row": 4,
+              "col": 1
+            },
+            {
+              "row": 5,
+              "col": 0
+            }
+          ]
+        },
+        "question": "Freedom from danger or risk.",
+        "answer": "safety"
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "title": "Level 16 \u2014 Problem Solving",
+    "timeLimit": 70,
+    "orientation": "6x6",
+    "gridSize": 36,
+    "questions": [
+      {
+        "q_id": 1,
+        "coins": 18,
+        "grid": [
+          [
+            "y",
+            "t",
+            "u",
+            "n",
+            "a",
+            "e"
+          ],
+          [
+            "e",
+            "b",
+            "k",
+            "l",
+            "l",
+            "v"
+          ],
+          [
+            "d",
+            "w",
+            "s",
+            "i",
+            "s",
+            "l"
+          ],
+          [
+            "t",
+            "r",
+            "h",
+            "c",
+            "e",
+            "o"
+          ],
+          [
+            "i",
+            "n",
+            "k",
+            "i",
+            "i",
+            "s"
+          ],
+          [
+            "c",
+            "u",
+            "t",
+            "w",
+            "n",
+            "t"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 4,
+              "col": 5
+            },
+            {
+              "row": 3,
+              "col": 5
+            },
+            {
+              "row": 2,
+              "col": 5
+            },
+            {
+              "row": 1,
+              "col": 5
+            },
+            {
+              "row": 0,
+              "col": 5
+            }
+          ]
+        },
+        "question": "To find an answer to a problem or puzzle.",
+        "answer": "solve"
+      },
+      {
+        "q_id": 6,
+        "coins": 18,
+        "grid": [
+          [
+            "m",
+            "s",
+            "t",
+            "o",
+            "d",
+            "s"
+          ],
+          [
+            "t",
+            "e",
+            "d",
+            "r",
+            "i",
+            "r"
+          ],
+          [
+            "s",
+            "e",
+            "t",
+            "i",
+            "h",
+            "w"
+          ],
+          [
+            "h",
+            "c",
+            "l",
+            "h",
+            "r",
+            "i"
+          ],
+          [
+            "l",
+            "h",
+            "o",
+            "o",
+            "o",
+            "o"
+          ],
+          [
+            "e",
+            "n",
+            "n",
+            "l",
+            "t",
+            "d"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 0,
+              "col": 0
+            },
+            {
+              "row": 1,
+              "col": 1
+            },
+            {
+              "row": 2,
+              "col": 2
+            },
+            {
+              "row": 3,
+              "col": 3
+            },
+            {
+              "row": 4,
+              "col": 4
+            },
+            {
+              "row": 5,
+              "col": 5
+            }
+          ]
+        },
+        "question": "A systematic way of doing something.",
+        "answer": "method"
+      },
+      {
+        "q_id": 7,
+        "coins": 19,
+        "grid": [
+          [
+            "r",
+            "a",
+            "n",
+            "t",
+            "u",
+            "r"
+          ],
+          [
+            "e",
+            "r",
+            "b",
+            "e",
+            "o",
+            "o"
+          ],
+          [
+            "a",
+            "a",
+            "h",
+            "i",
+            "m",
+            "l"
+          ],
+          [
+            "s",
+            "o",
+            "n",
+            "l",
+            "f",
+            "a"
+          ],
+          [
+            "o",
+            "u",
+            "k",
+            "d",
+            "n",
+            "r"
+          ],
+          [
+            "n",
+            "d",
+            "a",
+            "e",
+            "r",
+            "c"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 0,
+              "col": 0
+            },
+            {
+              "row": 1,
+              "col": 0
+            },
+            {
+              "row": 2,
+              "col": 0
+            },
+            {
+              "row": 3,
+              "col": 0
+            },
+            {
+              "row": 4,
+              "col": 0
+            },
+            {
+              "row": 5,
+              "col": 0
+            }
+          ]
+        },
+        "question": "A logical basis for a belief or action.",
+        "answer": "reason"
+      },
+      {
+        "q_id": 8,
+        "coins": 20,
+        "grid": [
+          [
+            "i",
+            "m",
+            "n",
+            "r",
+            "e",
+            "t"
+          ],
+          [
+            "s",
+            "s",
+            "h",
+            "o",
+            "d",
+            "h"
+          ],
+          [
+            "a",
+            "h",
+            "b",
+            "e",
+            "b",
+            "n"
+          ],
+          [
+            "t",
+            "a",
+            "b",
+            "r",
+            "r",
+            "o"
+          ],
+          [
+            "o",
+            "u",
+            "l",
+            "e",
+            "i",
+            "a"
+          ],
+          [
+            "g",
+            "n",
+            "t",
+            "r",
+            "i",
+            "i"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 1,
+              "col": 4
+            },
+            {
+              "row": 2,
+              "col": 3
+            },
+            {
+              "row": 3,
+              "col": 2
+            },
+            {
+              "row": 4,
+              "col": 1
+            },
+            {
+              "row": 5,
+              "col": 0
+            }
+          ]
+        },
+        "question": "To remove defects or problems (in code or systems).",
+        "answer": "debug"
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "title": "Level 17 \u2014 Creativity",
+    "timeLimit": 68,
+    "orientation": "6x6",
+    "gridSize": 36,
+    "questions": [
+      {
+        "q_id": 1,
+        "coins": 19,
+        "grid": [
+          [
+            "c",
+            "f",
+            "f",
+            "u",
+            "n",
+            "b"
+          ],
+          [
+            "g",
+            "r",
+            "o",
+            "t",
+            "o",
+            "y"
+          ],
+          [
+            "d",
+            "a",
+            "e",
+            "a",
+            "a",
+            "s"
+          ],
+          [
+            "n",
+            "j",
+            "o",
+            "a",
+            "t",
+            "n"
+          ],
+          [
+            "d",
+            "k",
+            "i",
+            "i",
+            "t",
+            "d"
+          ],
+          [
+            "s",
+            "i",
+            "r",
+            "o",
+            "e",
+            "e"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 0,
+              "col": 0
+            },
+            {
+              "row": 1,
+              "col": 1
+            },
+            {
+              "row": 2,
+              "col": 2
+            },
+            {
+              "row": 3,
+              "col": 3
+            },
+            {
+              "row": 4,
+              "col": 4
+            },
+            {
+              "row": 5,
+              "col": 5
+            }
+          ]
+        },
+        "question": "To bring something new into existence.",
+        "answer": "create"
+      },
+      {
+        "q_id": 2,
+        "coins": 20,
+        "grid": [
+          [
+            "c",
+            "w",
+            "e",
+            "y",
+            "n",
+            "a"
+          ],
+          [
+            "n",
+            "h",
+            "h",
+            "i",
+            "h",
+            "g"
+          ],
+          [
+            "n",
+            "e",
+            "l",
+            "e",
+            "l",
+            "i"
+          ],
+          [
+            "i",
+            "n",
+            "v",
+            "e",
+            "n",
+            "t"
+          ],
+          [
+            "t",
+            "t",
+            "n",
+            "d",
+            "i",
+            "t"
+          ],
+          [
+            "e",
+            "i",
+            "r",
+            "m",
+            "t",
+            "s"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 3,
+              "col": 0
+            },
+            {
+              "row": 3,
+              "col": 1
+            },
+            {
+              "row": 3,
+              "col": 2
+            },
+            {
+              "row": 3,
+              "col": 3
+            },
+            {
+              "row": 3,
+              "col": 4
+            },
+            {
+              "row": 3,
+              "col": 5
+            }
+          ]
+        },
+        "question": "To design or make something that did not exist before.",
+        "answer": "invent"
+      },
+      {
+        "q_id": 5,
+        "coins": 19,
+        "grid": [
+          [
+            "h",
+            "p",
+            "f",
+            "a",
+            "u",
+            "l"
+          ],
+          [
+            "s",
+            "c",
+            "e",
+            "z",
+            "f",
+            "s"
+          ],
+          [
+            "s",
+            "f",
+            "t",
+            "i",
+            "e",
+            "a"
+          ],
+          [
+            "r",
+            "s",
+            "s",
+            "e",
+            "x",
+            "r"
+          ],
+          [
+            "n",
+            "m",
+            "n",
+            "e",
+            "k",
+            "o"
+          ],
+          [
+            "a",
+            "r",
+            "b",
+            "b",
+            "e",
+            "s"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 5,
+              "col": 5
+            },
+            {
+              "row": 4,
+              "col": 4
+            },
+            {
+              "row": 3,
+              "col": 3
+            },
+            {
+              "row": 2,
+              "col": 2
+            },
+            {
+              "row": 1,
+              "col": 1
+            },
+            {
+              "row": 0,
+              "col": 0
+            }
+          ]
+        },
+        "question": "A rough drawing capturing the main ideas.",
+        "answer": "sketch"
+      },
+      {
+        "q_id": 6,
+        "coins": 20,
+        "grid": [
+          [
+            "n",
+            "l",
+            "t",
+            "a",
+            "s",
+            "t"
+          ],
+          [
+            "e",
+            "n",
+            "m",
+            "a",
+            "d",
+            "a"
+          ],
+          [
+            "u",
+            "m",
+            "i",
+            "d",
+            "h",
+            "i"
+          ],
+          [
+            "t",
+            "h",
+            "c",
+            "h",
+            "t",
+            "g"
+          ],
+          [
+            "c",
+            "o",
+            "l",
+            "l",
+            "a",
+            "b"
+          ],
+          [
+            "n",
+            "h",
+            "d",
+            "e",
+            "s",
+            "s"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 4,
+              "col": 0
+            },
+            {
+              "row": 4,
+              "col": 1
+            },
+            {
+              "row": 4,
+              "col": 2
+            },
+            {
+              "row": 4,
+              "col": 3
+            },
+            {
+              "row": 4,
+              "col": 4
+            },
+            {
+              "row": 4,
+              "col": 5
+            }
+          ]
+        },
+        "question": "To work together to produce creative results (short form).",
+        "answer": "collab"
+      },
+      {
+        "q_id": 7,
+        "coins": 21,
+        "grid": [
+          [
+            "y",
+            "r",
+            "s",
+            "d",
+            "o",
+            "l"
+          ],
+          [
+            "n",
+            "t",
+            "l",
+            "m",
+            "a",
+            "a"
+          ],
+          [
+            "k",
+            "r",
+            "u",
+            "p",
+            "s",
+            "y"
+          ],
+          [
+            "u",
+            "s",
+            "o",
+            "a",
+            "m",
+            "m"
+          ],
+          [
+            "e",
+            "w",
+            "d",
+            "s",
+            "n",
+            "t"
+          ],
+          [
+            "s",
+            "t",
+            "w",
+            "e",
+            "n",
+            "e"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 1,
+              "col": 3
+            },
+            {
+              "row": 2,
+              "col": 2
+            },
+            {
+              "row": 3,
+              "col": 1
+            },
+            {
+              "row": 4,
+              "col": 0
+            }
+          ]
+        },
+        "question": "A source of artistic inspiration.",
+        "answer": "muse"
+      },
+      {
+        "q_id": 10,
+        "coins": 20,
+        "grid": [
+          [
+            "k",
+            "m",
+            "u",
+            "t",
+            "r",
+            "o"
+          ],
+          [
+            "r",
+            "h",
+            "a",
+            "a",
+            "s",
+            "a"
+          ],
+          [
+            "a",
+            "i",
+            "l",
+            "s",
+            "o",
+            "l"
+          ],
+          [
+            "p",
+            "z",
+            "b",
+            "e",
+            "c",
+            "f"
+          ],
+          [
+            "s",
+            "n",
+            "a",
+            "o",
+            "n",
+            "t"
+          ],
+          [
+            "o",
+            "l",
+            "o",
+            "n",
+            "e",
+            "a"
+          ]
+        ],
+        "answerPlacement": {
+          "path": [
+            {
+              "row": 4,
+              "col": 0
+            },
+            {
+              "row": 3,
+              "col": 0
+            },
+            {
+              "row": 2,
+              "col": 0
+            },
+            {
+              "row": 1,
+              "col": 0
+            },
+            {
+              "row": 0,
+              "col": 0
+            }
+          ]
+        },
+        "question": "A small but powerful trigger for an idea.",
+        "answer": "spark"
+      }
+    ]
+  }
+]
