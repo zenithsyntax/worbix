@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:confetti/confetti.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'gameplay_controller.dart';
 import 'gameplay_state.dart';
 import '../ads/ad_manager.dart';
@@ -42,85 +43,322 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (_) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        backgroundColor: Colors.yellow.shade100,
-        title: Row(
-          children: [
-            const Icon(
-              Icons.star,
-              color: Colors.orange,
-              size: 40,
-            ).animate().scale(duration: 500.ms, curve: Curves.elasticOut),
-            const SizedBox(width: 8),
-            Text("Level Complete!", style: theme.textTheme.headlineSmall),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              "You found the word!\nCoins: ${state.currentCoins}",
-              style: theme.textTheme.bodyLarge,
-              textAlign: TextAlign.center,
+      barrierColor: Colors.black.withOpacity(0.5),
+      builder: (_) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width * 0.9,
+            maxHeight: MediaQuery.of(context).size.height * 0.8,
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFFFFF8E1), // Cream
+                  Color(0xFFFFE0B2), // Light orange
+                  Color(0xFFFFCC80), // Orange
+                ],
+              ),
+              borderRadius: BorderRadius.circular(30),
+              border: Border.all(
+                color: const Color(0xFFFF6B00), // Dark orange for stroke
+                width: 6,
+              ),
             ),
-            const SizedBox(height: 12),
-            if (isUnlocked)
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFFFFF8E1), // Cream
+                    Color(0xFFFFE0B2), // Light orange
+                    Color(0xFFFFCC80), // Orange
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.lock_open, color: Colors.green),
-                  SizedBox(width: 8),
-                  Text(
-                    "Next Level Unlocked!",
-                    style: TextStyle(
-                      color: Colors.green,
-                      fontWeight: FontWeight.bold,
+                  // 3D Title with star icon
+                  Container(
+                    constraints: const BoxConstraints(
+                      maxWidth: double.infinity,
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 16,
+                    ),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color(0xFFFFB74D), // Orange
+                          Color(0xFFFF9800), // Darker orange
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: const Color(0xFFFF6B00),
+                        width: 4,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFE0B2),
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: const Color(0xFFFF6B00),
+                              width: 3,
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.star,
+                            color: Color(0xFFFF6B00),
+                            size: 28,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Flexible(
+                          child: Text(
+                            "Level Complete!",
+                            style: GoogleFonts.bangers(
+                              fontSize: 22,
+                              color: Colors.white,
+                              letterSpacing: 1.0,
+                              shadows: [
+                                Shadow(
+                                  color: const Color(
+                                    0xFFFF6B00,
+                                  ).withOpacity(0.5),
+                                  offset: const Offset(2, 2),
+                                  blurRadius: 0,
+                                ),
+                              ],
+                            ),
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  // Content with 3D effect
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFF8E1),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: const Color(0xFFFFB74D),
+                        width: 4,
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          "You found the word!",
+                          style: GoogleFonts.comicNeue(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFFFF6B00),
+                            height: 1.4,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 16),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 12,
+                            horizontal: 16,
+                          ),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFFFFE0B2), Color(0xFFFFCC80)],
+                            ),
+                            borderRadius: BorderRadius.circular(15),
+                            border: Border.all(
+                              color: const Color(0xFFFFB74D),
+                              width: 3,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFFD54F),
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: const Color(0xFFFF6B00),
+                                    width: 2,
+                                  ),
+                                ),
+                                child: const Icon(
+                                  Icons.monetization_on,
+                                  color: Color(0xFFFF6B00),
+                                  size: 24,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                "Coins: ${state.currentCoins}",
+                                style: GoogleFonts.nunito(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFFFF6B00),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        if (isUnlocked)
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 12,
+                              horizontal: 16,
+                            ),
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFFC8E6C9), Color(0xFFA5D6A7)],
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                              border: Border.all(color: Colors.green, width: 3),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(
+                                  Icons.lock_open,
+                                  color: Colors.green,
+                                  size: 24,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  "Next Level Unlocked!",
+                                  style: GoogleFonts.nunito(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green.shade800,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        else
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 12,
+                              horizontal: 16,
+                            ),
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFFFFCDD2), Color(0xFFFFB3BA)],
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                              border: Border.all(color: Colors.red, width: 3),
+                            ),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(
+                                      Icons.lock,
+                                      color: Colors.red,
+                                      size: 24,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      "Next Level Locked",
+                                      style: GoogleFonts.nunito(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.red.shade800,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  "Need $cost Coins total.\nYou have ${progress.totalCoins}.",
+                                  style: GoogleFonts.comicNeue(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red.shade800,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  // Continue button with 3D effect
+                  Container(
+                    height: 60,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Color(0xFFFFB74D), Color(0xFFFF9800)],
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: const Color(0xFFFF6B00),
+                        width: 4,
+                      ),
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          // Show ad after level completion, then go back to home
+                          adService.showInterstitialAd(
+                            onAdDismissed: () {
+                              if (context.mounted) {
+                                Navigator.of(context).pop();
+                              }
+                            },
+                          );
+                        },
+                        borderRadius: BorderRadius.circular(20),
+                        child: Center(
+                          child: Text(
+                            "Continue",
+                            style: GoogleFonts.permanentMarker(
+                              fontSize: 20,
+                              color: Colors.white,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ],
-              )
-            else
-              Column(
-                children: [
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.lock, color: Colors.red),
-                      SizedBox(width: 8),
-                      Text(
-                        "Next Level Locked",
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    "Need $cost Coins total.\nYou have ${progress.totalCoins}.",
-                    textAlign: TextAlign.center,
-                  ),
-                ],
               ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              // Show ad after level completion, then go back to home
-              adService.showInterstitialAd(
-                onAdDismissed: () {
-                  if (context.mounted) {
-                    Navigator.of(context).pop();
-                  }
-                },
-              );
-            },
-            child: const Text("Continue"),
+            ),
           ),
-        ],
+        ),
       ).animate().scale(duration: 300.ms, curve: Curves.elasticOut),
     );
   }
@@ -217,6 +455,25 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: Container(
+          margin: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: IconButton(
+            icon: const Icon(
+              Icons.arrow_back_ios_new,
+              color: Colors.white,
+              size: 20,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            padding: EdgeInsets.zero,
+          ),
+        ),
         title: Text(
           "Level ${state.level!.id}",
           style: theme.textTheme.headlineMedium?.copyWith(color: Colors.white),
@@ -228,102 +485,293 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
               // Show Menu: Replay, Instructions, Quit
               showModalBottomSheet(
                 context: context,
-                builder: (_) => Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ListTile(
-                      leading: const Icon(Icons.help_outline),
-                      title: const Text("Instructions"),
-                      onTap: () {
-                        Navigator.pop(context);
-                        showDialog(
-                          context: context,
-                          builder: (_) => const InstructionsDialog(),
-                        );
-                      },
+                backgroundColor: Colors.transparent,
+                builder: (_) => Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xFFFFF8E1),
+                        Color(0xFFFFE0B2),
+                        Color(0xFFFFCC80),
+                      ],
                     ),
-                    ListTile(
-                      leading: const Icon(Icons.replay),
-                      title: const Text("Replay Previous"),
-                      enabled: true, // Always enable to check history
-                      onTap: () async {
-                        Navigator.pop(context);
-
-                        // Get completed questions
-                        final progress = ref.read(userProgressProvider);
-                        final completed =
-                            progress.completedQuestions[state.level!.id] ?? [];
-
-                        if (completed.isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("No questions completed yet!"),
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(30),
+                    ),
+                    border: Border.all(
+                      color: const Color(0xFFFF6B00),
+                      width: 6,
+                    ),
+                  ),
+                  child: Container(
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color(0xFFFFF8E1),
+                          Color(0xFFFFE0B2),
+                          Color(0xFFFFCC80),
+                        ],
+                      ),
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(24),
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 12,
+                            horizontal: 16,
+                          ),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [Color(0xFFFFB74D), Color(0xFFFF9800)],
                             ),
-                          );
-                          return;
-                        }
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: const Color(0xFFFF6B00),
+                              width: 4,
+                            ),
+                          ),
+                          child: Text(
+                            "Menu",
+                            style: GoogleFonts.bangers(
+                              fontSize: 24,
+                              color: Colors.white,
+                              letterSpacing: 1.5,
+                              shadows: [
+                                Shadow(
+                                  color: const Color(
+                                    0xFFFF6B00,
+                                  ).withOpacity(0.5),
+                                  offset: const Offset(2, 2),
+                                  blurRadius: 0,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        _buildMenuButton(
+                          icon: Icons.help_outline,
+                          text: "Instructions",
+                          onTap: () {
+                            Navigator.pop(context);
+                            showDialog(
+                              context: context,
+                              builder: (_) => const InstructionsDialog(),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 12),
+                        _buildMenuButton(
+                          icon: Icons.replay,
+                          text: "Replay Previous",
+                          onTap: () async {
+                            Navigator.pop(context);
 
-                        completed.sort(); // Ensure order
+                            // Get completed questions
+                            final progress = ref.read(userProgressProvider);
+                            final completed =
+                                progress.completedQuestions[state.level!.id] ??
+                                [];
 
-                        // Show selection dialog
-                        await showDialog(
-                          context: context,
-                          builder: (_) => SimpleDialog(
-                            title: const Text("Replay Question"),
-                            children: completed.map((qId) {
-                              return SimpleDialogOption(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  // We need to map qId back to index?
-                                  // We assumed qId matches index+1 or similar?
-                                  // In LevelModel, qId is likely 1-based. Questions list is 0-based.
-                                  // Let's find the index in levels
-                                  final idx = state.level!.questions.indexWhere(
-                                    (q) => q.qId == qId,
-                                  );
-                                  if (idx != -1) {
-                                    // Trigger load of specific question
-                                    // We need a method in controller to jump to index?
-                                    // loadLevel resumes from saved.
-                                    // checking jumpToQuestion
-                                    // Actually we don't have jumpToQuestion.
-                                    // We can add it or just modify loadLevel slightly?
-                                    // Or just modify state directly via a new method.
-                                    ref
-                                        .read(
-                                          gameplayControllerProvider.notifier,
-                                        )
-                                        .jumpToQuestion(idx);
-                                  }
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 8,
-                                  ),
-                                  child: Text("Question $qId"),
+                            if (completed.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("No questions completed yet!"),
                                 ),
                               );
-                            }).toList(),
-                          ),
-                        );
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.exit_to_app),
-                      title: const Text("Exit Level"),
-                      onTap: () {
-                        Navigator.pop(context);
-                        // Show ad when exiting to home page
-                        adService.showInterstitialAd(
-                          onAdDismissed: () {
-                            if (context.mounted) {
-                              Navigator.pop(context);
+                              return;
                             }
+
+                            completed.sort(); // Ensure order
+
+                            // Show selection dialog
+                            await showDialog(
+                              context: context,
+                              barrierColor: Colors.black.withOpacity(0.5),
+                              builder: (_) => Dialog(
+                                backgroundColor: Colors.transparent,
+                                child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    gradient: const LinearGradient(
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                      colors: [
+                                        Color(0xFFFFF8E1), // Cream
+                                        Color(0xFFFFE0B2), // Light orange
+                                        Color(0xFFFFCC80), // Orange
+                                      ],
+                                    ),
+                                    borderRadius: BorderRadius.circular(30),
+                                    border: Border.all(
+                                      color: const Color(0xFFFF6B00),
+                                      width: 6,
+                                    ),
+                                  ),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(24),
+                                    decoration: BoxDecoration(
+                                      gradient: const LinearGradient(
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                        colors: [
+                                          Color(0xFFFFF8E1),
+                                          Color(0xFFFFE0B2),
+                                          Color(0xFFFFCC80),
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.circular(24),
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 12,
+                                            horizontal: 16,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            gradient: const LinearGradient(
+                                              begin: Alignment.topLeft,
+                                              end: Alignment.bottomRight,
+                                              colors: [
+                                                Color(0xFFFFB74D),
+                                                Color(0xFFFF9800),
+                                              ],
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                              20,
+                                            ),
+                                            border: Border.all(
+                                              color: const Color(0xFFFF6B00),
+                                              width: 4,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            "Replay Question",
+                                            style: GoogleFonts.bangers(
+                                              fontSize: 24,
+                                              color: Colors.white,
+                                              letterSpacing: 1.5,
+                                              shadows: [
+                                                Shadow(
+                                                  color: const Color(
+                                                    0xFFFF6B00,
+                                                  ).withOpacity(0.5),
+                                                  offset: const Offset(2, 2),
+                                                  blurRadius: 0,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 16),
+                                        ...completed.map((qId) {
+                                          return Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 8,
+                                            ),
+                                            child: Container(
+                                              height: 50,
+                                              decoration: BoxDecoration(
+                                                gradient: const LinearGradient(
+                                                  begin: Alignment.topLeft,
+                                                  end: Alignment.bottomRight,
+                                                  colors: [
+                                                    Color(0xFFFFE0B2),
+                                                    Color(0xFFFFCC80),
+                                                  ],
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                                border: Border.all(
+                                                  color: const Color(
+                                                    0xFFFFB74D,
+                                                  ),
+                                                  width: 3,
+                                                ),
+                                              ),
+                                              child: Material(
+                                                color: Colors.transparent,
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    Navigator.pop(context);
+                                                    final idx = state
+                                                        .level!
+                                                        .questions
+                                                        .indexWhere(
+                                                          (q) => q.qId == qId,
+                                                        );
+                                                    if (idx != -1) {
+                                                      ref
+                                                          .read(
+                                                            gameplayControllerProvider
+                                                                .notifier,
+                                                          )
+                                                          .jumpToQuestion(idx);
+                                                    }
+                                                  },
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                  child: Center(
+                                                    child: Text(
+                                                      "Question $qId",
+                                                      style:
+                                                          GoogleFonts.comicNeue(
+                                                            fontSize: 18,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: const Color(
+                                                              0xFFFF6B00,
+                                                            ),
+                                                          ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }).toList(),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
                           },
-                        );
-                      },
+                        ),
+                        const SizedBox(height: 12),
+                        _buildMenuButton(
+                          icon: Icons.exit_to_app,
+                          text: "Exit Level",
+                          onTap: () {
+                            Navigator.pop(context);
+                            // Show ad when exiting to home page
+                            adService.showInterstitialAd(
+                              onAdDismissed: () {
+                                if (context.mounted) {
+                                  Navigator.pop(context);
+                                }
+                              },
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               );
             },
@@ -370,6 +818,8 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
               child: Image.asset(
                 'assets/game_play_page Backgound.png',
                 fit: BoxFit.cover,
+                repeat: ImageRepeat.noRepeat,
+                opacity: const AlwaysStoppedAnimation<double>(0.7),
               ),
             ),
             Column(
@@ -432,7 +882,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                 bottom: BorderSide(
                                   width: 3,
                                   color: filled
-                                      ? theme.colorScheme.primary
+                                      ? const Color(0xFFFF6B00)
                                       : Colors.grey.shade300,
                                 ),
                               ),
@@ -443,7 +893,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                       style: TextStyle(
                                         fontSize: 28,
                                         fontWeight: FontWeight.bold,
-                                        color: theme.colorScheme.primary,
+                                        color: const Color(0xFFFF6B00),
                                       ),
                                     )
                                     .animate(target: filled ? 1 : 0)
@@ -482,6 +932,22 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
 
                         return Stack(
                           children: [
+                            // Draw connecting line behind the boxes
+                            IgnorePointer(
+                              child: CustomPaint(
+                                size: Size(
+                                  constraints.maxWidth,
+                                  constraints.maxHeight,
+                                ),
+                                painter: SelectionPathPainter(
+                                  selectedIndices: state.selectedIndices,
+                                  tileSize: tileSize,
+                                  spacing: 8.0,
+                                  color: const Color(0xFFFF6B00),
+                                ),
+                              ),
+                            ),
+                            // Letter boxes on top
                             GridView.builder(
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: 36,
@@ -508,23 +974,23 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                         curve: Curves.easeOut,
                                         decoration: BoxDecoration(
                                           color: isSelected
-                                              ? theme.colorScheme.primary
-                                                    .withOpacity(0.2)
+                                              ? const Color(0xFFFFF8E1)
                                               : Colors.white,
                                           borderRadius: BorderRadius.circular(
                                             12,
                                           ),
                                           border: Border.all(
-                                            width: 2,
+                                            width: 3,
                                             color: isSelected
-                                                ? theme.colorScheme.primary
+                                                ? const Color(0xFFFF6B00)
                                                 : Colors.grey.shade200,
                                           ),
                                           boxShadow: [
                                             BoxShadow(
                                               color: isSelected
-                                                  ? theme.colorScheme.primary
-                                                        .withOpacity(0.3)
+                                                  ? const Color(
+                                                      0xFFFF6B00,
+                                                    ).withOpacity(0.4)
                                                   : Colors.black.withOpacity(
                                                       0.05,
                                                     ),
@@ -540,7 +1006,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                             fontSize: 22,
                                             fontWeight: FontWeight.w900,
                                             color: isSelected
-                                                ? theme.colorScheme.primary
+                                                ? const Color(0xFFFF6B00)
                                                 : Colors.grey.shade700,
                                           ),
                                         ),
@@ -551,20 +1017,6 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                       ),
                                 );
                               },
-                            ),
-                            IgnorePointer(
-                              child: CustomPaint(
-                                size: Size(
-                                  constraints.maxWidth,
-                                  constraints.maxHeight,
-                                ),
-                                painter: SelectionPathPainter(
-                                  selectedIndices: state.selectedIndices,
-                                  tileSize: tileSize,
-                                  spacing: 8.0,
-                                  color: theme.colorScheme.primary,
-                                ),
-                              ),
                             ),
                           ],
                         );
@@ -579,78 +1031,153 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      ElevatedButton.icon(
-                        onPressed: () => controller.clearSelection(),
-                        icon: const Icon(Icons.refresh_rounded),
-                        label: const Text("Reset"),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey.shade300,
-                          foregroundColor: Colors.black87,
+                      // Reset Button
+                      Expanded(
+                        child: Container(
+                          height: 60,
+                          margin: const EdgeInsets.only(right: 8),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFE0B2),
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                blurRadius: 8,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () => controller.clearSelection(),
+                              borderRadius: BorderRadius.circular(20),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    Icons.refresh_rounded,
+                                    color: Color(0xFFFF6B00),
+                                    size: 24,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    "Reset",
+                                    style: GoogleFonts.comicNeue(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: const Color(0xFFFF6B00),
+                                      letterSpacing: 0.5,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          // Get hint data first
-                          final start = q.answerPlacement.path.first;
-                          final firstLetterRow = start['row']!;
-                          final firstLetterCol = start['col']!;
-                          final firstLetter =
-                              q.grid[firstLetterRow][firstLetterCol];
-
-                          // Function to show hint
-                          void showHint() {
-                            if (!mounted) return;
-
-                            // Show snackbar
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  "First letter '$firstLetter' is marked!",
-                                ),
-                                duration: const Duration(seconds: 2),
+                      // Hint Button
+                      Expanded(
+                        child: Container(
+                          height: 60,
+                          margin: const EdgeInsets.only(left: 8),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFB74D),
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                blurRadius: 8,
+                                offset: const Offset(0, 4),
                               ),
-                            );
+                            ],
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () {
+                                // Get hint data first
+                                final start = q.answerPlacement.path.first;
+                                final firstLetterRow = start['row']!;
+                                final firstLetterCol = start['col']!;
+                                final firstLetter =
+                                    q.grid[firstLetterRow][firstLetterCol];
 
-                            // Auto-select the first letter
-                            controller.selectFirstLetter(
-                              firstLetterRow,
-                              firstLetterCol,
-                            );
-                          }
+                                // Function to show hint
+                                void showHint() {
+                                  if (!mounted) return;
 
-                          // Show rewarded ad first
-                          ref
-                              .read(adManagerProvider)
-                              .showRewarded(
-                                (reward) {
-                                  // Reward earned callback (for tracking)
-                                  debugPrint(
-                                    'Reward earned: ${reward.amount} ${reward.type}',
-                                  );
-                                },
-                                onAdDismissed: () {
-                                  // Hint shown when ad is dismissed (user watched it)
-                                  showHint();
-                                },
-                                onAdNotReady: () {
-                                  // If ad is not ready, show a message
-                                  if (mounted) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          "Ad is loading. Please try again in a moment.",
-                                        ),
-                                        duration: Duration(seconds: 2),
+                                  // Show snackbar
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        "First letter '$firstLetter' is marked!",
                                       ),
+                                      duration: const Duration(seconds: 2),
+                                    ),
+                                  );
+
+                                  // Auto-select the first letter
+                                  controller.selectFirstLetter(
+                                    firstLetterRow,
+                                    firstLetterCol,
+                                  );
+                                }
+
+                                // Show rewarded ad first
+                                ref
+                                    .read(adManagerProvider)
+                                    .showRewarded(
+                                      (reward) {
+                                        // Reward earned callback (for tracking)
+                                        debugPrint(
+                                          'Reward earned: ${reward.amount} ${reward.type}',
+                                        );
+                                      },
+                                      onAdDismissed: () {
+                                        // Hint shown when ad is dismissed (user watched it)
+                                        showHint();
+                                      },
+                                      onAdNotReady: () {
+                                        // If ad is not ready, show a message
+                                        if (mounted) {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                "Ad is loading. Please try again in a moment.",
+                                              ),
+                                              duration: Duration(seconds: 2),
+                                            ),
+                                          );
+                                        }
+                                      },
                                     );
-                                  }
-                                },
-                              );
-                        },
-                        icon: const Icon(Icons.lightbulb_outline),
-                        label: const Text("Hint"),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: theme.colorScheme.secondary,
+                              },
+                              borderRadius: BorderRadius.circular(20),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    Icons.lightbulb_outline,
+                                    color: Colors.white,
+                                    size: 24,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    "Hint",
+                                    style: GoogleFonts.comicNeue(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      letterSpacing: 0.5,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -684,6 +1211,47 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
       ),
     );
   }
+
+  Widget _buildMenuButton({
+    required IconData icon,
+    required String text,
+    required VoidCallback onTap,
+  }) {
+    return Container(
+      height: 60,
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0xFFFFE0B2), Color(0xFFFFCC80)],
+        ),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: const Color(0xFFFFB74D), width: 4),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(20),
+          child: Row(
+            children: [
+              const SizedBox(width: 16),
+              Icon(icon, color: const Color(0xFFFF6B00), size: 28),
+              const SizedBox(width: 16),
+              Text(
+                text,
+                style: GoogleFonts.bubblegumSans(
+                  fontSize: 20,
+                  color: const Color(0xFFFF6B00),
+                  letterSpacing: 1.2,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class SelectionPathPainter extends CustomPainter {
@@ -712,18 +1280,52 @@ class SelectionPathPainter extends CustomPainter {
 
     final path = Path();
 
-    for (int i = 0; i < selectedIndices.length; i++) {
-      final idx = selectedIndices[i];
-      final r = idx ~/ 6;
-      final c = idx % 6;
-
+    // Helper function to get box center
+    Offset getBoxCenter(int index) {
+      final r = index ~/ 6;
+      final c = index % 6;
       final x = c * (tileSize + spacing) + tileSize / 2;
       final y = r * (tileSize + spacing) + tileSize / 2;
+      return Offset(x, y);
+    }
+
+    // Helper function to get edge point of a box based on direction
+    Offset getEdgePoint(Offset center, Offset direction) {
+      // Normalize direction
+      final length = direction.distance;
+      if (length == 0) return center;
+      final normalized = direction / length;
+
+      // Calculate edge point (half tileSize away from center in the direction)
+      return center + normalized * (tileSize / 2);
+    }
+
+    for (int i = 0; i < selectedIndices.length; i++) {
+      final currentCenter = getBoxCenter(selectedIndices[i]);
 
       if (i == 0) {
-        path.moveTo(x, y);
+        // For the first box, if there's a next box, start from edge toward next box
+        if (selectedIndices.length > 1) {
+          final nextCenter = getBoxCenter(selectedIndices[i + 1]);
+          final direction = nextCenter - currentCenter;
+          final startEdge = getEdgePoint(currentCenter, direction);
+          path.moveTo(startEdge.dx, startEdge.dy);
+        } else {
+          // Only one box, start from center
+          path.moveTo(currentCenter.dx, currentCenter.dy);
+        }
       } else {
-        path.lineTo(x, y);
+        // Get previous box center
+        final prevCenter = getBoxCenter(selectedIndices[i - 1]);
+
+        // Calculate direction from previous to current
+        final direction = currentCenter - prevCenter;
+
+        // Get entry point to current box (edge facing the previous box)
+        final entryPoint = getEdgePoint(currentCenter, -direction);
+
+        // Draw line directly to the entry edge of current box
+        path.lineTo(entryPoint.dx, entryPoint.dy);
       }
     }
 
