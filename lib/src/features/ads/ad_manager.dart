@@ -123,10 +123,13 @@ class AdManager {
         },
         onAdFailedToLoad: (error) {
           _isRewardedAdLoading = false;
-          debugPrint('Rewarded failed: $error');
-          // Retry after delay if using production ads
-          if (!useTestAds && error.code == 3) {
-            Future.delayed(const Duration(seconds: 5), () => loadRewarded());
+          debugPrint(
+            'Rewarded failed: $error - Code: ${error.code}, Message: ${error.message}',
+          );
+          // Retry after delay for network errors or other retryable errors
+          // Error code 3 = ERROR_CODE_NO_FILL, but we should retry for other errors too
+          if (error.code == 3 || error.code == 0 || error.code == 2) {
+            Future.delayed(const Duration(seconds: 3), () => loadRewarded());
           }
         },
       ),
@@ -187,8 +190,8 @@ class AdManager {
       // If ad is loading, wait a bit and check again
       if (_isRewardedAdLoading) {
         debugPrint('Rewarded ad is loading, waiting...');
-        // Wait up to 3 seconds for the ad to load
-        for (int i = 0; i < 6; i++) {
+        // Wait up to 5 seconds for the ad to load (increased from 3 seconds)
+        for (int i = 0; i < 10; i++) {
           await Future.delayed(const Duration(milliseconds: 500));
           if (_rewardedAd != null) {
             // Ad loaded, show it
@@ -205,9 +208,19 @@ class AdManager {
       // Try to load if not already loading
       if (!_isRewardedAdLoading) {
         loadRewarded();
+        // Wait a bit more after triggering load
+        await Future.delayed(const Duration(seconds: 2));
+        if (_rewardedAd != null) {
+          _showRewardedAd(
+            onReward,
+            onAdDismissed: onAdDismissed,
+            onAdNotReady: onAdNotReady,
+          );
+          return;
+        }
       }
 
-      debugPrint('Rewarded ad not ready');
+      debugPrint('Rewarded ad not ready after waiting');
       // If ad is not ready, call the fallback callback
       if (onAdNotReady != null) {
         onAdNotReady();
