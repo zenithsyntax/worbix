@@ -3,10 +3,10 @@
         android:label="worbix"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
-        <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
+        <!-- AdMob App ID: ca-app-pub-9698718721404755~2343475738 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713"/>
+            android:value="ca-app-pub-9698718721404755~2343475738"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

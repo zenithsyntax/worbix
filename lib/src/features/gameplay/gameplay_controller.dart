@@ -95,6 +95,13 @@ class GameplayController extends StateNotifier<GameplayState> {
       state = state.copyWith(selectedIndices: []);
   }
 
+  void selectFirstLetter(int row, int col) {
+      if (state.status != GameStatus.playing) return;
+      // Convert row/col to flat index (0-35)
+      final index = row * 6 + col;
+      state = state.copyWith(selectedIndices: [index]);
+  }
+
   void onTileTap(int index) {
       if (state.status != GameStatus.playing) return;
 

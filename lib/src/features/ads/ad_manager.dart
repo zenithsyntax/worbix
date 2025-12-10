@@ -3,19 +3,43 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AdManager {
-  // Test IDs - Replace with real IDs in production
-  static const String bannerAdUnitId = 'ca-app-pub-3940256099942544/6300978111';
-  static const String interstitialAdUnitId = 'ca-app-pub-3940256099942544/1033173712';
-  static const String rewardedAdUnitId = 'ca-app-pub-3940256099942544/5224354917';
+  // Test Ad Unit IDs (for development)
+  static const String testBannerAdUnitId =
+      'ca-app-pub-3940256099942544/6300978111';
+  static const String testInterstitialAdUnitId =
+      'ca-app-pub-3940256099942544/1033173712';
+  static const String testRewardedAdUnitId =
+      'ca-app-pub-3940256099942544/5224354917';
+
+  // Production Ad Unit IDs
+  static const String bannerAdUnitId =
+      'ca-app-pub-9698718721404755/6442502844'; // Banner ad
+  static const String interstitialAdUnitId =
+      'ca-app-pub-9698718721404755/4637083696'; // Interstitial ad
+  static const String rewardedAdUnitId =
+      'ca-app-pub-9698718721404755/8520488387'; // Hint rewarded ad
+
+  // Use test ads in debug mode or when production ads fail
+  static bool get useTestAds => kDebugMode;
+
+  String get _bannerAdUnitId =>
+      useTestAds ? testBannerAdUnitId : bannerAdUnitId;
+  String get _interstitialAdUnitId =>
+      useTestAds ? testInterstitialAdUnitId : interstitialAdUnitId;
+  String get _rewardedAdUnitId =>
+      useTestAds ? testRewardedAdUnitId : rewardedAdUnitId;
 
   BannerAd? _bannerAd;
   InterstitialAd? _interstitialAd;
   RewardedAd? _rewardedAd;
 
+  bool _isRewardedAdLoading = false;
+  bool _isInterstitialAdLoading = false;
+
   // Banner
   Future<void> loadBanner() async {
     _bannerAd = BannerAd(
-      adUnitId: bannerAdUnitId,
+      adUnitId: _bannerAdUnitId,
       size: AdSize.banner,
       request: const AdRequest(),
       listener: BannerAdListener(
@@ -23,6 +47,10 @@ class AdManager {
         onAdFailedToLoad: (ad, error) {
           ad.dispose();
           debugPrint('Banner failed to load: $error');
+          // Retry after delay if using production ads
+          if (!useTestAds && error.code == 3) {
+            Future.delayed(const Duration(seconds: 5), () => loadBanner());
+          }
         },
       ),
     );
@@ -33,12 +61,29 @@ class AdManager {
 
   // Interstitial
   void loadInterstitial() {
+    if (_isInterstitialAdLoading) return;
+    _isInterstitialAdLoading = true;
+
     InterstitialAd.load(
-      adUnitId: interstitialAdUnitId,
+      adUnitId: _interstitialAdUnitId,
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
-        onAdLoaded: (ad) => _interstitialAd = ad,
-        onAdFailedToLoad: (error) => debugPrint('Interstitial failed: $error'),
+        onAdLoaded: (ad) {
+          _interstitialAd = ad;
+          _isInterstitialAdLoading = false;
+          debugPrint('Interstitial loaded');
+        },
+        onAdFailedToLoad: (error) {
+          _isInterstitialAdLoading = false;
+          debugPrint('Interstitial failed: $error');
+          // Retry after delay if using production ads
+          if (!useTestAds && error.code == 3) {
+            Future.delayed(
+              const Duration(seconds: 5),
+              () => loadInterstitial(),
+            );
+          }
+        },
       ),
     );
   }
@@ -64,35 +109,109 @@ class AdManager {
 
   // Rewarded
   void loadRewarded() {
+    if (_isRewardedAdLoading) return;
+    _isRewardedAdLoading = true;
+
     RewardedAd.load(
-      adUnitId: rewardedAdUnitId,
+      adUnitId: _rewardedAdUnitId,
       request: const AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
-        onAdLoaded: (ad) => _rewardedAd = ad,
-        onAdFailedToLoad: (error) => debugPrint('Rewarded failed: $error'),
+        onAdLoaded: (ad) {
+          _rewardedAd = ad;
+          _isRewardedAdLoading = false;
+          debugPrint('Rewarded ad loaded');
+        },
+        onAdFailedToLoad: (error) {
+          _isRewardedAdLoading = false;
+          debugPrint('Rewarded failed: $error');
+          // Retry after delay if using production ads
+          if (!useTestAds && error.code == 3) {
+            Future.delayed(const Duration(seconds: 5), () => loadRewarded());
+          }
+        },
       ),
     );
   }
 
-  void showRewarded(Function(RewardItem) onReward) {
-    if (_rewardedAd != null) {
-      _rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
-        onAdDismissedFullScreenContent: (ad) {
-          ad.dispose();
-          loadRewarded();
-        },
-        onAdFailedToShowFullScreenContent: (ad, err) {
-          ad.dispose();
-          loadRewarded();
-        },
-      );
-      _rewardedAd!.show(onUserEarnedReward: (ad, reward) {
+  void _showRewardedAd(
+    Function(RewardItem) onReward, {
+    Function()? onAdDismissed,
+    Function()? onAdNotReady,
+  }) {
+    if (_rewardedAd == null) {
+      if (onAdNotReady != null) {
+        onAdNotReady();
+      }
+      return;
+    }
+
+    _rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdDismissedFullScreenContent: (ad) {
+        ad.dispose();
+        loadRewarded();
+        // When ad is dismissed, user watched it - trigger callback
+        if (onAdDismissed != null) {
+          onAdDismissed();
+        }
+      },
+      onAdFailedToShowFullScreenContent: (ad, err) {
+        ad.dispose();
+        loadRewarded();
+        debugPrint('Rewarded ad failed to show: $err');
+        // If ad fails to show, call the fallback
+        if (onAdNotReady != null) {
+          onAdNotReady();
+        }
+      },
+    );
+    _rewardedAd!.show(
+      onUserEarnedReward: (ad, reward) {
         onReward(reward);
-      });
-      _rewardedAd = null;
+      },
+    );
+    _rewardedAd = null;
+  }
+
+  Future<void> showRewarded(
+    Function(RewardItem) onReward, {
+    Function()? onAdDismissed,
+    Function()? onAdNotReady,
+  }) async {
+    if (_rewardedAd != null) {
+      _showRewardedAd(
+        onReward,
+        onAdDismissed: onAdDismissed,
+        onAdNotReady: onAdNotReady,
+      );
     } else {
-      loadRewarded();
+      // If ad is loading, wait a bit and check again
+      if (_isRewardedAdLoading) {
+        debugPrint('Rewarded ad is loading, waiting...');
+        // Wait up to 3 seconds for the ad to load
+        for (int i = 0; i < 6; i++) {
+          await Future.delayed(const Duration(milliseconds: 500));
+          if (_rewardedAd != null) {
+            // Ad loaded, show it
+            _showRewardedAd(
+              onReward,
+              onAdDismissed: onAdDismissed,
+              onAdNotReady: onAdNotReady,
+            );
+            return;
+          }
+        }
+      }
+
+      // Try to load if not already loading
+      if (!_isRewardedAdLoading) {
+        loadRewarded();
+      }
+
       debugPrint('Rewarded ad not ready');
+      // If ad is not ready, call the fallback callback
+      if (onAdNotReady != null) {
+        onAdNotReady();
+      }
     }
   }
 }

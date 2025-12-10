@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -596,16 +597,62 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                     ),
                     ElevatedButton.icon(
                       onPressed: () {
-                        ref.read(adManagerProvider).showRewarded((reward) {
-                          final start = q.answerPlacement.path.first;
+                        // Get hint data first
+                        final start = q.answerPlacement.path.first;
+                        final firstLetterRow = start['row']!;
+                        final firstLetterCol = start['col']!;
+                        final firstLetter =
+                            q.grid[firstLetterRow][firstLetterCol];
+
+                        // Function to show hint
+                        void showHint() {
+                          if (!mounted) return;
+
+                          // Show snackbar
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
-                                "Hint: Answer starts at (R${start['row']}, C${start['col']})",
+                                "First letter '$firstLetter' is marked!",
                               ),
+                              duration: const Duration(seconds: 2),
                             ),
                           );
-                        });
+
+                          // Auto-select the first letter
+                          controller.selectFirstLetter(
+                            firstLetterRow,
+                            firstLetterCol,
+                          );
+                        }
+
+                        // Show rewarded ad first
+                        ref
+                            .read(adManagerProvider)
+                            .showRewarded(
+                              (reward) {
+                                // Reward earned callback (for tracking)
+                                debugPrint(
+                                  'Reward earned: ${reward.amount} ${reward.type}',
+                                );
+                              },
+                              onAdDismissed: () {
+                                // Hint shown when ad is dismissed (user watched it)
+                                showHint();
+                              },
+                              onAdNotReady: () {
+                                // If ad is not ready, show a message
+                                if (mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        "Ad is loading. Please try again in a moment.",
+                                      ),
+                                      duration: Duration(seconds: 2),
+                                    ),
+                                  );
+                                }
+                              },
+                            );
                       },
                       icon: const Icon(Icons.lightbulb_outline),
                       label: const Text("Hint"),

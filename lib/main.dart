@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'src/app/app.dart';
@@ -6,12 +7,17 @@ import 'src/app/app.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Initialize Ads
-  // TODO: Open boxes if needed eagerly, or lazily in repositories
+  // Configure test device IDs for development
+  if (kDebugMode) {
+    final configuration = RequestConfiguration(
+      testDeviceIds: ['D8A458A384886F4C41F86ED2A2C2F8D3'], // Your test device ID
+    );
+    MobileAds.instance.updateRequestConfiguration(configuration);
+  }
   
   // Initialize Ads
   // We don't await this so it doesn't block startup
-  MobileAds.instance.initialize();
+  await MobileAds.instance.initialize();
 
   runApp(const ProviderScope(child: WorbixApp()));
 }
