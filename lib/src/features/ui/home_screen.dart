@@ -11,28 +11,42 @@ import '../ads/ad_service.dart';
 import '../ads/ad_manager.dart';
 import '../levels/level_model.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Precache the background image for fast loading
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      precacheImage(
+        const AssetImage('assets/home_page_backgorund.png'),
+        context,
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final levelsAsync = ref.watch(levelsProvider);
     final userProgress = ref.watch(userProgressProvider);
-    final theme = Theme.of(context);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text(
-          "Worbix",
-          style: theme.textTheme.displaySmall?.copyWith(
-            color: Colors.white,
-            fontSize: 32,
-          ),
+        title: Image.asset(
+          'assets/worbix-wordmark.png',
+          height: 40,
+          fit: BoxFit.contain,
         ),
-        centerTitle: true,
+        centerTitle: false,
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 16),
@@ -67,14 +81,11 @@ class HomeScreen extends ConsumerWidget {
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              const Color(0xFFF5E6D3), // Light beige
-              const Color(0xFFE8D5C4), // Slightly darker beige
-            ],
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/home_page_backgorund.png'),
+            fit: BoxFit.cover,
+            repeat: ImageRepeat.noRepeat,
           ),
         ),
         child: levelsAsync.when(
@@ -446,7 +457,7 @@ class _RoadmapViewState extends State<RoadmapView> {
     final nodeSpacing = math.max(140.0, screenHeight / (levelCount + 1));
     final pathWidth = screenWidth * 0.65;
     final startX = screenWidth * 0.175;
-    final topPadding = 120.0;
+    final topPadding = 180.0;
 
     for (int i = 0; i < levelCount; i++) {
       final progress = i / math.max(1, levelCount - 1);
@@ -519,7 +530,7 @@ class _RoadmapViewState extends State<RoadmapView> {
     // Increased spacing to match node spacing with extra for vertical waves
     final nodeSpacing = math.max(140.0, screenHeight / (levelCount + 1));
     // Add extra height for vertical snake undulation
-    return 120 + (nodeSpacing * levelCount * 1.3);
+    return 180 + (nodeSpacing * levelCount * 1.3);
   }
 
   List<Widget> _buildDecorativeElements(
