@@ -413,8 +413,8 @@ class _RoadmapViewState extends State<RoadmapView> {
                   widget.userProgress.totalCoins >= level.unlockCost;
 
               return Positioned(
-                left: position.dx - 50,
-                top: position.dy - 50,
+                left: position.dx - 55,
+                top: position.dy - 55,
                 child:
                     LevelNode(
                           level: level,
@@ -443,80 +443,71 @@ class _RoadmapViewState extends State<RoadmapView> {
   ) {
     final positions = <Offset>[];
     // Increased spacing between nodes
-    final nodeSpacing = math.max(180.0, screenHeight / (levelCount + 1));
-    final pathWidth = screenWidth * 0.7;
-    final startX = screenWidth * 0.15;
-    final topPadding = 150.0;
+    final nodeSpacing = math.max(140.0, screenHeight / (levelCount + 1));
+    final pathWidth = screenWidth * 0.65;
+    final startX = screenWidth * 0.175;
+    final topPadding = 120.0;
 
     for (int i = 0; i < levelCount; i++) {
       final progress = i / math.max(1, levelCount - 1);
       double x, y;
 
-      // Create smooth S-curve path using easing functions for natural flow
-      if (progress < 0.3) {
-        // Top curve - smooth arc going down and right
-        final localProgress = progress / 0.3;
-        final eased = _easeInOutCubic(localProgress);
-        x = startX + (pathWidth * 0.35 * eased);
-        y = topPadding + (nodeSpacing * i * 0.9);
-      } else if (progress < 0.6) {
-        // Right side - smooth vertical descent with slight curve
-        final localProgress = (progress - 0.3) / 0.3;
-        final eased = _easeInOutCubic(localProgress);
-        // Add slight horizontal curve for smoothness
-        final curveOffset = math.sin(localProgress * math.pi) * 15;
-        x =
-            startX +
-            pathWidth * 0.35 +
-            (pathWidth * 0.25 * eased) +
-            curveOffset;
-        y =
-            topPadding +
-            (nodeSpacing * levelCount * 0.3 * 0.9) +
-            (nodeSpacing * (i - levelCount * 0.3) * 1.1);
-      } else if (progress < 0.8) {
-        // Bottom curve - smooth transition to straight line
-        final localProgress = (progress - 0.6) / 0.2;
-        final eased = _easeInOutCubic(localProgress);
-        // Smooth curve transitioning to left side
-        x = startX + pathWidth * 0.6 - (pathWidth * 0.4 * (1 - eased));
-        y =
-            topPadding +
-            (nodeSpacing * levelCount * 0.6) +
-            (nodeSpacing * (i - levelCount * 0.6) * 0.8);
+      // Create snake-like path with multiple curves and ultra-smooth turns
+      // Base vertical position
+      // Reduce spacing between first and second levels
+      double baseY;
+      if (i == 0) {
+        baseY = topPadding;
+      } else if (i == 1) {
+        // Second level - much closer to first level (reduced spacing)
+        baseY = topPadding + (nodeSpacing * 0.5);
       } else {
-        // End section - smooth straight line going down with small curve at the end
-        final localProgress = (progress - 0.8) / 0.2;
-
-        // Start position (where curve ends)
-        final startXPos = startX + pathWidth * 0.2;
-        final startYPos = topPadding + (nodeSpacing * levelCount * 0.8);
-
-        // End position (straight down, slightly to the left with small curve)
-        final endXPos = startX + pathWidth * 0.15;
-        final endYPos =
-            startYPos + (nodeSpacing * (i - levelCount * 0.8) * 1.2);
-
-        // For most of the path (first 85%), make it perfectly straight
-        if (localProgress < 0.85) {
-          // Linear interpolation for straight line
-          x = startXPos + (endXPos - startXPos) * (localProgress / 0.85);
-          y = startYPos + (endYPos - startYPos) * (localProgress / 0.85);
-        } else {
-          // Last 15% - add a small gentle curve to the left
-          final curveProgress = (localProgress - 0.85) / 0.15;
-          final eased = _easeInOutCubic(curveProgress);
-
-          // Base straight line position at 85%
-          final straightX = startXPos + (endXPos - startXPos) * 0.85;
-          final straightY = startYPos + (endYPos - startYPos) * 0.85;
-
-          // Add small curve - slight leftward arc
-          final curveAmount = math.sin(eased * math.pi) * 8; // Small curve
-          x = straightX + (endXPos - straightX) * eased - curveAmount;
-          y = straightY + (endYPos - straightY) * eased;
-        }
+        // Normal spacing for remaining levels
+        baseY =
+            topPadding + (nodeSpacing * 0.5) + (nodeSpacing * (i - 1) * 1.1);
       }
+      y = baseY;
+
+      // Primary snake curve - large S-shaped movement (4 full cycles for smooth flow)
+      // Using smoother wave with phase adjustment for natural flow
+      final primaryPhase = progress * math.pi * 4;
+      final primaryCurve = math.sin(primaryPhase) * pathWidth * 0.55;
+
+      // Secondary wave for more snake-like undulation (6 cycles for fine detail)
+      // Use smoother blending with cosine for phase offset
+      final secondaryPhase = progress * math.pi * 6;
+      final secondaryWave = math.sin(secondaryPhase) * pathWidth * 0.12;
+
+      // Tertiary wave for subtle snake movement (8 cycles)
+      // Reduced amplitude for smoother overall curve
+      final tertiaryPhase = progress * math.pi * 8;
+      final tertiaryWave = math.sin(tertiaryPhase) * pathWidth * 0.05;
+
+      // Enhanced smooth edge transitions using smoother easing
+      final edgeSmoothing = (math.sin(progress * math.pi) * 0.5 + 0.5);
+      final smoothBlend = edgeSmoothing * edgeSmoothing; // Quadratic smoothing
+
+      // Center position for the snake path
+      final centerX = startX + (pathWidth * 0.5);
+
+      // Combine all curves with improved blending for ultra-smooth snake-like path
+      x =
+          centerX +
+          primaryCurve +
+          (secondaryWave * smoothBlend) +
+          (tertiaryWave * 0.8);
+
+      // Add vertical undulation for more realistic snake movement
+      // Vertical wave creates up/down movement like a snake slithering
+      // Use smoother cosine wave with adjusted phase
+      final verticalPhase = progress * math.pi * 3.5;
+      final verticalWave = math.cos(verticalPhase) * nodeSpacing * 0.18;
+      y += verticalWave;
+
+      // Add slight vertical offset based on horizontal position for depth
+      // Reduced amplitude for smoother effect
+      final depthOffset = math.sin(primaryPhase) * nodeSpacing * 0.08;
+      y += depthOffset * 0.6;
 
       positions.add(Offset(x, y));
     }
@@ -524,15 +515,11 @@ class _RoadmapViewState extends State<RoadmapView> {
     return positions;
   }
 
-  // Smooth easing function for natural curves
-  double _easeInOutCubic(double t) {
-    return t < 0.5 ? 4 * t * t * t : 1 - math.pow(-2 * t + 2, 3) / 2;
-  }
-
   double _calculateTotalHeight(int levelCount, double screenHeight) {
-    // Increased spacing to match node spacing
-    final nodeSpacing = math.max(180.0, screenHeight / (levelCount + 1));
-    return 150 + (nodeSpacing * levelCount * 1.3);
+    // Increased spacing to match node spacing with extra for vertical waves
+    final nodeSpacing = math.max(140.0, screenHeight / (levelCount + 1));
+    // Add extra height for vertical snake undulation
+    return 120 + (nodeSpacing * levelCount * 1.3);
   }
 
   List<Widget> _buildDecorativeElements(
@@ -587,7 +574,7 @@ class RoadmapPathPainter extends CustomPainter {
       ..color =
           const Color(0xFFFFB84D) // Orange-yellow
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 20
+      ..strokeWidth = 26
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round;
 
@@ -595,7 +582,7 @@ class RoadmapPathPainter extends CustomPainter {
     final shadowPaint = Paint()
       ..color = Colors.black.withOpacity(0.2)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 20
+      ..strokeWidth = 26
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round;
 
@@ -605,9 +592,10 @@ class RoadmapPathPainter extends CustomPainter {
       // Single node - just draw a point
       path.addOval(Rect.fromCircle(center: nodePositions[0], radius: 10));
     } else {
-      // Use smooth cubic Bezier curves for all segments
+      // Use Catmull-Rom spline for ultra-smooth curves
       path.moveTo(nodePositions[0].dx, nodePositions[0].dy);
 
+      // Generate ultra-smooth curve using enhanced Catmull-Rom spline with subdivision
       for (int i = 0; i < nodePositions.length - 1; i++) {
         final p0 = nodePositions[math.max(0, i - 1)];
         final p1 = nodePositions[i];
@@ -617,55 +605,67 @@ class RoadmapPathPainter extends CustomPainter {
         // Check if this is in the last section (last 20% of nodes)
         final isLastSection = i >= nodePositions.length * 0.8;
 
-        // For last section, use smaller tension for straighter lines
-        final t = isLastSection ? 0.1 : 0.3; // Smaller tension = straighter
+        // Use even lower tension for maximum smoothness
+        final baseTension = isLastSection ? 0.12 : 0.2; // Ultra-smooth tension
 
-        // Calculate direction vectors
-        final d1 = i == 0
-            ? Offset(p2.dx - p1.dx, p2.dy - p1.dy)
-            : Offset(p1.dx - p0.dx, p1.dy - p0.dy);
-
-        final d2 = i == nodePositions.length - 2
-            ? Offset(p2.dx - p1.dx, p2.dy - p1.dy)
-            : Offset(p3.dx - p2.dx, p3.dy - p2.dy);
-
-        // Normalize direction vectors
-        final len1 = math.sqrt(d1.dx * d1.dx + d1.dy * d1.dy);
-        final len2 = math.sqrt(d2.dx * d2.dx + d2.dy * d2.dy);
-
-        final dir1 = len1 > 0
-            ? Offset(d1.dx / len1, d1.dy / len1)
-            : Offset(0.0, 1.0);
-        final dir2 = len2 > 0
-            ? Offset(d2.dx / len2, d2.dy / len2)
-            : Offset(0.0, 1.0);
-
-        // Calculate distance between points
-        final dist = math.sqrt(
+        // Calculate distances for centripetal parameterization
+        final dist01 = math.sqrt(
+          (p1.dx - p0.dx) * (p1.dx - p0.dx) + (p1.dy - p0.dy) * (p1.dy - p0.dy),
+        );
+        final dist12 = math.sqrt(
           (p2.dx - p1.dx) * (p2.dx - p1.dx) + (p2.dy - p1.dy) * (p2.dy - p1.dy),
         );
-
-        // Control points for smooth cubic Bezier
-        // For last section, make control points closer to create straighter lines
-        final controlPoint1 = Offset(
-          p1.dx + dir1.dx * dist * t,
-          p1.dy + dir1.dy * dist * t,
+        final dist23 = math.sqrt(
+          (p3.dx - p2.dx) * (p3.dx - p2.dx) + (p3.dy - p2.dy) * (p3.dy - p2.dy),
         );
 
-        final controlPoint2 = Offset(
-          p2.dx - dir2.dx * dist * t,
-          p2.dy - dir2.dy * dist * t,
+        // Enhanced centripetal parameterization for maximum smoothness
+        final alpha = 0.5;
+        final t01 = dist01 < 0.001 ? 0.0 : math.pow(dist01, alpha);
+        final t12 = dist12 < 0.001 ? 1.0 : math.pow(dist12, alpha);
+        final t23 = dist23 < 0.001 ? 0.0 : math.pow(dist23, alpha);
+
+        // Calculate refined control points using improved Catmull-Rom to Bezier conversion
+        final total1 = t01 + t12;
+        final total2 = t12 + t23;
+
+        final t1 = total1 < 0.001 ? baseTension : baseTension * (t12 / total1);
+        final t2 = total2 < 0.001 ? baseTension : baseTension * (t12 / total2);
+
+        // Calculate ultra-smooth control points with refined calculations
+        final cp1 = Offset(
+          p1.dx + (p2.dx - p0.dx) * t1,
+          p1.dy + (p2.dy - p0.dy) * t1,
         );
 
-        // Draw smooth cubic Bezier curve
-        path.cubicTo(
-          controlPoint1.dx,
-          controlPoint1.dy,
-          controlPoint2.dx,
-          controlPoint2.dy,
-          p2.dx,
-          p2.dy,
+        final cp2 = Offset(
+          p2.dx - (p3.dx - p1.dx) * t2,
+          p2.dy - (p3.dy - p1.dy) * t2,
         );
+
+        // Subdivide the curve into multiple segments for ultra-smooth rendering
+        // This creates more intermediate points for smoother curves
+        final segments = isLastSection
+            ? 10
+            : 16; // More segments = smoother curve
+
+        for (int j = 0; j < segments; j++) {
+          final t = j / segments;
+          final nextT = (j + 1) / segments;
+
+          // Calculate points on the Bezier curve
+          final point1 = _evaluateBezier(p1, cp1, cp2, p2, t);
+          final point2 = _evaluateBezier(p1, cp1, cp2, p2, nextT);
+
+          if (j == 0) {
+            if (i == 0) {
+              path.moveTo(point1.dx, point1.dy);
+            } else {
+              path.lineTo(point1.dx, point1.dy);
+            }
+          }
+          path.lineTo(point2.dx, point2.dy);
+        }
       }
     }
 
@@ -676,6 +676,22 @@ class RoadmapPathPainter extends CustomPainter {
 
     // Draw main path
     canvas.drawPath(path, pathPaint);
+  }
+
+  // Evaluate a point on a cubic Bezier curve at parameter t (0 to 1)
+  Offset _evaluateBezier(Offset p0, Offset p1, Offset p2, Offset p3, double t) {
+    final u = 1.0 - t;
+    final tt = t * t;
+    final uu = u * u;
+    final uuu = uu * u;
+    final ttt = tt * t;
+
+    final x =
+        uuu * p0.dx + 3 * uu * t * p1.dx + 3 * u * tt * p2.dx + ttt * p3.dx;
+    final y =
+        uuu * p0.dy + 3 * uu * t * p1.dy + 3 * u * tt * p2.dy + ttt * p3.dy;
+
+    return Offset(x, y);
   }
 
   @override
@@ -702,8 +718,8 @@ class LevelNode extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 100,
-        height: 100,
+        width: 110,
+        height: 110,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           gradient: isLocked
@@ -742,12 +758,12 @@ class LevelNode extends StatelessWidget {
         ),
         child: Center(
           child: isLocked
-              ? Icon(Icons.lock, color: Colors.white.withOpacity(0.7), size: 40)
+              ? Icon(Icons.lock, color: Colors.white.withOpacity(0.7), size: 44)
               : Text(
                   "${level.id}",
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 40,
+                    fontSize: 44,
                     fontWeight: FontWeight.bold,
                     shadows: [
                       Shadow(
