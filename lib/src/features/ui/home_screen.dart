@@ -527,27 +527,107 @@ class _RoadmapViewState extends State<RoadmapView> {
     double totalHeight,
   ) {
     return [
-      // Top right - Letter icon
-      Positioned(right: 30, top: 60, child: _LetterIcon(letter: 'W', size: 40)),
+      // Puzzle 1: WORD/CROSS - Top left corner (rotated)
+      // Positioned(
+      //   left: 10,
+      //   top: 50,
+      //   child: _CrosswordPuzzle(
+      //     tileSize: 45.0,
+      //     spacing: 2.0,
+      //     angle: -0.3,
+      //     horizontalWord: 'WORD',
+      //     verticalWord: 'CROSS',
+      //     horizontalStartCol: 0,
+      //     verticalStartRow: 0,
+      //     intersectionRow: 2,
+      //     intersectionCol: 1,
+      //   ),
+      // ),
+      // Puzzle 2: GAME/PLAY - Top right corner (rotated)
+      // Positioned(
+      //   right: 10,
+      //   top: 60,
+      //   child: _CrosswordPuzzle(
+      //     tileSize: 42.0,
+      //     spacing: 2.0,
+      //     angle: 0.4,
+      //     horizontalWord: 'GAME',
+      //     verticalWord: 'PLAY',
+      //     horizontalStartCol: 0,
+      //     verticalStartRow: 0,
+      //     intersectionRow: 1,
+      //     intersectionCol: 1,
+      //   ),
+      // ),
+      // Puzzle 3: FUN/QUIZ - Bottom left corner (rotated)
+      // Positioned(
+      //   left: 15,
+      //   top: totalHeight - 250,
+      //   child: _CrosswordPuzzle(
+      //     tileSize: 48.0,
+      //     spacing: 2.0,
+      //     angle: 0.25,
+      //     horizontalWord: 'FUN',
+      //     verticalWord: 'QUIZ',
+      //     horizontalStartCol: 0,
+      //     verticalStartRow: 0,
+      //     intersectionRow: 1,
+      //     intersectionCol: 1,
+      //   ),
+      // ),
+      // Puzzle 4: BRAIN/TEST - Bottom right corner (rotated)
+      // Positioned(
+      //   right: 15,
+      //   top: totalHeight - 280,
+      //   child: _CrosswordPuzzle(
+      //     tileSize: 40.0,
+      //     spacing: 2.0,
+      //     angle: -0.35,
+      //     horizontalWord: 'BRAIN',
+      //     verticalWord: 'TEST',
+      //     horizontalStartCol: 0,
+      //     verticalStartRow: 0,
+      //     intersectionRow: 2,
+      //     intersectionCol: 2,
+      //   ),
+      // ),
+      // Puzzle 5: WORD/PUZZLE - Left side middle (rotated)
+      // Positioned(
+      //   left: 5,
+      //   top: totalHeight * 0.3,
+      //   child: _CrosswordPuzzle(
+      //     tileSize: 38.0,
+      //     spacing: 2.0,
+      //     angle: 0.5,
+      //     horizontalWord: 'WORD',
+      //     verticalWord: 'PUZZLE',
+      //     horizontalStartCol: 0,
+      //     verticalStartRow: 0,
+      //     intersectionRow: 2,
+      //     intersectionCol: 1,
+      //   ),
+      // ),
+      // Puzzle 6: CROSS/GRID - Right side middle (rotated)
+      // Positioned(
+      //   right: 5,
+      //   top: totalHeight * 0.35,
+      //   child: _CrosswordPuzzle(
+      //     tileSize: 44.0,
+      //     spacing: 2.0,
+      //     angle: -0.45,
+      //     horizontalWord: 'CROSS',
+      //     verticalWord: 'GRID',
+      //     horizontalStartCol: 0,
+      //     verticalStartRow: 0,
+      //     intersectionRow: 1,
+      //     intersectionCol: 2,
+      //   ),
+      // ),
       // Center - Crossword icon (in the U-turn area)
       Positioned(
         left: screenWidth * 0.5 - 20,
         top: totalHeight * 0.6,
         child: _CrosswordIcon(size: 35),
-      ),
-      // Top left - Letter icon
-      Positioned(left: 30, top: 80, child: _LetterIcon(letter: 'A', size: 35)),
-      // Right side - Letter icon
-      Positioned(
-        right: 25,
-        top: totalHeight * 0.4,
-        child: _LetterIcon(letter: 'B', size: 30),
-      ),
-      // Left side - Letter icon
-      Positioned(
-        left: 20,
-        top: totalHeight * 0.75,
-        child: _LetterIcon(letter: 'X', size: 32),
       ),
       // Bottom area - Crossword icon
       Positioned(
@@ -784,39 +864,162 @@ class LevelNode extends StatelessWidget {
 class _LetterIcon extends StatelessWidget {
   final String letter;
   final double size;
+  final double angle;
+  final Color color;
+  final String? fontFamily;
+  final Color tileColor;
+  final bool hasShadow;
 
-  const _LetterIcon({required this.letter, required this.size});
+  const _LetterIcon({
+    required this.letter,
+    required this.size,
+    this.angle = 0.0,
+    required this.color,
+    this.fontFamily,
+    this.tileColor = Colors.white,
+    this.hasShadow = true,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.orange.withOpacity(0.3),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-        border: Border.all(color: const Color(0xFFFFB84D), width: 2),
-      ),
-      child: Center(
-        child: Text(
-          letter,
-          style: TextStyle(
-            fontSize: size * 0.5,
-            fontWeight: FontWeight.bold,
-            color: const Color(0xFFFF8C00),
+    return Transform.rotate(
+      angle: angle,
+      child: Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          color: tileColor,
+          borderRadius: BorderRadius.circular(4),
+          boxShadow: hasShadow
+              ? [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
+              : null,
+        ),
+        child: Center(
+          child: Text(
+            letter,
+            style: TextStyle(
+              fontSize: size * 0.5,
+              fontWeight: FontWeight.w900,
+              color: color,
+              letterSpacing: 0.5,
+              fontFamily: fontFamily,
+            ),
           ),
         ),
       ),
     ).animate().scale(duration: 600.ms, curve: Curves.easeOutBack).fade();
   }
 }
+
+// Crossword Puzzle Widget
+// class _CrosswordPuzzle extends StatelessWidget {
+//   final double tileSize;
+//   final double spacing;
+//   final double angle;
+//   final String horizontalWord;
+//   final String verticalWord;
+//   final int horizontalStartCol;
+//   final int verticalStartRow;
+//   final int intersectionRow;
+//   final int intersectionCol;
+
+//   const _CrosswordPuzzle({
+//     this.tileSize = 50.0,
+//     this.spacing = 2.0,
+//     this.angle = 0.0,
+//     required this.horizontalWord,
+//     required this.verticalWord,
+//     required this.horizontalStartCol,
+//     required this.verticalStartRow,
+//     required this.intersectionRow,
+//     required this.intersectionCol,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final tileWithSpacing = tileSize + spacing;
+
+//     // Calculate grid dimensions
+//     final maxCol = math.max(
+//       horizontalStartCol + horizontalWord.length - 1,
+//       intersectionCol,
+//     );
+//     final maxRow = math.max(
+//       verticalStartRow + verticalWord.length - 1,
+//       intersectionRow,
+//     );
+
+//     final width = (maxCol + 1) * tileWithSpacing;
+//     final height = (maxRow + 1) * tileWithSpacing;
+
+//     // Build tiles
+//     final tiles = <Widget>[];
+
+//     // Add horizontal word tiles (dark)
+//     for (int i = 0; i < horizontalWord.length; i++) {
+//       final col = horizontalStartCol + i;
+//       final row = intersectionRow;
+//       final letter = horizontalWord[i];
+
+//       tiles.add(
+//         Positioned(
+//           left: col * tileWithSpacing,
+//           top: row * tileWithSpacing,
+//           child: _LetterIcon(
+//             letter: letter,
+//             size: tileSize,
+//             angle: 0.0,
+//             color: Colors.white,
+//             tileColor: Colors.grey.shade800,
+//             hasShadow: true,
+//             fontFamily: null,
+//           ),
+//         ),
+//       );
+//     }
+
+//     // Add vertical word tiles (white, skip intersection)
+//     for (int i = 0; i < verticalWord.length; i++) {
+//       final row = verticalStartRow + i;
+//       final col = intersectionCol;
+//       final letter = verticalWord[i];
+//       final isIntersection = (col == intersectionCol && row == intersectionRow);
+
+//       if (!isIntersection) {
+//         tiles.add(
+//           Positioned(
+//             left: col * tileWithSpacing,
+//             top: row * tileWithSpacing,
+//             child: _LetterIcon(
+//               letter: letter,
+//               size: tileSize,
+//               angle: 0.0,
+//               color: Colors.white,
+//               tileColor: Colors.white,
+//               hasShadow: true,
+//               fontFamily: null,
+//             ),
+//           ),
+//         );
+//       }
+//     }
+
+//     return Transform.rotate(
+//       angle: angle,
+//       child: Container(
+//         width: width,
+//         height: height,
+//         child: Stack(children: tiles),
+//       ),
+//     );
+//   }
+// }
 
 // Crossword Icon Widget
 class _CrosswordIcon extends StatelessWidget {
