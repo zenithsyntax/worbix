@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import '../levels/level_model.dart';
 
 enum GameStatus { loading, playing, questionCompleted, won, lost, paused }
@@ -16,6 +15,7 @@ class GameplayState {
 
   final int currentQuestionDuration; // Seconds spent on current question
   final int coinsEarnedLastQuestion;
+  final bool isTimeExpired; // Track if time has run out for current question
 
   const GameplayState({
     this.level,
@@ -27,6 +27,7 @@ class GameplayState {
     this.currentGrid = const [],
     this.currentQuestionDuration = 0,
     this.coinsEarnedLastQuestion = 0,
+    this.isTimeExpired = false,
   });
   
   GameplayState copyWith({
@@ -39,6 +40,7 @@ class GameplayState {
     List<List<String>>? currentGrid,
     int? currentQuestionDuration,
     int? coinsEarnedLastQuestion,
+    bool? isTimeExpired,
   }) {
     return GameplayState(
       level: level ?? this.level,
@@ -50,6 +52,7 @@ class GameplayState {
       currentGrid: currentGrid ?? this.currentGrid,
       currentQuestionDuration: currentQuestionDuration ?? this.currentQuestionDuration,
       coinsEarnedLastQuestion: coinsEarnedLastQuestion ?? this.coinsEarnedLastQuestion,
+      isTimeExpired: isTimeExpired ?? this.isTimeExpired,
     );
   }
 }

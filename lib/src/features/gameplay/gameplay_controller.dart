@@ -55,6 +55,7 @@ class GameplayController extends StateNotifier<GameplayState> {
       selectedIndices: [],
       currentQuestionDuration: 0,
       coinsEarnedLastQuestion: 0,
+      isTimeExpired: false,
     );
     
     // Update saved position
@@ -83,9 +84,9 @@ class GameplayController extends StateNotifier<GameplayState> {
           
           // Check if time ran out
           if (newTimeLeft == 0) {
-              // Time's up for this question
-              state = state.copyWith(status: GameStatus.lost);
-              _timer?.cancel();
+              // Time's up - mark as expired but allow gameplay to continue
+              state = state.copyWith(isTimeExpired: true);
+              // Don't cancel timer or change status - let user continue playing
           }
       }
     });
@@ -101,9 +102,12 @@ class GameplayController extends StateNotifier<GameplayState> {
       final index = row * 6 + col;
       state = state.copyWith(selectedIndices: [index]);
   }
+  
+  // Allow tile tapping even after time expires
+  bool get _canPlay => state.status == GameStatus.playing;
 
   void onTileTap(int index) {
-      if (state.status != GameStatus.playing) return;
+      if (!_canPlay) return;
 
       // 0-35 index
       final r = index ~/ 6;
@@ -184,18 +188,25 @@ class GameplayController extends StateNotifier<GameplayState> {
       if (word.toLowerCase() == q.answer.toLowerCase()) {
           // Correct!
           
-          // Calculate Coins based on remaining time (timer)
-          // More time left = more coins, less time left = fewer coins
-          // Formula: coinsEarned = maxCoins * (timeLeft / timeLimit)
-          // Ensure minimum of 1 coin
-          final maxCoins = q.coins;
-          final timeLimit = state.level!.timeLimit;
-          final timeLeft = state.timeLeft;
-          
-          // Calculate coins based on percentage of time remaining
-          // If timeLeft is 140 and timeLimit is 140, you get 100% of coins
-          // If timeLeft is 70 and timeLimit is 140, you get 50% of coins
-          final coinsEarned = (maxCoins * (timeLeft / timeLimit)).clamp(1.0, maxCoins.toDouble()).toInt();
+          // If time expired, only give 1 coin, otherwise calculate normally
+          final int coinsEarned;
+          if (state.isTimeExpired) {
+              // Time expired - only reward 1 coin
+              coinsEarned = 1;
+          } else {
+              // Calculate Coins based on remaining time (timer)
+              // More time left = more coins, less time left = fewer coins
+              // Formula: coinsEarned = maxCoins * (timeLeft / timeLimit)
+              // Ensure minimum of 1 coin
+              final maxCoins = q.coins;
+              final timeLimit = state.level!.timeLimit;
+              final timeLeft = state.timeLeft;
+              
+              // Calculate coins based on percentage of time remaining
+              // If timeLeft is 140 and timeLimit is 140, you get 100% of coins
+              // If timeLeft is 70 and timeLimit is 140, you get 50% of coins
+              coinsEarned = (maxCoins * (timeLeft / timeLimit)).clamp(1.0, maxCoins.toDouble()).toInt();
+          }
           
           // Save Progress (replay can earn coins again as per requirements)
           await ref.read(userProgressProvider.notifier).markQuestionCompleted(
@@ -217,6 +228,7 @@ class GameplayController extends StateNotifier<GameplayState> {
               status: GameStatus.questionCompleted,
               currentCoins: state.currentCoins + coinsEarned,
               coinsEarnedLastQuestion: coinsEarned,
+              isTimeExpired: false, // Reset for next question
           );
           // Timer naturally effectively pauses because status != playing
       } 
@@ -252,6 +264,7 @@ class GameplayController extends StateNotifier<GameplayState> {
                selectedIndices: [],
                currentQuestionDuration: 0, // Reset duration counter
                coinsEarnedLastQuestion: 0,
+               isTimeExpired: false, // Reset time expired flag
            );
            // Restart timer for the new question
            _startTimer();
@@ -271,6 +284,7 @@ class GameplayController extends StateNotifier<GameplayState> {
           selectedIndices: [],
           currentQuestionDuration: 0, // Reset duration counter
           coinsEarnedLastQuestion: 0,
+          isTimeExpired: false, // Reset time expired flag
       );
       // Restart timer for the question
       _startTimer();

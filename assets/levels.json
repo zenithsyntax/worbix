@@ -2,7 +2,7 @@
   {
     "id": 1,
     "title": "Level 1 \u2014 Starters",
-    "timeLimit": 140,
+    "timeLimit": 10,
     "orientation": "6x6",
     "gridSize": 36,
     "questions": [

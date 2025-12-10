@@ -165,7 +165,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
     final controller = ref.read(gameplayControllerProvider.notifier);
     final theme = Theme.of(context);
 
-    // Listen for Game Over / Win / Question Complete
+    // Listen for Game Over / Win / Question Complete / Time Expired
     ref.listen(gameplayControllerProvider, (prev, next) {
       if (prev?.status != next.status) {
         if (next.status == GameStatus.questionCompleted) {
@@ -187,35 +187,19 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
           _confettiController.play();
           // Handle level won asynchronously
           _handleLevelWon(context, ref, next, widget.levelId, theme);
-        } else if (next.status == GameStatus.lost) {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) => AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              title: const Text("Time's Up!"),
-              content: const Text("Try again?"),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("Exit"),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    controller.loadLevel(widget.levelId);
-                  },
-                  child: const Text("Retry"),
-                ),
-              ],
-            ),
-          );
         }
+      }
+
+      // Listen for time expiration (when isTimeExpired changes from false to true)
+      if (prev?.isTimeExpired != next.isTimeExpired && next.isTimeExpired) {
+        // Show simple "Time Over" message - gameplay continues
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text("Time Over"),
+            duration: const Duration(seconds: 2),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
     });
 
@@ -378,315 +362,318 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
           ),
         ],
       ),
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              // Clue Section
-              Container(
-                margin: const EdgeInsets.all(16),
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surface,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                width: double.infinity,
-                child: Column(
-                  children: [
-                    Text(
-                      "Question ${state.currentQuestionIndex + 1}/${state.level!.questions.length}",
-                      style: TextStyle(
-                        color: theme.colorScheme.secondary,
-                        fontWeight: FontWeight.bold,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                // Clue Section
+                Container(
+                  margin: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surface,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      q.question,
-                      style: theme.textTheme.headlineSmall?.copyWith(
-                        fontSize: 22,
-                        color: theme.colorScheme.onSurface,
+                    ],
+                  ),
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      Text(
+                        "Question ${state.currentQuestionIndex + 1}/${state.level!.questions.length}",
+                        style: TextStyle(
+                          color: theme.colorScheme.secondary,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 16),
-                    // Answer Blanks with Animation
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(q.answer.length, (index) {
-                        String char = "";
-                        bool filled = false;
-                        if (index < state.selectedIndices.length) {
-                          int tapIdx = state.selectedIndices[index];
-                          int r = tapIdx ~/ 6;
-                          int c = tapIdx % 6;
-                          char = state.currentGrid[r][c];
-                          filled = true;
-                        }
-                        return Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 4),
-                          width: 40,
-                          height: 50,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(
-                                width: 3,
-                                color: filled
-                                    ? theme.colorScheme.primary
-                                    : Colors.grey.shade300,
+                      const SizedBox(height: 8),
+                      Text(
+                        q.question,
+                        style: theme.textTheme.headlineSmall?.copyWith(
+                          fontSize: 22,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 16),
+                      // Answer Blanks with Animation
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(q.answer.length, (index) {
+                          String char = "";
+                          bool filled = false;
+                          if (index < state.selectedIndices.length) {
+                            int tapIdx = state.selectedIndices[index];
+                            int r = tapIdx ~/ 6;
+                            int c = tapIdx % 6;
+                            char = state.currentGrid[r][c];
+                            filled = true;
+                          }
+                          return Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 4),
+                            width: 40,
+                            height: 50,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  width: 3,
+                                  color: filled
+                                      ? theme.colorScheme.primary
+                                      : Colors.grey.shade300,
+                                ),
                               ),
                             ),
-                          ),
-                          child:
-                              Text(
-                                    char,
-                                    style: TextStyle(
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.bold,
-                                      color: theme.colorScheme.primary,
-                                    ),
-                                  )
-                                  .animate(target: filled ? 1 : 0)
-                                  .scale(
-                                    duration: 200.ms,
-                                    curve: Curves.easeOutBack,
-                                  ),
-                        );
-                      }),
-                    ),
-                  ],
-                ),
-              ),
-
-              // Timer Bar
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: LinearProgressIndicator(
-                  value: state.timeLeft / state.level!.timeLimit,
-                  borderRadius: BorderRadius.circular(10),
-                  minHeight: 12,
-                  backgroundColor: Colors.grey.shade200,
-                  color: state.timeLeft < 10
-                      ? Colors.red
-                      : theme.colorScheme.tertiary,
-                ).animate(target: state.timeLeft < 10 ? 1 : 0).shake(hz: 2),
-              ),
-
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      final gridWidth = constraints.maxWidth;
-                      final tileSize = (gridWidth - (5 * 8)) / 6;
-
-                      return Stack(
-                        children: [
-                          GridView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: 36,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 6,
-                                  crossAxisSpacing: 8,
-                                  mainAxisSpacing: 8,
-                                ),
-                            itemBuilder: (context, index) {
-                              final r = index ~/ 6;
-                              final c = index % 6;
-                              final letter = state.currentGrid[r][c];
-                              final isSelected = state.selectedIndices.contains(
-                                index,
-                              );
-
-                              return GestureDetector(
-                                onTap: () => controller.onTileTap(index),
-                                child:
-                                    AnimatedContainer(
-                                      duration: const Duration(
-                                        milliseconds: 150,
+                            child:
+                                Text(
+                                      char,
+                                      style: TextStyle(
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.bold,
+                                        color: theme.colorScheme.primary,
                                       ),
-                                      curve: Curves.easeOut,
-                                      decoration: BoxDecoration(
-                                        color: isSelected
-                                            ? theme.colorScheme.primary
-                                                  .withOpacity(0.2)
-                                            : Colors.white,
-                                        borderRadius: BorderRadius.circular(12),
-                                        border: Border.all(
-                                          width: 2,
-                                          color: isSelected
-                                              ? theme.colorScheme.primary
-                                              : Colors.grey.shade200,
-                                        ),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: isSelected
-                                                ? theme.colorScheme.primary
-                                                      .withOpacity(0.3)
-                                                : Colors.black.withOpacity(
-                                                    0.05,
-                                                  ),
-                                            blurRadius: isSelected ? 8 : 4,
-                                            offset: const Offset(0, 4),
-                                          ),
-                                        ],
-                                      ),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        letter.toUpperCase(),
-                                        style: TextStyle(
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.w900,
-                                          color: isSelected
-                                              ? theme.colorScheme.primary
-                                              : Colors.grey.shade700,
-                                        ),
-                                      ),
-                                    ).animate().scale(
-                                      delay: (30 * index).ms,
-                                      duration: 400.ms,
+                                    )
+                                    .animate(target: filled ? 1 : 0)
+                                    .scale(
+                                      duration: 200.ms,
                                       curve: Curves.easeOutBack,
                                     ),
-                              );
-                            },
-                          ),
-                          IgnorePointer(
-                            child: CustomPaint(
-                              size: Size(
-                                constraints.maxWidth,
-                                constraints.maxHeight,
-                              ),
-                              painter: SelectionPathPainter(
-                                selectedIndices: state.selectedIndices,
-                                tileSize: tileSize,
-                                spacing: 8.0,
-                                color: theme.colorScheme.primary,
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
+                          );
+                        }),
+                      ),
+                    ],
                   ),
                 ),
-              ),
 
-              // Action Buttons
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton.icon(
-                      onPressed: () => controller.clearSelection(),
-                      icon: const Icon(Icons.refresh_rounded),
-                      label: const Text("Reset"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey.shade300,
-                        foregroundColor: Colors.black87,
-                      ),
-                    ),
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        // Get hint data first
-                        final start = q.answerPlacement.path.first;
-                        final firstLetterRow = start['row']!;
-                        final firstLetterCol = start['col']!;
-                        final firstLetter =
-                            q.grid[firstLetterRow][firstLetterCol];
+                // Timer Bar
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: LinearProgressIndicator(
+                    value: state.timeLeft / state.level!.timeLimit,
+                    borderRadius: BorderRadius.circular(10),
+                    minHeight: 12,
+                    backgroundColor: Colors.grey.shade200,
+                    color: state.timeLeft < 10
+                        ? Colors.red
+                        : theme.colorScheme.tertiary,
+                  ).animate(target: state.timeLeft < 10 ? 1 : 0).shake(hz: 2),
+                ),
 
-                        // Function to show hint
-                        void showHint() {
-                          if (!mounted) return;
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        final gridWidth = constraints.maxWidth;
+                        final tileSize = (gridWidth - (5 * 8)) / 6;
 
-                          // Show snackbar
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                "First letter '$firstLetter' is marked!",
-                              ),
-                              duration: const Duration(seconds: 2),
-                            ),
-                          );
+                        return Stack(
+                          children: [
+                            GridView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: 36,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 6,
+                                    crossAxisSpacing: 8,
+                                    mainAxisSpacing: 8,
+                                  ),
+                              itemBuilder: (context, index) {
+                                final r = index ~/ 6;
+                                final c = index % 6;
+                                final letter = state.currentGrid[r][c];
+                                final isSelected = state.selectedIndices
+                                    .contains(index);
 
-                          // Auto-select the first letter
-                          controller.selectFirstLetter(
-                            firstLetterRow,
-                            firstLetterCol,
-                          );
-                        }
-
-                        // Show rewarded ad first
-                        ref
-                            .read(adManagerProvider)
-                            .showRewarded(
-                              (reward) {
-                                // Reward earned callback (for tracking)
-                                debugPrint(
-                                  'Reward earned: ${reward.amount} ${reward.type}',
+                                return GestureDetector(
+                                  onTap: () => controller.onTileTap(index),
+                                  child:
+                                      AnimatedContainer(
+                                        duration: const Duration(
+                                          milliseconds: 150,
+                                        ),
+                                        curve: Curves.easeOut,
+                                        decoration: BoxDecoration(
+                                          color: isSelected
+                                              ? theme.colorScheme.primary
+                                                    .withOpacity(0.2)
+                                              : Colors.white,
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                          border: Border.all(
+                                            width: 2,
+                                            color: isSelected
+                                                ? theme.colorScheme.primary
+                                                : Colors.grey.shade200,
+                                          ),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: isSelected
+                                                  ? theme.colorScheme.primary
+                                                        .withOpacity(0.3)
+                                                  : Colors.black.withOpacity(
+                                                      0.05,
+                                                    ),
+                                              blurRadius: isSelected ? 8 : 4,
+                                              offset: const Offset(0, 4),
+                                            ),
+                                          ],
+                                        ),
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          letter.toUpperCase(),
+                                          style: TextStyle(
+                                            fontSize: 22,
+                                            fontWeight: FontWeight.w900,
+                                            color: isSelected
+                                                ? theme.colorScheme.primary
+                                                : Colors.grey.shade700,
+                                          ),
+                                        ),
+                                      ).animate().scale(
+                                        delay: (30 * index).ms,
+                                        duration: 400.ms,
+                                        curve: Curves.easeOutBack,
+                                      ),
                                 );
                               },
-                              onAdDismissed: () {
-                                // Hint shown when ad is dismissed (user watched it)
-                                showHint();
-                              },
-                              onAdNotReady: () {
-                                // If ad is not ready, show a message
-                                if (mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        "Ad is loading. Please try again in a moment.",
-                                      ),
-                                      duration: Duration(seconds: 2),
-                                    ),
-                                  );
-                                }
-                              },
-                            );
+                            ),
+                            IgnorePointer(
+                              child: CustomPaint(
+                                size: Size(
+                                  constraints.maxWidth,
+                                  constraints.maxHeight,
+                                ),
+                                painter: SelectionPathPainter(
+                                  selectedIndices: state.selectedIndices,
+                                  tileSize: tileSize,
+                                  spacing: 8.0,
+                                  color: theme.colorScheme.primary,
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
                       },
-                      icon: const Icon(Icons.lightbulb_outline),
-                      label: const Text("Hint"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: theme.colorScheme.secondary,
-                      ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-              if (ref.watch(adManagerProvider).bannerAd != null)
-                SizedBox(
-                  height: 50,
-                  child: AdWidget(ad: ref.watch(adManagerProvider).bannerAd!),
-                ),
-            ],
-          ),
 
-          Align(
-            alignment: Alignment.topCenter,
-            child: ConfettiWidget(
-              confettiController: _confettiController,
-              blastDirectionality: BlastDirectionality.explosive,
-              shouldLoop: false,
-              colors: const [
-                Colors.green,
-                Colors.blue,
-                Colors.pink,
-                Colors.orange,
-                Colors.purple,
+                // Action Buttons
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: () => controller.clearSelection(),
+                        icon: const Icon(Icons.refresh_rounded),
+                        label: const Text("Reset"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.grey.shade300,
+                          foregroundColor: Colors.black87,
+                        ),
+                      ),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          // Get hint data first
+                          final start = q.answerPlacement.path.first;
+                          final firstLetterRow = start['row']!;
+                          final firstLetterCol = start['col']!;
+                          final firstLetter =
+                              q.grid[firstLetterRow][firstLetterCol];
+
+                          // Function to show hint
+                          void showHint() {
+                            if (!mounted) return;
+
+                            // Show snackbar
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  "First letter '$firstLetter' is marked!",
+                                ),
+                                duration: const Duration(seconds: 2),
+                              ),
+                            );
+
+                            // Auto-select the first letter
+                            controller.selectFirstLetter(
+                              firstLetterRow,
+                              firstLetterCol,
+                            );
+                          }
+
+                          // Show rewarded ad first
+                          ref
+                              .read(adManagerProvider)
+                              .showRewarded(
+                                (reward) {
+                                  // Reward earned callback (for tracking)
+                                  debugPrint(
+                                    'Reward earned: ${reward.amount} ${reward.type}',
+                                  );
+                                },
+                                onAdDismissed: () {
+                                  // Hint shown when ad is dismissed (user watched it)
+                                  showHint();
+                                },
+                                onAdNotReady: () {
+                                  // If ad is not ready, show a message
+                                  if (mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          "Ad is loading. Please try again in a moment.",
+                                        ),
+                                        duration: Duration(seconds: 2),
+                                      ),
+                                    );
+                                  }
+                                },
+                              );
+                        },
+                        icon: const Icon(Icons.lightbulb_outline),
+                        label: const Text("Hint"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: theme.colorScheme.secondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (ref.watch(adManagerProvider).bannerAd != null)
+                  SizedBox(
+                    height: 50,
+                    child: AdWidget(ad: ref.watch(adManagerProvider).bannerAd!),
+                  ),
               ],
             ),
-          ),
-        ],
+
+            Align(
+              alignment: Alignment.topCenter,
+              child: ConfettiWidget(
+                confettiController: _confettiController,
+                blastDirectionality: BlastDirectionality.explosive,
+                shouldLoop: false,
+                colors: const [
+                  Colors.green,
+                  Colors.blue,
+                  Colors.pink,
+                  Colors.orange,
+                  Colors.purple,
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
