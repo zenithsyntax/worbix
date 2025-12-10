@@ -66,19 +66,21 @@ class GameplayController extends StateNotifier<GameplayState> {
           return;
       }
       
-      // Check if already selected (Prevent loops)
+      // Check if trying to select a tile already selected (Backtracking/Loop)
       if (state.selectedIndices.contains(index)) {
-          // Allow backtracking/deselecting if it's the 2nd to last one?
-          // Simplest: If they tap the last selected, ignore. If they tap the 2nd to last, remove last (undo).
-           if (index == state.selectedIndices.last) return;
-           
+           // Allow simple undo (tapping the last one again? or just ignore?)
+           // If they tap the 2nd to last, we treat it as an undo of the last step
            if (state.selectedIndices.length > 1 && index == state.selectedIndices[state.selectedIndices.length - 2]) {
-               // Undo last move
                final newSelection = List<int>.from(state.selectedIndices)..removeLast();
                state = state.copyWith(selectedIndices: newSelection);
                return;
            }
-           // Otherwise, loop attempt -> Invalid
+           // Any other self-intersection -> Reset? 
+           // User said "old path is cleared and a NEW path begins... for example dont allow... loops"
+           // So if they tap an arbitrary middle tile, we reset to that tile.
+           if (index != state.selectedIndices.last) {
+              state = state.copyWith(selectedIndices: [index]);
+           }
            return;
       }
       
@@ -86,19 +88,34 @@ class GameplayController extends StateNotifier<GameplayState> {
       final lastR = lastIndex ~/ 6;
       final lastC = lastIndex % 6;
       
-      // 8-way adjacency check
-      final dr = (r - lastR).abs();
-      final dc = (c - lastC).abs();
+      // Calculate proposed direction
+      final dr = r - lastR;
+      final dc = c - lastC;
       
-      final isAdjacent = dr <= 1 && dc <= 1 && (dr != 0 || dc != 0);
-      
-      if (!isAdjacent) {
-          // Invalid jump -> Reset selection (Option A)
+      // Check adjacency (Must be adjacent |dr|<=1, |dc|<=1)
+      if (dr.abs() > 1 || dc.abs() > 1 || (dr == 0 && dc == 0)) {
+          // Non-adjacent jump -> Reset
           state = state.copyWith(selectedIndices: [index]);
           return;
       }
       
-      // Valid adjacent move
+      // Check Locked Direction (if we have at least 2 tiles)
+      if (state.selectedIndices.length >= 2) {
+          final first = state.selectedIndices[0];
+          final second = state.selectedIndices[1];
+          
+          final lockedDr = (second ~/ 6) - (first ~/ 6);
+          final lockedDc = (second % 6) - (first % 6);
+          
+          // New step MUST match the locked direction
+          if (dr != lockedDr || dc != lockedDc) {
+              // Deviation -> Reset to new tile
+              state = state.copyWith(selectedIndices: [index]);
+              return;
+          }
+      }
+      
+      // Valid move -> Add
       state = state.copyWith(selectedIndices: [...state.selectedIndices, index]);
       _checkAnswer();
   }
