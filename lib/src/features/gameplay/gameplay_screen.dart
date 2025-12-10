@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:confetti/confetti.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'gameplay_controller.dart';
 import 'gameplay_state.dart';
 import '../ads/ad_manager.dart';
@@ -365,6 +366,13 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
       body: SafeArea(
         child: Stack(
           children: [
+            // Background Image
+            Positioned.fill(
+              child: Image.asset(
+                'assets/game_play_page Backgound.png',
+                fit: BoxFit.cover,
+              ),
+            ),
             Column(
               children: [
                 // Clue Section

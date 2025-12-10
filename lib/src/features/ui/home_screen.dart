@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../levels/level_repository.dart';
 import '../store/user_progress_provider.dart';
 import '../store/user_progress_model.dart';
@@ -143,210 +144,456 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Row(
-          children: [
-            const Icon(Icons.lock, color: Colors.orange, size: 32),
-            const SizedBox(width: 8),
-            Text(
-              "Level ${level.id} Locked",
-              style: const TextStyle(fontSize: 20),
+      barrierColor: Colors.black.withOpacity(0.5),
+      builder: (context) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color(0xFFFFF8E1), // Cream
+                Color(0xFFFFE0B2), // Light orange
+                Color(0xFFFFCC80), // Orange
+              ],
             ),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              "You need $unlockCost coins to unlock this level.",
-              style: const TextStyle(fontSize: 16),
-              textAlign: TextAlign.center,
+            borderRadius: BorderRadius.circular(30),
+            border: Border.all(
+              color: const Color(0xFFFF6B00), // Dark orange for stroke
+              width: 6,
             ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFFFFF8E1), // Cream
+                  Color(0xFFFFE0B2), // Light orange
+                  Color(0xFFFFCC80), // Orange
+                ],
+              ),
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.monetization_on, color: Colors.yellowAccent),
-                const SizedBox(width: 4),
-                Text(
-                  "You have: $currentCoins coins",
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
+                // 3D Title with lock icon
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12,
+                    horizontal: 16,
                   ),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xFFFFB74D), // Orange
+                        Color(0xFFFF9800), // Darker orange
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: const Color(0xFFFF6B00),
+                      width: 4,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFE0B2),
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: const Color(0xFFFF6B00),
+                            width: 3,
+                          ),
+                        ),
+                        child: const Icon(
+                          Icons.lock,
+                          color: Color(0xFFFF6B00),
+                          size: 32,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        "Level ${level.id} Locked!",
+                        style: GoogleFonts.bangers(
+                          fontSize: 28,
+                          color: Colors.white,
+                          letterSpacing: 1.5,
+                          shadows: [
+                            Shadow(
+                              color: const Color(0xFFFF6B00).withOpacity(0.5),
+                              offset: const Offset(2, 2),
+                              blurRadius: 0,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+                // Content with 3D effect
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFF8E1),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: const Color(0xFFFFB74D),
+                      width: 4,
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        "You need $unlockCost coins\nto unlock this level!",
+                        style: GoogleFonts.comicNeue(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFFFF6B00),
+                          height: 1.4,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 16),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 12,
+                          horizontal: 16,
+                        ),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFFFFE0B2), Color(0xFFFFCC80)],
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
+                            color: const Color(0xFFFFB74D),
+                            width: 3,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFFD54F),
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: const Color(0xFFFF6B00),
+                                  width: 2,
+                                ),
+                              ),
+                              child: const Icon(
+                                Icons.monetization_on,
+                                color: Color(0xFFFF6B00),
+                                size: 24,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              "You have: $currentCoins coins",
+                              style: GoogleFonts.nunito(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFFFF6B00),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+                // Two buttons with 3D effect
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    // Cancel button
+                    Expanded(
+                      child: Container(
+                        height: 60,
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [Color(0xFFFFE0B2), Color(0xFFFFCC80)],
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: const Color(0xFFFFB74D),
+                            width: 4,
+                          ),
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                            },
+                            borderRadius: BorderRadius.circular(20),
+                            child: Center(
+                              child: Text(
+                                "Cancel",
+                                style: GoogleFonts.bubblegumSans(
+                                  fontSize: 20,
+                                  color: const Color(0xFFFF6B00),
+                                  letterSpacing: 1.2,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    // Watch Ad button
+                    Expanded(
+                      child: Container(
+                        height: 60,
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [Color(0xFFFFB74D), Color(0xFFFF9800)],
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: const Color(0xFFFF6B00),
+                            width: 4,
+                          ),
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () async {
+                              // Get ScaffoldMessenger and Navigator before closing dialog
+                              final scaffoldMessenger = ScaffoldMessenger.of(
+                                context,
+                              );
+                              final navigator = Navigator.of(context);
+
+                              // Close dialog first
+                              navigator.pop();
+
+                              // Show loading message
+                              scaffoldMessenger.showSnackBar(
+                                const SnackBar(
+                                  content: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      SizedBox(width: 12),
+                                      Text("Loading ad..."),
+                                    ],
+                                  ),
+                                  duration: Duration(seconds: 5),
+                                ),
+                              );
+
+                              // Wait a moment for ad to potentially load
+                              await Future.delayed(
+                                const Duration(milliseconds: 500),
+                              );
+
+                              // Show rewarded ad
+                              ref
+                                  .read(adManagerProvider)
+                                  .showRewarded(
+                                    (reward) {
+                                      // Reward earned - add 10 coins and unlock the level
+                                      ref
+                                          .read(userProgressProvider.notifier)
+                                          .addCoins(10);
+                                      ref
+                                          .read(userProgressProvider.notifier)
+                                          .unlockLevel(level.id);
+                                      // Hide loading snackbar and show success
+                                      scaffoldMessenger.hideCurrentSnackBar();
+                                      scaffoldMessenger.showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            "Level ${level.id} unlocked! +10 coins",
+                                          ),
+                                          backgroundColor: Colors.green,
+                                          duration: const Duration(seconds: 2),
+                                        ),
+                                      );
+                                    },
+                                    onAdDismissed: () {
+                                      // Ad was watched - add 10 coins and unlock the level
+                                      ref
+                                          .read(userProgressProvider.notifier)
+                                          .addCoins(10);
+                                      ref
+                                          .read(userProgressProvider.notifier)
+                                          .unlockLevel(level.id);
+                                      // Hide loading snackbar and show success
+                                      scaffoldMessenger.hideCurrentSnackBar();
+                                      scaffoldMessenger.showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            "Level ${level.id} unlocked! +10 coins",
+                                          ),
+                                          backgroundColor: Colors.green,
+                                          duration: const Duration(seconds: 2),
+                                        ),
+                                      );
+                                    },
+                                    onAdNotReady: () {
+                                      // Hide loading snackbar and show error with retry option
+                                      scaffoldMessenger.hideCurrentSnackBar();
+                                      scaffoldMessenger.showSnackBar(
+                                        SnackBar(
+                                          content: const Text(
+                                            "Ad failed to load. Please check your internet connection and try again.",
+                                          ),
+                                          duration: const Duration(seconds: 4),
+                                          backgroundColor: Colors.orange,
+                                          action: SnackBarAction(
+                                            label: 'Retry',
+                                            textColor: Colors.white,
+                                            onPressed: () {
+                                              // Retry loading and showing the ad
+                                              ref
+                                                  .read(adManagerProvider)
+                                                  .loadRewarded();
+                                              // Show the ad again after a short delay
+                                              Future.delayed(const Duration(seconds: 2), () {
+                                                ref
+                                                    .read(adManagerProvider)
+                                                    .showRewarded(
+                                                      (reward) {
+                                                        ref
+                                                            .read(
+                                                              userProgressProvider
+                                                                  .notifier,
+                                                            )
+                                                            .addCoins(10);
+                                                        ref
+                                                            .read(
+                                                              userProgressProvider
+                                                                  .notifier,
+                                                            )
+                                                            .unlockLevel(
+                                                              level.id,
+                                                            );
+                                                        scaffoldMessenger.showSnackBar(
+                                                          SnackBar(
+                                                            content: Text(
+                                                              "Level ${level.id} unlocked! +10 coins",
+                                                            ),
+                                                            backgroundColor:
+                                                                Colors.green,
+                                                            duration:
+                                                                const Duration(
+                                                                  seconds: 2,
+                                                                ),
+                                                          ),
+                                                        );
+                                                      },
+                                                      onAdDismissed: () {
+                                                        ref
+                                                            .read(
+                                                              userProgressProvider
+                                                                  .notifier,
+                                                            )
+                                                            .addCoins(10);
+                                                        ref
+                                                            .read(
+                                                              userProgressProvider
+                                                                  .notifier,
+                                                            )
+                                                            .unlockLevel(
+                                                              level.id,
+                                                            );
+                                                        scaffoldMessenger.showSnackBar(
+                                                          SnackBar(
+                                                            content: Text(
+                                                              "Level ${level.id} unlocked! +10 coins",
+                                                            ),
+                                                            backgroundColor:
+                                                                Colors.green,
+                                                            duration:
+                                                                const Duration(
+                                                                  seconds: 2,
+                                                                ),
+                                                          ),
+                                                        );
+                                                      },
+                                                      onAdNotReady: () {
+                                                        scaffoldMessenger
+                                                            .showSnackBar(
+                                                              const SnackBar(
+                                                                content: Text(
+                                                                  "Ad still not ready. Please try again later.",
+                                                                ),
+                                                                duration:
+                                                                    Duration(
+                                                                      seconds:
+                                                                          3,
+                                                                    ),
+                                                                backgroundColor:
+                                                                    Colors.red,
+                                                              ),
+                                                            );
+                                                      },
+                                                    );
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                            },
+                            borderRadius: BorderRadius.circular(20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.play_circle_filled,
+                                  color: Colors.white,
+                                  size: 28,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  "Watch Ad",
+                                  style: GoogleFonts.permanentMarker(
+                                    fontSize: 20,
+                                    color: Colors.white,
+                                    letterSpacing: 1.2,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text("Play Again"),
-          ),
-          ElevatedButton.icon(
-            onPressed: () async {
-              // Get ScaffoldMessenger and Navigator before closing dialog
-              final scaffoldMessenger = ScaffoldMessenger.of(context);
-              final navigator = Navigator.of(context);
-
-              // Close dialog first
-              navigator.pop();
-
-              // Show loading message
-              scaffoldMessenger.showSnackBar(
-                const SnackBar(
-                  content: Row(
-                    children: [
-                      SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(width: 12),
-                      Text("Loading ad..."),
-                    ],
-                  ),
-                  duration: Duration(seconds: 5),
-                ),
-              );
-
-              // Wait a moment for ad to potentially load
-              await Future.delayed(const Duration(milliseconds: 500));
-
-              // Show rewarded ad
-              ref
-                  .read(adManagerProvider)
-                  .showRewarded(
-                    (reward) {
-                      // Reward earned - add 10 coins and unlock the level
-                      ref.read(userProgressProvider.notifier).addCoins(10);
-                      ref
-                          .read(userProgressProvider.notifier)
-                          .unlockLevel(level.id);
-                      // Hide loading snackbar and show success
-                      scaffoldMessenger.hideCurrentSnackBar();
-                      scaffoldMessenger.showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            "Level ${level.id} unlocked! +10 coins",
-                          ),
-                          backgroundColor: Colors.green,
-                          duration: const Duration(seconds: 2),
-                        ),
-                      );
-                    },
-                    onAdDismissed: () {
-                      // Ad was watched - add 10 coins and unlock the level
-                      ref.read(userProgressProvider.notifier).addCoins(10);
-                      ref
-                          .read(userProgressProvider.notifier)
-                          .unlockLevel(level.id);
-                      // Hide loading snackbar and show success
-                      scaffoldMessenger.hideCurrentSnackBar();
-                      scaffoldMessenger.showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            "Level ${level.id} unlocked! +10 coins",
-                          ),
-                          backgroundColor: Colors.green,
-                          duration: const Duration(seconds: 2),
-                        ),
-                      );
-                    },
-                    onAdNotReady: () {
-                      // Hide loading snackbar and show error with retry option
-                      scaffoldMessenger.hideCurrentSnackBar();
-                      scaffoldMessenger.showSnackBar(
-                        SnackBar(
-                          content: const Text(
-                            "Ad failed to load. Please check your internet connection and try again.",
-                          ),
-                          duration: const Duration(seconds: 4),
-                          backgroundColor: Colors.orange,
-                          action: SnackBarAction(
-                            label: 'Retry',
-                            textColor: Colors.white,
-                            onPressed: () {
-                              // Retry loading and showing the ad
-                              ref.read(adManagerProvider).loadRewarded();
-                              // Show the ad again after a short delay
-                              Future.delayed(const Duration(seconds: 2), () {
-                                ref
-                                    .read(adManagerProvider)
-                                    .showRewarded(
-                                      (reward) {
-                                        ref
-                                            .read(userProgressProvider.notifier)
-                                            .addCoins(10);
-                                        ref
-                                            .read(userProgressProvider.notifier)
-                                            .unlockLevel(level.id);
-                                        scaffoldMessenger.showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              "Level ${level.id} unlocked! +10 coins",
-                                            ),
-                                            backgroundColor: Colors.green,
-                                            duration: const Duration(
-                                              seconds: 2,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      onAdDismissed: () {
-                                        ref
-                                            .read(userProgressProvider.notifier)
-                                            .addCoins(10);
-                                        ref
-                                            .read(userProgressProvider.notifier)
-                                            .unlockLevel(level.id);
-                                        scaffoldMessenger.showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              "Level ${level.id} unlocked! +10 coins",
-                                            ),
-                                            backgroundColor: Colors.green,
-                                            duration: const Duration(
-                                              seconds: 2,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      onAdNotReady: () {
-                                        scaffoldMessenger.showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                              "Ad still not ready. Please try again later.",
-                                            ),
-                                            duration: Duration(seconds: 3),
-                                            backgroundColor: Colors.red,
-                                          ),
-                                        );
-                                      },
-                                    );
-                              });
-                            },
-                          ),
-                        ),
-                      );
-                    },
-                  );
-            },
-            icon: const Icon(Icons.play_circle_outline),
-            label: const Text("Watch Rewarded Ad"),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.orange,
-              foregroundColor: Colors.white,
-            ),
-          ),
-        ],
       ),
     );
   }
