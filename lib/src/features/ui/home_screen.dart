@@ -86,6 +86,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             image: AssetImage('assets/home_page_backgorund.png'),
             fit: BoxFit.cover,
             repeat: ImageRepeat.noRepeat,
+            opacity: 0.7,
           ),
         ),
         child: levelsAsync.when(
@@ -402,14 +403,14 @@ class _RoadmapViewState extends State<RoadmapView> {
         height: totalHeight,
         child: Stack(
           children: [
-            // Background path
-            CustomPaint(
-              size: Size(screenWidth, totalHeight),
-              painter: RoadmapPathPainter(
-                nodeCount: widget.levels.length,
-                nodePositions: nodePositions,
-              ),
-            ),
+            // Background path - removed
+            // CustomPaint(
+            //   size: Size(screenWidth, totalHeight),
+            //   painter: RoadmapPathPainter(
+            //     nodeCount: widget.levels.length,
+            //     nodePositions: nodePositions,
+            //   ),
+            // ),
 
             // Decorative letter and crossword icons
             ..._buildDecorativeElements(screenWidth, totalHeight),
@@ -454,7 +455,7 @@ class _RoadmapViewState extends State<RoadmapView> {
   ) {
     final positions = <Offset>[];
     // Increased spacing between nodes
-    final nodeSpacing = math.max(140.0, screenHeight / (levelCount + 1));
+    final nodeSpacing = math.max(130.0, screenHeight / (levelCount + 1));
     final pathWidth = screenWidth * 0.65;
     final startX = screenWidth * 0.175;
     final topPadding = 180.0;
@@ -472,10 +473,16 @@ class _RoadmapViewState extends State<RoadmapView> {
       } else if (i == 1) {
         // Second level - much closer to first level (reduced spacing)
         baseY = topPadding + (nodeSpacing * 0.5);
+      } else if (i == 2) {
+        // Third level - extra space after second level
+        baseY = topPadding + (nodeSpacing * 0.5) + (nodeSpacing * 1.3);
       } else {
-        // Normal spacing for remaining levels
+        // Increased spacing for remaining levels
         baseY =
-            topPadding + (nodeSpacing * 0.5) + (nodeSpacing * (i - 1) * 1.1);
+            topPadding +
+            (nodeSpacing * 0.5) +
+            (nodeSpacing * 1.3) +
+            (nodeSpacing * (i - 2) * 1.0);
       }
       y = baseY;
 
@@ -528,9 +535,9 @@ class _RoadmapViewState extends State<RoadmapView> {
 
   double _calculateTotalHeight(int levelCount, double screenHeight) {
     // Increased spacing to match node spacing with extra for vertical waves
-    final nodeSpacing = math.max(140.0, screenHeight / (levelCount + 1));
+    final nodeSpacing = math.max(130.0, screenHeight / (levelCount + 1));
     // Add extra height for vertical snake undulation
-    return 180 + (nodeSpacing * levelCount * 1.3);
+    return 180 + (nodeSpacing * levelCount * 1.2);
   }
 
   List<Widget> _buildDecorativeElements(
@@ -635,17 +642,17 @@ class _RoadmapViewState extends State<RoadmapView> {
       //   ),
       // ),
       // Center - Crossword icon (in the U-turn area)
-      Positioned(
-        left: screenWidth * 0.5 - 20,
-        top: totalHeight * 0.6,
-        child: _CrosswordIcon(size: 35),
-      ),
-      // Bottom area - Crossword icon
-      Positioned(
-        left: screenWidth * 0.3,
-        top: totalHeight * 0.5,
-        child: _CrosswordIcon(size: 28),
-      ),
+      // Positioned(
+      //   left: screenWidth * 0.5 - 20,
+      //   top: totalHeight * 0.6,
+      //   child: _CrosswordIcon(size: 35),
+      // ),
+      // // Bottom area - Crossword icon
+      // Positioned(
+      //   left: screenWidth * 0.3,
+      //   top: totalHeight * 0.5,
+      //   child: _CrosswordIcon(size: 28),
+      // ),
     ];
   }
 }

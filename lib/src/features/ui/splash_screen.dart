@@ -24,7 +24,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       await ref.read(levelRepositoryProvider).init();
       // Initialize User Progress
       await ref.read(initUserProgressProvider.future);
-      
+
       if (mounted) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const HomeScreen()),
