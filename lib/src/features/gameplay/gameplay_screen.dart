@@ -1092,131 +1092,171 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                           height: 60,
                           margin: const EdgeInsets.only(left: 8),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFFB74D),
+                            color: state.hintsUsed >= 1
+                                ? Colors.grey.shade400
+                                : const Color(0xFFFFB74D),
                             borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                blurRadius: 8,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
+                            boxShadow: state.hintsUsed >= 1
+                                ? []
+                                : [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.2),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
                           ),
                           child: Material(
                             color: Colors.transparent,
                             child: InkWell(
-                              onTap: () {
-                                // Get hint data - middle letters only (exclude first and last)
-                                final path = q.answerPlacement.path;
-
-                                // Need at least 3 letters to have middle letters
-                                if (path.length < 3) {
-                                  // If word is too short, show a message
-                                  if (mounted) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          "Word is too short for hint!",
-                                        ),
-                                        duration: Duration(seconds: 2),
-                                      ),
-                                    );
-                                  }
-                                  return;
-                                }
-
-                                // Get middle letters (exclude first and last)
-                                final middleLetters = path.sublist(
-                                  1,
-                                  path.length - 1,
-                                );
-
-                                if (middleLetters.isEmpty) return;
-
-                                // Randomly select ONE middle letter
-                                final random = Random();
-                                final middleLetterIndex = random.nextInt(
-                                  middleLetters.length,
-                                );
-                                final selectedHintLetter =
-                                    middleLetters[middleLetterIndex];
-
-                                // Find the position of this letter in the original path
-                                // middleLetters starts at index 1 of path, so we need to add 1
-                                final hintPositionInPath =
-                                    1 + middleLetterIndex;
-
-                                // Get the letter for the snackbar message
-                                final row = selectedHintLetter['row']!;
-                                final col = selectedHintLetter['col']!;
-                                final hintLetter = q.grid[row][col]
-                                    .toUpperCase();
-
-                                // Create a list with all path positions up to and including the hint
-                                final pathUpToHint = path.sublist(
-                                  0,
-                                  hintPositionInPath + 1,
-                                );
-
-                                // Function to show hint
-                                void showHint() {
-                                  if (!mounted) return;
-
-                                  // Show snackbar with single letter
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        "Hint: Letter '$hintLetter' is marked!",
-                                      ),
-                                      duration: const Duration(seconds: 2),
-                                    ),
-                                  );
-
-                                  // Auto-select the hint letter at the correct position
-                                  controller.selectHintLetterAtPosition(
-                                    pathUpToHint,
-                                    hintPositionInPath,
-                                  );
-                                }
-
-                                // Show rewarded ad first
-                                ref
-                                    .read(adManagerProvider)
-                                    .showRewarded(
-                                      (reward) {
-                                        // Reward earned callback (for tracking)
-                                        debugPrint(
-                                          'Reward earned: ${reward.amount} ${reward.type}',
-                                        );
-                                      },
-                                      onAdDismissed: () {
-                                        // Hint shown when ad is dismissed (user watched it)
-                                        showHint();
-                                      },
-                                      onAdNotReady: () {
-                                        // If ad is not ready, show a message
+                              onTap: state.hintsUsed >= 1
+                                  ? null
+                                  : () {
+                                      // Check if hint limit reached (only 1 hint per question)
+                                      if (state.hintsUsed >= 1) {
                                         if (mounted) {
                                           ScaffoldMessenger.of(
                                             context,
                                           ).showSnackBar(
                                             const SnackBar(
                                               content: Text(
-                                                "Ad is loading. Please try again in a moment.",
+                                                "You have used all available hints for this question!",
                                               ),
                                               duration: Duration(seconds: 2),
                                             ),
                                           );
                                         }
-                                      },
-                                    );
-                              },
+                                        return;
+                                      }
+
+                                      // Get hint data - middle letters only (exclude first and last)
+                                      final path = q.answerPlacement.path;
+
+                                      // Need at least 3 letters to have middle letters
+                                      if (path.length < 3) {
+                                        // If word is too short, show a message
+                                        if (mounted) {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                "Word is too short for hint!",
+                                              ),
+                                              duration: Duration(seconds: 2),
+                                            ),
+                                          );
+                                        }
+                                        return;
+                                      }
+
+                                      // Get middle letters (exclude first and last)
+                                      final middleLetters = path.sublist(
+                                        1,
+                                        path.length - 1,
+                                      );
+
+                                      if (middleLetters.isEmpty) return;
+
+                                      // Randomly select ONE middle letter
+                                      final random = Random();
+                                      final middleLetterIndex = random.nextInt(
+                                        middleLetters.length,
+                                      );
+                                      final selectedHintLetter =
+                                          middleLetters[middleLetterIndex];
+
+                                      // Find the position of this letter in the original path
+                                      // middleLetters starts at index 1 of path, so we need to add 1
+                                      final hintPositionInPath =
+                                          1 + middleLetterIndex;
+
+                                      // Get the letter for the snackbar message
+                                      final row = selectedHintLetter['row']!;
+                                      final col = selectedHintLetter['col']!;
+                                      final hintLetter = q.grid[row][col]
+                                          .toUpperCase();
+
+                                      // Create a list with all path positions up to and including the hint
+                                      final pathUpToHint = path.sublist(
+                                        0,
+                                        hintPositionInPath + 1,
+                                      );
+
+                                      // Function to show hint
+                                      void showHint() {
+                                        if (!mounted) return;
+
+                                        // Show snackbar with single letter
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              "Hint: Letter '$hintLetter' is marked!",
+                                            ),
+                                            duration: const Duration(
+                                              seconds: 2,
+                                            ),
+                                          ),
+                                        );
+
+                                        // Auto-select the hint letter at the correct position
+                                        controller.selectHintLetterAtPosition(
+                                          pathUpToHint,
+                                          hintPositionInPath,
+                                        );
+                                      }
+
+                                      // Pause timer when ad is shown
+                                      controller.pauseTimer();
+
+                                      // Show rewarded ad first
+                                      ref
+                                          .read(adManagerProvider)
+                                          .showRewarded(
+                                            (reward) {
+                                              // Reward earned callback (for tracking)
+                                              debugPrint(
+                                                'Reward earned: ${reward.amount} ${reward.type}',
+                                              );
+                                            },
+                                            onAdDismissed: () {
+                                              // Resume timer when ad is dismissed
+                                              controller.resumeTimer();
+                                              // Hint shown when ad is dismissed (user watched it)
+                                              showHint();
+                                            },
+                                            onAdNotReady: () {
+                                              // Resume timer if ad is not ready
+                                              controller.resumeTimer();
+                                              // If ad is not ready, show a message
+                                              if (mounted) {
+                                                ScaffoldMessenger.of(
+                                                  context,
+                                                ).showSnackBar(
+                                                  const SnackBar(
+                                                    content: Text(
+                                                      "Ad is loading. Please try again in a moment.",
+                                                    ),
+                                                    duration: Duration(
+                                                      seconds: 2,
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                          );
+                                    },
                               borderRadius: BorderRadius.circular(20),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Icon(
+                                  Icon(
                                     Icons.lightbulb_outline,
-                                    color: Colors.white,
+                                    color: state.hintsUsed >= 1
+                                        ? Colors.grey.shade600
+                                        : Colors.white,
                                     size: 24,
                                   ),
                                   const SizedBox(width: 8),
@@ -1225,7 +1265,9 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                     style: GoogleFonts.comicNeue(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                                      color: state.hintsUsed >= 1
+                                          ? Colors.grey.shade600
+                                          : Colors.white,
                                       letterSpacing: 0.5,
                                     ),
                                   ),

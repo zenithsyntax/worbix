@@ -17,6 +17,7 @@ class GameplayState {
   final int currentQuestionDuration; // Seconds spent on current question
   final int coinsEarnedLastQuestion;
   final bool isTimeExpired; // Track if time has run out for current question
+  final int hintsUsed; // Number of hints used in current question
 
   const GameplayState({
     this.level,
@@ -30,6 +31,7 @@ class GameplayState {
     this.currentQuestionDuration = 0,
     this.coinsEarnedLastQuestion = 0,
     this.isTimeExpired = false,
+    this.hintsUsed = 0,
   });
   
   GameplayState copyWith({
@@ -44,6 +46,7 @@ class GameplayState {
     int? currentQuestionDuration,
     int? coinsEarnedLastQuestion,
     bool? isTimeExpired,
+    int? hintsUsed,
   }) {
     return GameplayState(
       level: level ?? this.level,
@@ -57,6 +60,7 @@ class GameplayState {
       currentQuestionDuration: currentQuestionDuration ?? this.currentQuestionDuration,
       coinsEarnedLastQuestion: coinsEarnedLastQuestion ?? this.coinsEarnedLastQuestion,
       isTimeExpired: isTimeExpired ?? this.isTimeExpired,
+      hintsUsed: hintsUsed ?? this.hintsUsed,
     );
   }
 }

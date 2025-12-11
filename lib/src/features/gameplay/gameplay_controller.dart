@@ -7,6 +7,7 @@ import '../store/user_progress_provider.dart';
 class GameplayController extends StateNotifier<GameplayState> {
   final Ref ref;
   Timer? _timer;
+  bool _isTimerPaused = false;
   
   GameplayController(this.ref) : super(const GameplayState());
 
@@ -54,6 +55,7 @@ class GameplayController extends StateNotifier<GameplayState> {
       currentGrid: currentQ.grid, 
       selectedIndices: [],
       hintPositions: {},
+      hintsUsed: 0, // Initialize hint count
       currentQuestionDuration: 0,
       coinsEarnedLastQuestion: 0,
       isTimeExpired: false,
@@ -67,11 +69,17 @@ class GameplayController extends StateNotifier<GameplayState> {
   
   void _startTimer() {
     _timer?.cancel();
+    _isTimerPaused = false; // Reset pause state when starting timer
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (state.status != GameStatus.playing) {
         // Don't cancel here if we just pause? 
         // Only cancel if game over/won. 
         // If question completed, we pause timer? -> Yes status changed to questionCompleted.
+        return;
+      }
+      
+      // Don't update timer if it's paused
+      if (_isTimerPaused) {
         return;
       }
       
@@ -91,6 +99,14 @@ class GameplayController extends StateNotifier<GameplayState> {
           }
       }
     });
+  }
+  
+  void pauseTimer() {
+    _isTimerPaused = true;
+  }
+  
+  void resumeTimer() {
+    _isTimerPaused = false;
   }
   
   void clearSelection() {
@@ -129,9 +145,11 @@ class GameplayController extends StateNotifier<GameplayState> {
       final gridIndex = row * 6 + col;
       
       // Store only the hint position, not the positions before it
+      // Increment hint count when hint is used
       state = state.copyWith(
-        hintPositions: {hintPositionIndex: gridIndex},
+        hintPositions: {...state.hintPositions, hintPositionIndex: gridIndex},
         selectedIndices: [], // Clear any existing selection
+        hintsUsed: state.hintsUsed + 1,
       );
   }
   
@@ -332,6 +350,7 @@ class GameplayController extends StateNotifier<GameplayState> {
                currentGrid: nextQ.grid, 
                selectedIndices: [],
                hintPositions: {},
+               hintsUsed: 0, // Reset hint count for new question
                currentQuestionDuration: 0, // Reset duration counter
                coinsEarnedLastQuestion: 0,
                isTimeExpired: false, // Reset time expired flag
@@ -353,6 +372,7 @@ class GameplayController extends StateNotifier<GameplayState> {
           currentGrid: q.grid,
           selectedIndices: [],
           hintPositions: {},
+          hintsUsed: 0, // Reset hint count for new question
           currentQuestionDuration: 0, // Reset duration counter
           coinsEarnedLastQuestion: 0,
           isTimeExpired: false, // Reset time expired flag
