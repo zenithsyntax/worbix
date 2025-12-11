@@ -11,6 +11,7 @@ class GameplayState {
   
   // Selection state
   final List<int> selectedIndices; // Flat indices 0-35
+  final Map<int, int> hintPositions; // Map of word position -> grid index for hints
   final List<List<String>> currentGrid; // 6x6 
 
   final int currentQuestionDuration; // Seconds spent on current question
@@ -24,6 +25,7 @@ class GameplayState {
     this.timeLeft = 0,
     this.currentCoins = 0,
     this.selectedIndices = const [],
+    this.hintPositions = const {},
     this.currentGrid = const [],
     this.currentQuestionDuration = 0,
     this.coinsEarnedLastQuestion = 0,
@@ -37,6 +39,7 @@ class GameplayState {
     int? timeLeft,
     int? currentCoins,
     List<int>? selectedIndices,
+    Map<int, int>? hintPositions,
     List<List<String>>? currentGrid,
     int? currentQuestionDuration,
     int? coinsEarnedLastQuestion,
@@ -49,6 +52,7 @@ class GameplayState {
       timeLeft: timeLeft ?? this.timeLeft,
       currentCoins: currentCoins ?? this.currentCoins,
       selectedIndices: selectedIndices ?? this.selectedIndices,
+      hintPositions: hintPositions ?? this.hintPositions,
       currentGrid: currentGrid ?? this.currentGrid,
       currentQuestionDuration: currentQuestionDuration ?? this.currentQuestionDuration,
       coinsEarnedLastQuestion: coinsEarnedLastQuestion ?? this.coinsEarnedLastQuestion,

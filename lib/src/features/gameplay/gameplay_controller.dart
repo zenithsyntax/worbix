@@ -53,6 +53,7 @@ class GameplayController extends StateNotifier<GameplayState> {
                        // Let's assume this tracks coins earned IN THIS SESSION for the level.
       currentGrid: currentQ.grid, 
       selectedIndices: [],
+      hintPositions: {},
       currentQuestionDuration: 0,
       coinsEarnedLastQuestion: 0,
       isTimeExpired: false,
@@ -93,7 +94,10 @@ class GameplayController extends StateNotifier<GameplayState> {
   }
   
   void clearSelection() {
-      state = state.copyWith(selectedIndices: []);
+      state = state.copyWith(
+        selectedIndices: [],
+        hintPositions: {},
+      );
   }
 
   void selectFirstLetter(int row, int col) {
@@ -101,6 +105,34 @@ class GameplayController extends StateNotifier<GameplayState> {
       // Convert row/col to flat index (0-35)
       final index = row * 6 + col;
       state = state.copyWith(selectedIndices: [index]);
+  }
+  
+  void selectHintLetters(List<Map<String, int>> positions) {
+      if (state.status != GameStatus.playing) return;
+      // Convert row/col pairs to flat indices (0-35)
+      final indices = positions.map((pos) {
+          final row = pos['row']!;
+          final col = pos['col']!;
+          return row * 6 + col;
+      }).toList();
+      state = state.copyWith(selectedIndices: indices);
+  }
+  
+  void selectHintLetterAtPosition(List<Map<String, int>> pathUpToHint, int hintPositionIndex) {
+      if (state.status != GameStatus.playing) return;
+      if (pathUpToHint.length != hintPositionIndex + 1) return;
+      
+      // Get the hint letter's grid position
+      final hintPos = pathUpToHint[hintPositionIndex];
+      final row = hintPos['row']!;
+      final col = hintPos['col']!;
+      final gridIndex = row * 6 + col;
+      
+      // Store only the hint position, not the positions before it
+      state = state.copyWith(
+        hintPositions: {hintPositionIndex: gridIndex},
+        selectedIndices: [], // Clear any existing selection
+      );
   }
   
   // Allow tile tapping even after time expires
@@ -119,8 +151,11 @@ class GameplayController extends StateNotifier<GameplayState> {
       final c = index % 6;
       
       if (state.selectedIndices.isEmpty) {
-          // Start selection
-          state = state.copyWith(selectedIndices: [index]);
+          // Start selection - clear any hints
+          state = state.copyWith(
+            selectedIndices: [index],
+            hintPositions: {},
+          );
           return;
       }
       
@@ -137,7 +172,10 @@ class GameplayController extends StateNotifier<GameplayState> {
            // User said "old path is cleared and a NEW path begins... for example dont allow... loops"
            // So if they tap an arbitrary middle tile, we reset to that tile.
            if (index != state.selectedIndices.last) {
-              state = state.copyWith(selectedIndices: [index]);
+              state = state.copyWith(
+                selectedIndices: [index],
+                hintPositions: {},
+              );
            }
            return;
       }
@@ -147,7 +185,10 @@ class GameplayController extends StateNotifier<GameplayState> {
       if (state.selectedIndices.length >= answerLength) {
           // Already at max length, don't allow adding more tiles
           // Allow resetting to a new tile though
-          state = state.copyWith(selectedIndices: [index]);
+          state = state.copyWith(
+            selectedIndices: [index],
+            hintPositions: {},
+          );
           return;
       }
       
@@ -162,7 +203,10 @@ class GameplayController extends StateNotifier<GameplayState> {
       // Check adjacency (Must be adjacent |dr|<=1, |dc|<=1)
       if (dr.abs() > 1 || dc.abs() > 1 || (dr == 0 && dc == 0)) {
           // Non-adjacent jump -> Reset
-          state = state.copyWith(selectedIndices: [index]);
+          state = state.copyWith(
+            selectedIndices: [index],
+            hintPositions: {},
+          );
           return;
       }
       
@@ -177,7 +221,10 @@ class GameplayController extends StateNotifier<GameplayState> {
           // New step MUST match the locked direction
           if (dr != lockedDr || dc != lockedDc) {
               // Deviation -> Reset to new tile
-              state = state.copyWith(selectedIndices: [index]);
+              state = state.copyWith(
+                selectedIndices: [index],
+                hintPositions: {},
+              );
               return;
           }
       }
@@ -266,6 +313,7 @@ class GameplayController extends StateNotifier<GameplayState> {
            state = state.copyWith(
                status: GameStatus.won,
                selectedIndices: [],
+               hintPositions: {},
            );
            _timer?.cancel();
       } else {
@@ -283,6 +331,7 @@ class GameplayController extends StateNotifier<GameplayState> {
                timeLeft: state.level!.timeLimit, // Reset timer to level's time limit
                currentGrid: nextQ.grid, 
                selectedIndices: [],
+               hintPositions: {},
                currentQuestionDuration: 0, // Reset duration counter
                coinsEarnedLastQuestion: 0,
                isTimeExpired: false, // Reset time expired flag
@@ -303,6 +352,7 @@ class GameplayController extends StateNotifier<GameplayState> {
           timeLeft: state.level!.timeLimit, // Reset timer to level's time limit
           currentGrid: q.grid,
           selectedIndices: [],
+          hintPositions: {},
           currentQuestionDuration: 0, // Reset duration counter
           coinsEarnedLastQuestion: 0,
           isTimeExpired: false, // Reset time expired flag

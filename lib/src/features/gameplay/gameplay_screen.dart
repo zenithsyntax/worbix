@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -865,7 +866,16 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                         children: List.generate(q.answer.length, (index) {
                           String char = "";
                           bool filled = false;
-                          if (index < state.selectedIndices.length) {
+
+                          // Check if there's a hint at this position
+                          if (state.hintPositions.containsKey(index)) {
+                            int tapIdx = state.hintPositions[index]!;
+                            int r = tapIdx ~/ 6;
+                            int c = tapIdx % 6;
+                            char = state.currentGrid[r][c];
+                            filled = true;
+                          } else if (index < state.selectedIndices.length) {
+                            // Otherwise check selected indices
                             int tapIdx = state.selectedIndices[index];
                             int r = tapIdx ~/ 6;
                             int c = tapIdx % 6;
@@ -1096,31 +1106,76 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                             color: Colors.transparent,
                             child: InkWell(
                               onTap: () {
-                                // Get hint data first
-                                final start = q.answerPlacement.path.first;
-                                final firstLetterRow = start['row']!;
-                                final firstLetterCol = start['col']!;
-                                final firstLetter =
-                                    q.grid[firstLetterRow][firstLetterCol];
+                                // Get hint data - middle letters only (exclude first and last)
+                                final path = q.answerPlacement.path;
+
+                                // Need at least 3 letters to have middle letters
+                                if (path.length < 3) {
+                                  // If word is too short, show a message
+                                  if (mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          "Word is too short for hint!",
+                                        ),
+                                        duration: Duration(seconds: 2),
+                                      ),
+                                    );
+                                  }
+                                  return;
+                                }
+
+                                // Get middle letters (exclude first and last)
+                                final middleLetters = path.sublist(
+                                  1,
+                                  path.length - 1,
+                                );
+
+                                if (middleLetters.isEmpty) return;
+
+                                // Randomly select ONE middle letter
+                                final random = Random();
+                                final middleLetterIndex = random.nextInt(
+                                  middleLetters.length,
+                                );
+                                final selectedHintLetter =
+                                    middleLetters[middleLetterIndex];
+
+                                // Find the position of this letter in the original path
+                                // middleLetters starts at index 1 of path, so we need to add 1
+                                final hintPositionInPath =
+                                    1 + middleLetterIndex;
+
+                                // Get the letter for the snackbar message
+                                final row = selectedHintLetter['row']!;
+                                final col = selectedHintLetter['col']!;
+                                final hintLetter = q.grid[row][col]
+                                    .toUpperCase();
+
+                                // Create a list with all path positions up to and including the hint
+                                final pathUpToHint = path.sublist(
+                                  0,
+                                  hintPositionInPath + 1,
+                                );
 
                                 // Function to show hint
                                 void showHint() {
                                   if (!mounted) return;
 
-                                  // Show snackbar
+                                  // Show snackbar with single letter
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(
-                                        "First letter '$firstLetter' is marked!",
+                                        "Hint: Letter '$hintLetter' is marked!",
                                       ),
                                       duration: const Duration(seconds: 2),
                                     ),
                                   );
 
-                                  // Auto-select the first letter
-                                  controller.selectFirstLetter(
-                                    firstLetterRow,
-                                    firstLetterCol,
+                                  // Auto-select the hint letter at the correct position
+                                  controller.selectHintLetterAtPosition(
+                                    pathUpToHint,
+                                    hintPositionInPath,
                                   );
                                 }
 
