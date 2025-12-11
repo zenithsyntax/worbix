@@ -141,32 +141,52 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   ) {
     // Preload rewarded ad when dialog opens
     ref.read(adManagerProvider).loadRewarded();
+    
+    // Get previous level info for unlock criteria
+    final userProgress = ref.read(userProgressProvider);
+    final previousLevelId = level.id - 1;
+    final previousLevelCompleted = userProgress.completedQuestions[previousLevelId] ?? [];
+    final completedCount = previousLevelCompleted.length;
+    const requiredQuestions = 10;
 
     showDialog(
       context: context,
       barrierColor: Colors.black.withOpacity(0.5),
-      builder: (context) => Dialog(
-        backgroundColor: Colors.transparent,
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color(0xFFFFF8E1), // Cream
-                Color(0xFFFFE0B2), // Light orange
-                Color(0xFFFFCC80), // Orange
-              ],
-            ),
-            borderRadius: BorderRadius.circular(30),
-            border: Border.all(
-              color: const Color(0xFFFF6B00), // Dark orange for stroke
-              width: 6,
-            ),
-          ),
+      builder: (context) {
+        // Get screen size for responsive text
+        final screenSize = MediaQuery.of(context).size;
+        final screenWidth = screenSize.width;
+        final screenHeight = screenSize.height;
+        final isSmallScreen = screenWidth < 360 || screenHeight < 640;
+        final isMediumScreen = screenWidth >= 360 && screenWidth < 600;
+        
+        // Calculate responsive font sizes
+        double titleFontSize = isSmallScreen ? 22 : (isMediumScreen ? 26 : 28);
+        double criteriaFontSize = isSmallScreen ? 14 : (isMediumScreen ? 16 : 18);
+        double buttonFontSize = isSmallScreen ? 16 : (isMediumScreen ? 18 : 20);
+        
+        return Dialog(
+          backgroundColor: Colors.transparent,
           child: Container(
-            padding: const EdgeInsets.all(24),
+            padding: EdgeInsets.all(isSmallScreen ? 6 : 8),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFFFFF8E1), // Cream
+                  Color(0xFFFFE0B2), // Light orange
+                  Color(0xFFFFCC80), // Orange
+                ],
+              ),
+              borderRadius: BorderRadius.circular(30),
+              border: Border.all(
+                color: const Color(0xFFFF6B00), // Dark orange for stroke
+                width: 6,
+              ),
+            ),
+            child: Container(
+              padding: EdgeInsets.all(isSmallScreen ? 16 : 24),
             decoration: BoxDecoration(
               gradient: const LinearGradient(
                 begin: Alignment.topLeft,
@@ -184,9 +204,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               children: [
                 // 3D Title with lock icon
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 12,
-                    horizontal: 16,
+                  padding: EdgeInsets.symmetric(
+                    vertical: isSmallScreen ? 8 : 12,
+                    horizontal: isSmallScreen ? 12 : 16,
                   ),
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
@@ -207,7 +227,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(8),
+                        padding: EdgeInsets.all(isSmallScreen ? 6 : 8),
                         decoration: BoxDecoration(
                           color: const Color(0xFFFFE0B2),
                           shape: BoxShape.circle,
@@ -216,35 +236,42 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             width: 3,
                           ),
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.lock,
-                          color: Color(0xFFFF6B00),
-                          size: 32,
+                          color: const Color(0xFFFF6B00),
+                          size: isSmallScreen ? 24 : 32,
                         ),
                       ),
-                      const SizedBox(width: 12),
-                      Text(
-                        "Level ${level.id} Locked!",
-                        style: GoogleFonts.bangers(
-                          fontSize: 28,
-                          color: Colors.white,
-                          letterSpacing: 1.5,
-                          shadows: [
-                            Shadow(
-                              color: const Color(0xFFFF6B00).withOpacity(0.5),
-                              offset: const Offset(2, 2),
-                              blurRadius: 0,
+                      SizedBox(width: isSmallScreen ? 8 : 12),
+                      Flexible(
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            "Level ${level.id} Locked!",
+                            style: GoogleFonts.bangers(
+                              fontSize: titleFontSize,
+                              color: Colors.white,
+                              letterSpacing: 1.5,
+                              shadows: [
+                                Shadow(
+                                  color: const Color(0xFFFF6B00).withOpacity(0.5),
+                                  offset: const Offset(2, 2),
+                                  blurRadius: 0,
+                                ),
+                              ],
                             ),
-                          ],
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 24),
-                // Content with 3D effect
+                SizedBox(height: isSmallScreen ? 16 : 24),
+                // Content with 3D effect - Unlock Criteria
                 Container(
-                  padding: const EdgeInsets.all(20),
+                  padding: EdgeInsets.all(isSmallScreen ? 12 : 20),
                   decoration: BoxDecoration(
                     color: const Color(0xFFFFF8E1),
                     borderRadius: BorderRadius.circular(20),
@@ -255,37 +282,139 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                   child: Column(
                     children: [
-                      Text(
-                        "You need $unlockCost coins\nto unlock this level!",
-                        style: GoogleFonts.comicNeue(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFFFF6B00),
-                          height: 1.4,
+                      // Unlock Criteria Title
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          "To Unlock Level ${level.id}:",
+                          style: GoogleFonts.comicNeue(
+                            fontSize: criteriaFontSize + 2,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFFFF6B00),
+                            height: 1.3,
+                          ),
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
                         ),
-                        textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: isSmallScreen ? 12 : 16),
+                      // Criteria 1: Complete 10 questions
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 12,
-                          horizontal: 16,
+                        padding: EdgeInsets.symmetric(
+                          vertical: isSmallScreen ? 8 : 10,
+                          horizontal: isSmallScreen ? 10 : 12,
+                        ),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFFE3F2FD), Color(0xFFBBDEFB)],
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: const Color(0xFF2196F3),
+                            width: 2,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.check_circle_outline,
+                              color: const Color(0xFF2196F3),
+                              size: isSmallScreen ? 18 : 20,
+                            ),
+                            SizedBox(width: isSmallScreen ? 6 : 8),
+                            Flexible(
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  "Complete 10 questions in Level $previousLevelId",
+                                  style: GoogleFonts.nunito(
+                                    fontSize: criteriaFontSize,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0xFF1976D2),
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: isSmallScreen ? 8 : 10),
+                      // Progress indicator for questions
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: isSmallScreen ? 6 : 8,
+                          horizontal: isSmallScreen ? 10 : 12,
+                        ),
+                        decoration: BoxDecoration(
+                          color: completedCount >= requiredQuestions 
+                              ? Colors.green.shade50 
+                              : Colors.orange.shade50,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: completedCount >= requiredQuestions 
+                                ? Colors.green 
+                                : Colors.orange,
+                            width: 2,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              completedCount >= requiredQuestions 
+                                  ? Icons.check_circle 
+                                  : Icons.radio_button_unchecked,
+                              color: completedCount >= requiredQuestions 
+                                  ? Colors.green 
+                                  : Colors.orange,
+                              size: isSmallScreen ? 16 : 18,
+                            ),
+                            SizedBox(width: isSmallScreen ? 6 : 8),
+                            Flexible(
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  "Progress: $completedCount / $requiredQuestions questions",
+                                  style: GoogleFonts.nunito(
+                                    fontSize: criteriaFontSize - 1,
+                                    fontWeight: FontWeight.w600,
+                                    color: completedCount >= requiredQuestions 
+                                        ? Colors.green.shade800 
+                                        : Colors.orange.shade800,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: isSmallScreen ? 10 : 12),
+                      // Criteria 2: Have enough coins
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: isSmallScreen ? 8 : 10,
+                          horizontal: isSmallScreen ? 10 : 12,
                         ),
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
                             colors: [Color(0xFFFFE0B2), Color(0xFFFFCC80)],
                           ),
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(12),
                           border: Border.all(
                             color: const Color(0xFFFFB74D),
-                            width: 3,
+                            width: 2,
                           ),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Container(
-                              padding: const EdgeInsets.all(6),
+                              padding: EdgeInsets.all(isSmallScreen ? 4 : 6),
                               decoration: BoxDecoration(
                                 color: const Color(0xFFFFD54F),
                                 shape: BoxShape.circle,
@@ -294,19 +423,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   width: 2,
                                 ),
                               ),
-                              child: const Icon(
+                              child: Icon(
                                 Icons.monetization_on,
-                                color: Color(0xFFFF6B00),
-                                size: 24,
+                                color: const Color(0xFFFF6B00),
+                                size: isSmallScreen ? 18 : 20,
                               ),
                             ),
-                            const SizedBox(width: 8),
-                            Text(
-                              "You have: $currentCoins coins",
-                              style: GoogleFonts.nunito(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xFFFF6B00),
+                            SizedBox(width: isSmallScreen ? 6 : 8),
+                            Flexible(
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  "Have $unlockCost coins (You have: $currentCoins)",
+                                  style: GoogleFonts.nunito(
+                                    fontSize: criteriaFontSize,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0xFFFF6B00),
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                ),
                               ),
                             ),
                           ],
@@ -315,7 +451,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: isSmallScreen ? 16 : 24),
                 // Two buttons with 3D effect
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -323,7 +459,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     // Cancel button
                     Expanded(
                       child: Container(
-                        height: 60,
+                        height: isSmallScreen ? 50 : 60,
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
                             begin: Alignment.topLeft,
@@ -344,12 +480,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             },
                             borderRadius: BorderRadius.circular(20),
                             child: Center(
-                              child: Text(
-                                "Cancel",
-                                style: GoogleFonts.bubblegumSans(
-                                  fontSize: 20,
-                                  color: const Color(0xFFFF6B00),
-                                  letterSpacing: 1.2,
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  "Cancel",
+                                  style: GoogleFonts.bubblegumSans(
+                                    fontSize: buttonFontSize,
+                                    color: const Color(0xFFFF6B00),
+                                    letterSpacing: 1.2,
+                                  ),
+                                  maxLines: 1,
                                 ),
                               ),
                             ),
@@ -357,11 +497,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 16),
+                    SizedBox(width: isSmallScreen ? 12 : 16),
                     // Watch Ad button
                     Expanded(
                       child: Container(
-                        height: 60,
+                        height: isSmallScreen ? 50 : 60,
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
                             begin: Alignment.topLeft,
@@ -525,18 +665,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.play_circle_filled,
                                   color: Colors.white,
-                                  size: 28,
+                                  size: isSmallScreen ? 22 : 28,
                                 ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  "Watch Ad",
-                                  style: GoogleFonts.permanentMarker(
-                                    fontSize: 20,
-                                    color: Colors.white,
-                                    letterSpacing: 1.2,
+                                SizedBox(width: isSmallScreen ? 6 : 8),
+                                Flexible(
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      "Watch Ad",
+                                      style: GoogleFonts.permanentMarker(
+                                        fontSize: buttonFontSize,
+                                        color: Colors.white,
+                                        letterSpacing: 1.2,
+                                      ),
+                                      maxLines: 1,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -551,7 +697,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           ),
         ),
-      ),
+      );
+      },
     );
   }
 }
