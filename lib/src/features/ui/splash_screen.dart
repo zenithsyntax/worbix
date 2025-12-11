@@ -45,7 +45,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/worbix-logo.png',
+              'assets/worbix-app-Icon.png',
               height: 120,
               fit: BoxFit.contain,
             ),

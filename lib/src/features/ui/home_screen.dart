@@ -78,7 +78,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     fontSize: 18,
                     shadows: [
                       Shadow(
-                        color: Colors.black54,
+                        color: Colors.orange,
                         offset: Offset(1, 1),
                         blurRadius: 2,
                       ),

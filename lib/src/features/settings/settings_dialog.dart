@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../store/user_progress_provider.dart';
 import '../gameplay/widgets/instructions_dialog.dart';
+import 'privacy_policy_screen.dart';
 
 class SettingsDialog extends ConsumerWidget {
   const SettingsDialog({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userProgress = ref.watch(userProgressProvider);
     final screenSize = MediaQuery.of(context).size;
     final isSmallScreen = screenSize.width < 360 || screenSize.height < 640;
 
@@ -67,10 +66,7 @@ class SettingsDialog extends ConsumerWidget {
                     ],
                   ),
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: const Color(0xFFFF6B00),
-                    width: 4,
-                  ),
+                  border: Border.all(color: const Color(0xFFFF6B00), width: 4),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -111,30 +107,27 @@ class SettingsDialog extends ConsumerWidget {
                 ),
               ),
               SizedBox(height: isSmallScreen ? 16 : 24),
-              // Sound Effects Toggle
-              _SettingsOption(
-                icon: userProgress.soundEnabled ? Icons.volume_up : Icons.volume_off,
-                title: "Sound Effects",
-                trailing: Switch(
-                  value: userProgress.soundEnabled,
-                  activeColor: const Color(0xFFFF6B00),
-                  onChanged: (val) {
-                    ref.read(userProgressProvider.notifier).setSoundEnabled(val);
-                  },
-                ),
-                isSmallScreen: isSmallScreen,
-              ),
-              SizedBox(height: isSmallScreen ? 12 : 16),
               // Show Instructions Again
               _SettingsOption(
                 icon: Icons.help_outline,
                 title: "Show Instructions Again",
                 onTap: () {
-                  Navigator.of(context).pop();
-                  showDialog(
-                    context: context,
-                    builder: (_) => const InstructionsDialog(),
+                  // Get root navigator and context before popping
+                  final rootNavigator = Navigator.of(
+                    context,
+                    rootNavigator: true,
                   );
+                  final rootContext = rootNavigator.context;
+                  Navigator.of(context).pop();
+                  // Use SchedulerBinding to ensure dialog is closed before showing next
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (rootContext.mounted) {
+                      showDialog(
+                        context: rootContext,
+                        builder: (_) => const InstructionsDialog(),
+                      );
+                    }
+                  });
                 },
                 isSmallScreen: isSmallScreen,
               ),
@@ -143,32 +136,24 @@ class SettingsDialog extends ConsumerWidget {
               _SettingsOption(
                 icon: Icons.privacy_tip,
                 title: "Privacy Policy",
-                onTap: () async {
-                  // TODO: Replace with actual privacy policy URL
-                  final url = Uri.parse('https://www.example.com/privacy-policy');
-                  try {
-                    if (await canLaunchUrl(url)) {
-                      await launchUrl(url, mode: LaunchMode.externalApplication);
-                    } else {
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Could not open privacy policy'),
-                            backgroundColor: Colors.orange,
-                          ),
-                        );
-                      }
-                    }
-                  } catch (e) {
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Error: $e'),
-                          backgroundColor: Colors.orange,
+                onTap: () {
+                  // Get root navigator and context before popping
+                  final rootNavigator = Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  );
+                  final rootContext = rootNavigator.context;
+                  Navigator.of(context).pop();
+                  // Use SchedulerBinding to ensure dialog is closed before navigating
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (rootContext.mounted) {
+                      rootNavigator.push(
+                        MaterialPageRoute(
+                          builder: (_) => const PrivacyPolicyScreen(),
                         ),
                       );
                     }
-                  }
+                  });
                 },
                 isSmallScreen: isSmallScreen,
               ),
@@ -178,43 +163,59 @@ class SettingsDialog extends ConsumerWidget {
                 icon: Icons.delete_outline,
                 title: "Clear Data",
                 onTap: () {
-                  Navigator.of(context).pop();
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      title: const Text("Clear All Data?"),
-                      content: const Text(
-                        "This will delete all your progress, coins, and unlocked levels. This action cannot be undone.",
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: const Text("Cancel"),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            ref.read(userProgressProvider.notifier).clearData();
-                            Navigator.of(context).pop();
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('All data cleared'),
-                                  backgroundColor: Colors.green,
-                                ),
-                              );
-                            }
-                          },
-                          child: const Text(
-                            "Clear",
-                            style: TextStyle(color: Colors.red),
-                          ),
-                        ),
-                      ],
-                    ),
+                  // Get root navigator and context before popping
+                  final rootNavigator = Navigator.of(
+                    context,
+                    rootNavigator: true,
                   );
+                  final rootContext = rootNavigator.context;
+                  Navigator.of(context).pop();
+                  // Use SchedulerBinding to ensure dialog is closed before showing next
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (rootContext.mounted) {
+                      showDialog(
+                        context: rootContext,
+                        builder: (dialogContext) => AlertDialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          title: const Text("Clear All Data?"),
+                          content: const Text(
+                            "This will delete all your progress, coins, and unlocked levels. This action cannot be undone.",
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () =>
+                                  Navigator.of(dialogContext).pop(),
+                              child: const Text("Cancel"),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                ref
+                                    .read(userProgressProvider.notifier)
+                                    .clearData();
+                                Navigator.of(dialogContext).pop();
+                                if (rootContext.mounted) {
+                                  ScaffoldMessenger.of(
+                                    rootContext,
+                                  ).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('All data cleared'),
+                                      backgroundColor: Colors.green,
+                                    ),
+                                  );
+                                }
+                              },
+                              child: const Text(
+                                "Clear",
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  });
                 },
                 isSmallScreen: isSmallScreen,
               ),
@@ -229,10 +230,7 @@ class SettingsDialog extends ConsumerWidget {
                     colors: [Color(0xFFFFB74D), Color(0xFFFF9800)],
                   ),
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: const Color(0xFFFF6B00),
-                    width: 4,
-                  ),
+                  border: Border.all(color: const Color(0xFFFF6B00), width: 4),
                 ),
                 child: Material(
                   color: Colors.transparent,
@@ -277,15 +275,12 @@ class _SettingsOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    Widget content = Container(
       padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
       decoration: BoxDecoration(
         color: const Color(0xFFFFF8E1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: const Color(0xFFFFB74D),
-          width: 3,
-        ),
+        border: Border.all(color: const Color(0xFFFFB74D), width: 3),
       ),
       child: Row(
         children: [
@@ -294,10 +289,7 @@ class _SettingsOption extends StatelessWidget {
             decoration: BoxDecoration(
               color: const Color(0xFFFFE0B2),
               shape: BoxShape.circle,
-              border: Border.all(
-                color: const Color(0xFFFF6B00),
-                width: 2,
-              ),
+              border: Border.all(color: const Color(0xFFFF6B00), width: 2),
             ),
             child: Icon(
               icon,
@@ -326,6 +318,19 @@ class _SettingsOption extends StatelessWidget {
         ],
       ),
     );
+
+    // Make it tappable if onTap is provided
+    if (onTap != null) {
+      return Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(16),
+          child: content,
+        ),
+      );
+    }
+
+    return content;
   }
 }
-
