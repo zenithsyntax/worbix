@@ -110,6 +110,15 @@ class UserProgressNotifier extends Notifier<UserProgress> {
       await _save();
   }
   
+  Future<void> clearData() async {
+      // Reset to initial state
+      state = const UserProgress();
+      // Clear from SharedPreferences
+      await _prefs.remove(kProgressKey);
+      // Save the reset state
+      await _save();
+  }
+  
   Future<void> checkAutoUnlock() async {
       // Logic: Next level cost = unlockCoins from level data.
       // We check if currentCoins >= unlockCoins of (maxLevel + 1).

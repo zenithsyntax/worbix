@@ -7,7 +7,7 @@ import '../levels/level_repository.dart';
 import '../store/user_progress_provider.dart';
 import '../store/user_progress_model.dart';
 import '../gameplay/gameplay_screen.dart';
-import '../settings/settings_screen.dart';
+import '../settings/settings_dialog.dart';
 import '../ads/ad_service.dart';
 import '../ads/ad_manager.dart';
 import '../levels/level_model.dart';
@@ -48,36 +48,66 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           fit: BoxFit.contain,
         ),
         centerTitle: false,
+        automaticallyImplyLeading: false,
         actions: [
           Container(
-            margin: const EdgeInsets.only(right: 16),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            margin: const EdgeInsets.only(right: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.orange.withOpacity(0.4),
               borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: Colors.white.withOpacity(0.3),
+                width: 1.5,
+              ),
             ),
             child: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.monetization_on, color: Colors.yellowAccent),
-                const SizedBox(width: 4),
+                const Icon(
+                  Icons.monetization_on,
+                  color: Colors.yellowAccent,
+                  size: 24,
+                ),
+                const SizedBox(width: 6),
                 Text(
                   "${userProgress.totalCoins}",
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                     fontSize: 18,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black54,
+                        offset: Offset(1, 1),
+                        blurRadius: 2,
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ).animate().scale(duration: 400.ms, curve: Curves.easeOutBack),
-          IconButton(
-            icon: const Icon(Icons.settings, color: Colors.white),
-            onPressed: () {
-              Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: (_) => const SettingsScreen()));
-            },
+          Container(
+            margin: const EdgeInsets.only(right: 8),
+            decoration: BoxDecoration(
+              color: Colors.orange.withOpacity(0.4),
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: Colors.white.withOpacity(0.3),
+                width: 1.5,
+              ),
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.settings, color: Colors.white, size: 24),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (_) => const SettingsDialog(),
+                );
+              },
+              tooltip: 'Settings',
+            ),
           ),
         ],
       ),
@@ -141,11 +171,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   ) {
     // Preload rewarded ad when dialog opens
     ref.read(adManagerProvider).loadRewarded();
-    
+
     // Get previous level info for unlock criteria
     final userProgress = ref.read(userProgressProvider);
     final previousLevelId = level.id - 1;
-    final previousLevelCompleted = userProgress.completedQuestions[previousLevelId] ?? [];
+    final previousLevelCompleted =
+        userProgress.completedQuestions[previousLevelId] ?? [];
     final completedCount = previousLevelCompleted.length;
     const requiredQuestions = 10;
 
@@ -159,12 +190,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         final screenHeight = screenSize.height;
         final isSmallScreen = screenWidth < 360 || screenHeight < 640;
         final isMediumScreen = screenWidth >= 360 && screenWidth < 600;
-        
+
         // Calculate responsive font sizes
         double titleFontSize = isSmallScreen ? 22 : (isMediumScreen ? 26 : 28);
-        double criteriaFontSize = isSmallScreen ? 14 : (isMediumScreen ? 16 : 18);
+        double criteriaFontSize = isSmallScreen
+            ? 14
+            : (isMediumScreen ? 16 : 18);
         double buttonFontSize = isSmallScreen ? 16 : (isMediumScreen ? 18 : 20);
-        
+
         return Dialog(
           backgroundColor: Colors.transparent,
           child: Container(
@@ -187,517 +220,522 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             child: Container(
               padding: EdgeInsets.all(isSmallScreen ? 16 : 24),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color(0xFFFFF8E1), // Cream
-                  Color(0xFFFFE0B2), // Light orange
-                  Color(0xFFFFCC80), // Orange
-                ],
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFFFFF8E1), // Cream
+                    Color(0xFFFFE0B2), // Light orange
+                    Color(0xFFFFCC80), // Orange
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(24),
               ),
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // 3D Title with lock icon
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    vertical: isSmallScreen ? 8 : 12,
-                    horizontal: isSmallScreen ? 12 : 16,
-                  ),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Color(0xFFFFB74D), // Orange
-                        Color(0xFFFF9800), // Darker orange
-                      ],
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // 3D Title with lock icon
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      vertical: isSmallScreen ? 8 : 12,
+                      horizontal: isSmallScreen ? 12 : 16,
                     ),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: const Color(0xFFFF6B00),
-                      width: 4,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color(0xFFFFB74D), // Orange
+                          Color(0xFFFF9800), // Darker orange
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: const Color(0xFFFF6B00),
+                        width: 4,
+                      ),
                     ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(isSmallScreen ? 6 : 8),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFFE0B2),
-                          shape: BoxShape.circle,
-                          border: Border.all(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(isSmallScreen ? 6 : 8),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFE0B2),
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: const Color(0xFFFF6B00),
+                              width: 3,
+                            ),
+                          ),
+                          child: Icon(
+                            Icons.lock,
                             color: const Color(0xFFFF6B00),
-                            width: 3,
+                            size: isSmallScreen ? 24 : 32,
                           ),
                         ),
-                        child: Icon(
-                          Icons.lock,
-                          color: const Color(0xFFFF6B00),
-                          size: isSmallScreen ? 24 : 32,
+                        SizedBox(width: isSmallScreen ? 8 : 12),
+                        Flexible(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              "Level ${level.id} Locked!",
+                              style: GoogleFonts.bangers(
+                                fontSize: titleFontSize,
+                                color: Colors.white,
+                                letterSpacing: 1.5,
+                                shadows: [
+                                  Shadow(
+                                    color: const Color(
+                                      0xFFFF6B00,
+                                    ).withOpacity(0.5),
+                                    offset: const Offset(2, 2),
+                                    blurRadius: 0,
+                                  ),
+                                ],
+                              ),
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                            ),
+                          ),
                         ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: isSmallScreen ? 16 : 24),
+                  // Content with 3D effect - Unlock Criteria
+                  Container(
+                    padding: EdgeInsets.all(isSmallScreen ? 12 : 20),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFF8E1),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: const Color(0xFFFFB74D),
+                        width: 4,
                       ),
-                      SizedBox(width: isSmallScreen ? 8 : 12),
-                      Flexible(
-                        child: FittedBox(
+                    ),
+                    child: Column(
+                      children: [
+                        // Unlock Criteria Title
+                        FittedBox(
                           fit: BoxFit.scaleDown,
                           child: Text(
-                            "Level ${level.id} Locked!",
-                            style: GoogleFonts.bangers(
-                              fontSize: titleFontSize,
-                              color: Colors.white,
-                              letterSpacing: 1.5,
-                              shadows: [
-                                Shadow(
-                                  color: const Color(0xFFFF6B00).withOpacity(0.5),
-                                  offset: const Offset(2, 2),
-                                  blurRadius: 0,
-                                ),
-                              ],
+                            "To Unlock Level ${level.id}:",
+                            style: GoogleFonts.comicNeue(
+                              fontSize: criteriaFontSize + 2,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFFFF6B00),
+                              height: 1.3,
                             ),
                             textAlign: TextAlign.center,
                             maxLines: 2,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: isSmallScreen ? 16 : 24),
-                // Content with 3D effect - Unlock Criteria
-                Container(
-                  padding: EdgeInsets.all(isSmallScreen ? 12 : 20),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFFF8E1),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: const Color(0xFFFFB74D),
-                      width: 4,
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      // Unlock Criteria Title
-                      FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(
-                          "To Unlock Level ${level.id}:",
-                          style: GoogleFonts.comicNeue(
-                            fontSize: criteriaFontSize + 2,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xFFFF6B00),
-                            height: 1.3,
+                        SizedBox(height: isSmallScreen ? 12 : 16),
+                        // Criteria 1: Complete 10 questions
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: isSmallScreen ? 8 : 10,
+                            horizontal: isSmallScreen ? 10 : 12,
                           ),
-                          textAlign: TextAlign.center,
-                          maxLines: 2,
-                        ),
-                      ),
-                      SizedBox(height: isSmallScreen ? 12 : 16),
-                      // Criteria 1: Complete 10 questions
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: isSmallScreen ? 8 : 10,
-                          horizontal: isSmallScreen ? 10 : 12,
-                        ),
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFFE3F2FD), Color(0xFFBBDEFB)],
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: const Color(0xFF2196F3),
-                            width: 2,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.check_circle_outline,
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFFE3F2FD), Color(0xFFBBDEFB)],
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
                               color: const Color(0xFF2196F3),
-                              size: isSmallScreen ? 18 : 20,
+                              width: 2,
                             ),
-                            SizedBox(width: isSmallScreen ? 6 : 8),
-                            Flexible(
-                              child: FittedBox(
-                                fit: BoxFit.scaleDown,
-                                child: Text(
-                                  "Complete 10 questions in Level $previousLevelId",
-                                  style: GoogleFonts.nunito(
-                                    fontSize: criteriaFontSize,
-                                    fontWeight: FontWeight.bold,
-                                    color: const Color(0xFF1976D2),
-                                  ),
-                                  textAlign: TextAlign.center,
-                                  maxLines: 2,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: isSmallScreen ? 8 : 10),
-                      // Progress indicator for questions
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: isSmallScreen ? 6 : 8,
-                          horizontal: isSmallScreen ? 10 : 12,
-                        ),
-                        decoration: BoxDecoration(
-                          color: completedCount >= requiredQuestions 
-                              ? Colors.green.shade50 
-                              : Colors.orange.shade50,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: completedCount >= requiredQuestions 
-                                ? Colors.green 
-                                : Colors.orange,
-                            width: 2,
                           ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              completedCount >= requiredQuestions 
-                                  ? Icons.check_circle 
-                                  : Icons.radio_button_unchecked,
-                              color: completedCount >= requiredQuestions 
-                                  ? Colors.green 
-                                  : Colors.orange,
-                              size: isSmallScreen ? 16 : 18,
-                            ),
-                            SizedBox(width: isSmallScreen ? 6 : 8),
-                            Flexible(
-                              child: FittedBox(
-                                fit: BoxFit.scaleDown,
-                                child: Text(
-                                  "Progress: $completedCount / $requiredQuestions questions",
-                                  style: GoogleFonts.nunito(
-                                    fontSize: criteriaFontSize - 1,
-                                    fontWeight: FontWeight.w600,
-                                    color: completedCount >= requiredQuestions 
-                                        ? Colors.green.shade800 
-                                        : Colors.orange.shade800,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                  maxLines: 1,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: isSmallScreen ? 10 : 12),
-                      // Criteria 2: Have enough coins
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: isSmallScreen ? 8 : 10,
-                          horizontal: isSmallScreen ? 10 : 12,
-                        ),
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFFFFE0B2), Color(0xFFFFCC80)],
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: const Color(0xFFFFB74D),
-                            width: 2,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.all(isSmallScreen ? 4 : 6),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFFD54F),
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: const Color(0xFFFF6B00),
-                                  width: 2,
-                                ),
-                              ),
-                              child: Icon(
-                                Icons.monetization_on,
-                                color: const Color(0xFFFF6B00),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.check_circle_outline,
+                                color: const Color(0xFF2196F3),
                                 size: isSmallScreen ? 18 : 20,
                               ),
-                            ),
-                            SizedBox(width: isSmallScreen ? 6 : 8),
-                            Flexible(
-                              child: FittedBox(
-                                fit: BoxFit.scaleDown,
-                                child: Text(
-                                  "Have $unlockCost coins (You have: $currentCoins)",
-                                  style: GoogleFonts.nunito(
-                                    fontSize: criteriaFontSize,
-                                    fontWeight: FontWeight.bold,
-                                    color: const Color(0xFFFF6B00),
+                              SizedBox(width: isSmallScreen ? 6 : 8),
+                              Flexible(
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    "Complete 10 questions in Level $previousLevelId",
+                                    style: GoogleFonts.nunito(
+                                      fontSize: criteriaFontSize,
+                                      fontWeight: FontWeight.bold,
+                                      color: const Color(0xFF1976D2),
+                                    ),
+                                    textAlign: TextAlign.center,
+                                    maxLines: 2,
                                   ),
-                                  textAlign: TextAlign.center,
-                                  maxLines: 2,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: isSmallScreen ? 8 : 10),
+                        // Progress indicator for questions
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: isSmallScreen ? 6 : 8,
+                            horizontal: isSmallScreen ? 10 : 12,
+                          ),
+                          decoration: BoxDecoration(
+                            color: completedCount >= requiredQuestions
+                                ? Colors.green.shade50
+                                : Colors.orange.shade50,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: completedCount >= requiredQuestions
+                                  ? Colors.green
+                                  : Colors.orange,
+                              width: 2,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                completedCount >= requiredQuestions
+                                    ? Icons.check_circle
+                                    : Icons.radio_button_unchecked,
+                                color: completedCount >= requiredQuestions
+                                    ? Colors.green
+                                    : Colors.orange,
+                                size: isSmallScreen ? 16 : 18,
+                              ),
+                              SizedBox(width: isSmallScreen ? 6 : 8),
+                              Flexible(
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    "Progress: $completedCount / $requiredQuestions questions",
+                                    style: GoogleFonts.nunito(
+                                      fontSize: criteriaFontSize - 1,
+                                      fontWeight: FontWeight.w600,
+                                      color: completedCount >= requiredQuestions
+                                          ? Colors.green.shade800
+                                          : Colors.orange.shade800,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                    maxLines: 1,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: isSmallScreen ? 10 : 12),
+                        // Criteria 2: Have enough coins
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: isSmallScreen ? 8 : 10,
+                            horizontal: isSmallScreen ? 10 : 12,
+                          ),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFFFFE0B2), Color(0xFFFFCC80)],
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: const Color(0xFFFFB74D),
+                              width: 2,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(isSmallScreen ? 4 : 6),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFFD54F),
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: const Color(0xFFFF6B00),
+                                    width: 2,
+                                  ),
+                                ),
+                                child: Icon(
+                                  Icons.monetization_on,
+                                  color: const Color(0xFFFF6B00),
+                                  size: isSmallScreen ? 18 : 20,
+                                ),
+                              ),
+                              SizedBox(width: isSmallScreen ? 6 : 8),
+                              Flexible(
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    "Have $unlockCost coins (You have: $currentCoins)",
+                                    style: GoogleFonts.nunito(
+                                      fontSize: criteriaFontSize,
+                                      fontWeight: FontWeight.bold,
+                                      color: const Color(0xFFFF6B00),
+                                    ),
+                                    textAlign: TextAlign.center,
+                                    maxLines: 2,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: isSmallScreen ? 16 : 24),
+                  // Two buttons with 3D effect
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      // Cancel button
+                      Expanded(
+                        child: Container(
+                          height: isSmallScreen ? 50 : 60,
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [Color(0xFFFFE0B2), Color(0xFFFFCC80)],
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: const Color(0xFFFFB74D),
+                              width: 4,
+                            ),
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).pop();
+                              },
+                              borderRadius: BorderRadius.circular(20),
+                              child: Center(
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    "Cancel",
+                                    style: GoogleFonts.bubblegumSans(
+                                      fontSize: buttonFontSize,
+                                      color: const Color(0xFFFF6B00),
+                                      letterSpacing: 1.2,
+                                    ),
+                                    maxLines: 1,
+                                  ),
                                 ),
                               ),
                             ),
-                          ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: isSmallScreen ? 12 : 16),
+                      // Watch Ad button
+                      Expanded(
+                        child: Container(
+                          height: isSmallScreen ? 50 : 60,
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [Color(0xFFFFB74D), Color(0xFFFF9800)],
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: const Color(0xFFFF6B00),
+                              width: 4,
+                            ),
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () async {
+                                // Get ScaffoldMessenger and Navigator before closing dialog
+                                final scaffoldMessenger = ScaffoldMessenger.of(
+                                  context,
+                                );
+                                final navigator = Navigator.of(context);
+
+                                // Close dialog first
+                                navigator.pop();
+
+                                // Show loading message
+                                scaffoldMessenger.showSnackBar(
+                                  const SnackBar(
+                                    content: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 20,
+                                          height: 20,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        SizedBox(width: 12),
+                                        Text("Loading ad..."),
+                                      ],
+                                    ),
+                                    duration: Duration(seconds: 5),
+                                  ),
+                                );
+
+                                // Wait a moment for ad to potentially load
+                                await Future.delayed(
+                                  const Duration(milliseconds: 500),
+                                );
+
+                                // Show rewarded ad
+                                ref
+                                    .read(adManagerProvider)
+                                    .showRewarded(
+                                      (reward) {
+                                        // Reward earned - add 10 coins only (do not unlock level)
+                                        ref
+                                            .read(userProgressProvider.notifier)
+                                            .addCoins(10);
+                                        // Check if coins are enough to unlock next sequential level
+                                        ref
+                                            .read(userProgressProvider.notifier)
+                                            .checkAutoUnlock();
+                                        // Hide loading snackbar and show success
+                                        scaffoldMessenger.hideCurrentSnackBar();
+                                        scaffoldMessenger.showSnackBar(
+                                          SnackBar(
+                                            content: Text("+10 coins earned!"),
+                                            backgroundColor: Colors.green,
+                                            duration: const Duration(
+                                              seconds: 2,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      onAdDismissed: () {
+                                        // Ad dismissed - no action needed, reward already handled in reward callback
+                                      },
+                                      onAdNotReady: () {
+                                        // Hide loading snackbar and show error with retry option
+                                        scaffoldMessenger.hideCurrentSnackBar();
+                                        scaffoldMessenger.showSnackBar(
+                                          SnackBar(
+                                            content: const Text(
+                                              "Ad failed to load. Please check your internet connection and try again.",
+                                            ),
+                                            duration: const Duration(
+                                              seconds: 4,
+                                            ),
+                                            backgroundColor: Colors.orange,
+                                            action: SnackBarAction(
+                                              label: 'Retry',
+                                              textColor: Colors.white,
+                                              onPressed: () {
+                                                // Retry loading and showing the ad
+                                                ref
+                                                    .read(adManagerProvider)
+                                                    .loadRewarded();
+                                                // Show the ad again after a short delay
+                                                Future.delayed(const Duration(seconds: 2), () {
+                                                  ref
+                                                      .read(adManagerProvider)
+                                                      .showRewarded(
+                                                        (reward) {
+                                                          ref
+                                                              .read(
+                                                                userProgressProvider
+                                                                    .notifier,
+                                                              )
+                                                              .addCoins(10);
+                                                          // Check if coins are enough to unlock next sequential level
+                                                          ref
+                                                              .read(
+                                                                userProgressProvider
+                                                                    .notifier,
+                                                              )
+                                                              .checkAutoUnlock();
+                                                          scaffoldMessenger.showSnackBar(
+                                                            SnackBar(
+                                                              content: Text(
+                                                                "+10 coins earned!",
+                                                              ),
+                                                              backgroundColor:
+                                                                  Colors.green,
+                                                              duration:
+                                                                  const Duration(
+                                                                    seconds: 2,
+                                                                  ),
+                                                            ),
+                                                          );
+                                                        },
+                                                        onAdDismissed: () {
+                                                          // Ad dismissed - no action needed, reward already handled in reward callback
+                                                        },
+                                                        onAdNotReady: () {
+                                                          scaffoldMessenger
+                                                              .showSnackBar(
+                                                                const SnackBar(
+                                                                  content: Text(
+                                                                    "Ad still not ready. Please try again later.",
+                                                                  ),
+                                                                  duration:
+                                                                      Duration(
+                                                                        seconds:
+                                                                            3,
+                                                                      ),
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .red,
+                                                                ),
+                                                              );
+                                                        },
+                                                      );
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                              },
+                              borderRadius: BorderRadius.circular(20),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.play_circle_filled,
+                                    color: Colors.white,
+                                    size: isSmallScreen ? 22 : 28,
+                                  ),
+                                  SizedBox(width: isSmallScreen ? 6 : 8),
+                                  Flexible(
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text(
+                                        "Watch Ad",
+                                        style: GoogleFonts.permanentMarker(
+                                          fontSize: buttonFontSize,
+                                          color: Colors.white,
+                                          letterSpacing: 1.2,
+                                        ),
+                                        maxLines: 1,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ],
                   ),
-                ),
-                SizedBox(height: isSmallScreen ? 16 : 24),
-                // Two buttons with 3D effect
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    // Cancel button
-                    Expanded(
-                      child: Container(
-                        height: isSmallScreen ? 50 : 60,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [Color(0xFFFFE0B2), Color(0xFFFFCC80)],
-                          ),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: const Color(0xFFFFB74D),
-                            width: 4,
-                          ),
-                        ),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.of(context).pop();
-                            },
-                            borderRadius: BorderRadius.circular(20),
-                            child: Center(
-                              child: FittedBox(
-                                fit: BoxFit.scaleDown,
-                                child: Text(
-                                  "Cancel",
-                                  style: GoogleFonts.bubblegumSans(
-                                    fontSize: buttonFontSize,
-                                    color: const Color(0xFFFF6B00),
-                                    letterSpacing: 1.2,
-                                  ),
-                                  maxLines: 1,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: isSmallScreen ? 12 : 16),
-                    // Watch Ad button
-                    Expanded(
-                      child: Container(
-                        height: isSmallScreen ? 50 : 60,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [Color(0xFFFFB74D), Color(0xFFFF9800)],
-                          ),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: const Color(0xFFFF6B00),
-                            width: 4,
-                          ),
-                        ),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: () async {
-                              // Get ScaffoldMessenger and Navigator before closing dialog
-                              final scaffoldMessenger = ScaffoldMessenger.of(
-                                context,
-                              );
-                              final navigator = Navigator.of(context);
-
-                              // Close dialog first
-                              navigator.pop();
-
-                              // Show loading message
-                              scaffoldMessenger.showSnackBar(
-                                const SnackBar(
-                                  content: Row(
-                                    children: [
-                                      SizedBox(
-                                        width: 20,
-                                        height: 20,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      SizedBox(width: 12),
-                                      Text("Loading ad..."),
-                                    ],
-                                  ),
-                                  duration: Duration(seconds: 5),
-                                ),
-                              );
-
-                              // Wait a moment for ad to potentially load
-                              await Future.delayed(
-                                const Duration(milliseconds: 500),
-                              );
-
-                              // Show rewarded ad
-                              ref
-                                  .read(adManagerProvider)
-                                  .showRewarded(
-                                    (reward) {
-                                      // Reward earned - add 10 coins only (do not unlock level)
-                                      ref
-                                          .read(userProgressProvider.notifier)
-                                          .addCoins(10);
-                                      // Check if coins are enough to unlock next sequential level
-                                      ref
-                                          .read(userProgressProvider.notifier)
-                                          .checkAutoUnlock();
-                                      // Hide loading snackbar and show success
-                                      scaffoldMessenger.hideCurrentSnackBar();
-                                      scaffoldMessenger.showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            "+10 coins earned!",
-                                          ),
-                                          backgroundColor: Colors.green,
-                                          duration: const Duration(seconds: 2),
-                                        ),
-                                      );
-                                    },
-                                    onAdDismissed: () {
-                                      // Ad dismissed - no action needed, reward already handled in reward callback
-                                    },
-                                    onAdNotReady: () {
-                                      // Hide loading snackbar and show error with retry option
-                                      scaffoldMessenger.hideCurrentSnackBar();
-                                      scaffoldMessenger.showSnackBar(
-                                        SnackBar(
-                                          content: const Text(
-                                            "Ad failed to load. Please check your internet connection and try again.",
-                                          ),
-                                          duration: const Duration(seconds: 4),
-                                          backgroundColor: Colors.orange,
-                                          action: SnackBarAction(
-                                            label: 'Retry',
-                                            textColor: Colors.white,
-                                            onPressed: () {
-                                              // Retry loading and showing the ad
-                                              ref
-                                                  .read(adManagerProvider)
-                                                  .loadRewarded();
-                                              // Show the ad again after a short delay
-                                              Future.delayed(const Duration(seconds: 2), () {
-                                                ref
-                                                    .read(adManagerProvider)
-                                                    .showRewarded(
-                                                      (reward) {
-                                                        ref
-                                                            .read(
-                                                              userProgressProvider
-                                                                  .notifier,
-                                                            )
-                                                            .addCoins(10);
-                                                        // Check if coins are enough to unlock next sequential level
-                                                        ref
-                                                            .read(
-                                                              userProgressProvider
-                                                                  .notifier,
-                                                            )
-                                                            .checkAutoUnlock();
-                                                        scaffoldMessenger.showSnackBar(
-                                                          SnackBar(
-                                                            content: Text(
-                                                              "+10 coins earned!",
-                                                            ),
-                                                            backgroundColor:
-                                                                Colors.green,
-                                                            duration:
-                                                                const Duration(
-                                                                  seconds: 2,
-                                                                ),
-                                                          ),
-                                                        );
-                                                      },
-                                                      onAdDismissed: () {
-                                                        // Ad dismissed - no action needed, reward already handled in reward callback
-                                                      },
-                                                      onAdNotReady: () {
-                                                        scaffoldMessenger
-                                                            .showSnackBar(
-                                                              const SnackBar(
-                                                                content: Text(
-                                                                  "Ad still not ready. Please try again later.",
-                                                                ),
-                                                                duration:
-                                                                    Duration(
-                                                                      seconds:
-                                                                          3,
-                                                                    ),
-                                                                backgroundColor:
-                                                                    Colors.red,
-                                                              ),
-                                                            );
-                                                      },
-                                                    );
-                                              });
-                                            },
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  );
-                            },
-                            borderRadius: BorderRadius.circular(20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.play_circle_filled,
-                                  color: Colors.white,
-                                  size: isSmallScreen ? 22 : 28,
-                                ),
-                                SizedBox(width: isSmallScreen ? 6 : 8),
-                                Flexible(
-                                  child: FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      "Watch Ad",
-                                      style: GoogleFonts.permanentMarker(
-                                        fontSize: buttonFontSize,
-                                        color: Colors.white,
-                                        letterSpacing: 1.2,
-                                      ),
-                                      maxLines: 1,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-      );
+        );
       },
     );
   }
