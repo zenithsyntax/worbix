@@ -179,7 +179,21 @@ class GameplayController extends StateNotifier<GameplayState> {
       
       // Check if trying to select a tile already selected (Backtracking/Loop)
       if (state.selectedIndices.contains(index)) {
-           // Allow simple undo (tapping the last one again? or just ignore?)
+           // If clicking the last letter again
+           if (index == state.selectedIndices.last) {
+               // If only one letter is selected, deselect it
+               if (state.selectedIndices.length == 1) {
+                   state = state.copyWith(
+                     selectedIndices: [],
+                     hintPositions: {},
+                   );
+               } else {
+                   // If multiple letters, remove the last one (undo)
+                   final newSelection = List<int>.from(state.selectedIndices)..removeLast();
+                   state = state.copyWith(selectedIndices: newSelection);
+               }
+               return;
+           }
            // If they tap the 2nd to last, we treat it as an undo of the last step
            if (state.selectedIndices.length > 1 && index == state.selectedIndices[state.selectedIndices.length - 2]) {
                final newSelection = List<int>.from(state.selectedIndices)..removeLast();
