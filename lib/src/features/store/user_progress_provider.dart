@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/foundation.dart';
 import 'user_progress_model.dart';
+import '../levels/level_repository.dart';
 
 const String kProgressKey = 'progress_data';
 
@@ -110,10 +111,13 @@ class UserProgressNotifier extends Notifier<UserProgress> {
   }
   
   Future<void> checkAutoUnlock() async {
-      // Logic: Next level cost = (id - 1) * 50.
-      // e.g. Level 2 cost 50. Level 3 cost 100.
-      // We check if currentCoins >= cost of (maxLevel + 1).
+      // Logic: Next level cost = unlockCoins from level data.
+      // We check if currentCoins >= unlockCoins of (maxLevel + 1).
       // Also requires at least 10 questions completed in previous level
+      
+      // Get level repository to access level data
+      final levelRepo = ref.read(levelRepositoryProvider);
+      await levelRepo.init();
       
       int currentMax = state.maxLevelUnlocked;
       bool changed = false;
@@ -122,7 +126,9 @@ class UserProgressNotifier extends Notifier<UserProgress> {
       // Safety break to prevent infinite loops if cost is 0 or logic creates issues, though cost increases.
       for (int i = 0; i < 100; i++) {
            int nextLevelId = currentMax + 1;
-           int cost = (nextLevelId - 1) * 50;
+           final nextLevel = levelRepo.getLevel(nextLevelId);
+           if (nextLevel == null) break; // No more levels
+           int cost = nextLevel.unlockCoins;
            
            // Check if user has enough coins
            if (state.totalCoins >= cost) {
@@ -165,14 +171,22 @@ class UserProgressNotifier extends Notifier<UserProgress> {
       if (completedCount >= requiredQuestions) {
           // Player has completed at least 10 questions, unlock next level if user has enough coins
           final nextLevelId = levelId + 1;
-          final cost = (nextLevelId - 1) * 50;
           
-          // Only unlock if:
-          // 1. Next level is not already unlocked
-          // 2. User has enough coins
-          if (nextLevelId > state.maxLevelUnlocked && state.totalCoins >= cost) {
-              state = state.copyWith(maxLevelUnlocked: nextLevelId);
-              await _save();
+          // Get level repository to access level data
+          final levelRepo = ref.read(levelRepositoryProvider);
+          await levelRepo.init();
+          final nextLevel = levelRepo.getLevel(nextLevelId);
+          
+          if (nextLevel != null) {
+              final cost = nextLevel.unlockCoins;
+              
+              // Only unlock if:
+              // 1. Next level is not already unlocked
+              // 2. User has enough coins
+              if (nextLevelId > state.maxLevelUnlocked && state.totalCoins >= cost) {
+                  state = state.copyWith(maxLevelUnlocked: nextLevelId);
+                  await _save();
+              }
           }
       }
   }

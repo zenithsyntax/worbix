@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "title": "Level 1 \u2014 Starters",
+    "title": "Level 1 — Starters",
     "timeLimit": 140,
     "orientation": "6x6",
     "gridSize": 36,
@@ -758,11 +758,12 @@
         "question": "You sit on me to rest your legs. I have four legs.",
         "answer": "chair"
       }
-    ]
+    ],
+    "unlockCoins": 0
   },
   {
     "id": 2,
-    "title": "Level 2 \u2014 Everyday",
+    "title": "Level 2 — Everyday",
     "timeLimit": 130,
     "orientation": "6x6",
     "gridSize": 36,
@@ -840,7 +841,7 @@
             }
           ]
         },
-        "question": "I have pages and words \u2014 you read me for fun or facts.",
+        "question": "I have pages and words — you read me for fun or facts.",
         "answer": "book"
       },
       {
@@ -992,7 +993,7 @@
             }
           ]
         },
-        "question": "I have roots, a trunk, and leaves \u2014 I give shade.",
+        "question": "I have roots, a trunk, and leaves — I give shade.",
         "answer": "tree"
       },
       {
@@ -1152,7 +1153,7 @@
             }
           ]
         },
-        "question": "I face danger without fear \u2014 like a firefighter or hero.",
+        "question": "I face danger without fear — like a firefighter or hero.",
         "answer": "brave"
       },
       {
@@ -1547,11 +1548,12 @@
         "question": "You do this with soap and water to get clean.",
         "answer": "wash"
       }
-    ]
+    ],
+    "unlockCoins": 69
   },
   {
     "id": 3,
-    "title": "Level 3 \u2014 Think & Act",
+    "title": "Level 3 — Think & Act",
     "timeLimit": 120,
     "orientation": "6x6",
     "gridSize": 36,
@@ -1781,7 +1783,7 @@
             }
           ]
         },
-        "question": "I can burn, boil, or melt \u2014 opposite of cold.",
+        "question": "I can burn, boil, or melt — opposite of cold.",
         "answer": "hot"
       },
       {
@@ -2020,11 +2022,12 @@
         "question": "You do this with your brain when solving a puzzle.",
         "answer": "think"
       }
-    ]
+    ],
+    "unlockCoins": 164
   },
   {
     "id": 4,
-    "title": "Level 4 \u2014 Advanced",
+    "title": "Level 4 — Advanced",
     "timeLimit": 100,
     "orientation": "6x6",
     "gridSize": 36,
@@ -2189,11 +2192,12 @@
         "question": "To find an answer to a problem or puzzle.",
         "answer": "solve"
       }
-    ]
+    ],
+    "unlockCoins": 227
   },
   {
     "id": 6,
-    "title": "Level 6 \u2014 Logic Build",
+    "title": "Level 6 — Logic Build",
     "timeLimit": 80,
     "orientation": "6x6",
     "gridSize": 36,
@@ -2774,11 +2778,12 @@
         "question": "Free from agitation or strong emotion.",
         "answer": "calm"
       }
-    ]
+    ],
+    "unlockCoins": 251
   },
   {
     "id": 7,
-    "title": "Level 7 \u2014 Emotion Mastery",
+    "title": "Level 7 — Emotion Mastery",
     "timeLimit": 75,
     "orientation": "6x6",
     "gridSize": 36,
@@ -3119,11 +3124,12 @@
         "question": "A very quick look.",
         "answer": "glance"
       }
-    ]
+    ],
+    "unlockCoins": 337
   },
   {
     "id": 8,
-    "title": "Level 8 \u2014 Precision",
+    "title": "Level 8 — Precision",
     "timeLimit": 70,
     "orientation": "6x6",
     "gridSize": 36,
@@ -3376,11 +3382,12 @@
         "question": "To bring something new into existence.",
         "answer": "create"
       }
-    ]
+    ],
+    "unlockCoins": 394
   },
   {
     "id": 11,
-    "title": "Level 11 \u2014 Reflection",
+    "title": "Level 11 — Reflection",
     "timeLimit": 80,
     "orientation": "6x6",
     "gridSize": 36,
@@ -3889,11 +3896,12 @@
         "question": "Walking in a slow, relaxed way.",
         "answer": "stroll"
       }
-    ]
+    ],
+    "unlockCoins": 440
   },
   {
     "id": 12,
-    "title": "Level 12 \u2014 Social Skills",
+    "title": "Level 12 — Social Skills",
     "timeLimit": 78,
     "orientation": "6x6",
     "gridSize": 36,
@@ -4150,11 +4158,12 @@
         "question": "A very quick look.",
         "answer": "glance"
       }
-    ]
+    ],
+    "unlockCoins": 517
   },
   {
     "id": 13,
-    "title": "Level 13 \u2014 Observation",
+    "title": "Level 13 — Observation",
     "timeLimit": 76,
     "orientation": "6x6",
     "gridSize": 36,
@@ -4240,7 +4249,7 @@
             }
           ]
         },
-        "question": "Suddenly seeing something you didn\u2019t see before.",
+        "question": "Suddenly seeing something you didn’t see before.",
         "answer": "notice"
       },
       {
@@ -4411,11 +4420,12 @@
         "question": "To inspect broadly or get an overview.",
         "answer": "survey"
       }
-    ]
+    ],
+    "unlockCoins": 561
   },
   {
     "id": 14,
-    "title": "Level 14 \u2014 Risk & Resolve",
+    "title": "Level 14 — Risk & Resolve",
     "timeLimit": 74,
     "orientation": "6x6",
     "gridSize": 36,
@@ -5084,11 +5094,12 @@
         "question": "Freedom from danger or risk.",
         "answer": "safety"
       }
-    ]
+    ],
+    "unlockCoins": 604
   },
   {
     "id": 16,
-    "title": "Level 16 \u2014 Problem Solving",
+    "title": "Level 16 — Problem Solving",
     "timeLimit": 70,
     "orientation": "6x6",
     "gridSize": 36,
@@ -5421,11 +5432,12 @@
         "question": "To remove defects or problems (in code or systems).",
         "answer": "debug"
       }
-    ]
+    ],
+    "unlockCoins": 737
   },
   {
     "id": 17,
-    "title": "Level 17 \u2014 Creativity",
+    "title": "Level 17 — Creativity",
     "timeLimit": 68,
     "orientation": "6x6",
     "gridSize": 36,
@@ -5922,6 +5934,7 @@
         "question": "A small but powerful trigger for an idea.",
         "answer": "spark"
       }
-    ]
+    ],
+    "unlockCoins": 812
   }
 ]

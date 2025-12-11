@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class AnswerPlacement {
   final List<Map<String, int>> path;
 
@@ -60,6 +58,7 @@ class Level {
   final String orientation;
   final int gridSize;
   final List<Question> questions;
+  final int unlockCoins;
 
   const Level({
     required this.id,
@@ -68,9 +67,10 @@ class Level {
     required this.orientation,
     required this.gridSize,
     required this.questions,
+    required this.unlockCoins,
   });
   
-  int get unlockCost => (id - 1) * 50;
+  int get unlockCost => unlockCoins;
 
   factory Level.fromJson(Map<String, dynamic> json) {
     return Level(
@@ -82,6 +82,7 @@ class Level {
       questions: (json['questions'] as List)
           .map((e) => Question.fromJson(e as Map<String, dynamic>))
           .toList(),
+      unlockCoins: json['unlockCoins'] as int? ?? 0,
     );
   }
 }
