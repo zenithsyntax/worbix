@@ -57,7 +57,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
                   "Worbix collects minimal data necessary for app functionality:\n\n"
                       "• Game progress and level completion data\n"
                       "• Coins and achievements\n"
-                      "• Settings preferences (sound, etc.)\n\n"
+                      "• Settings preferences \n\n"
                       "All data is stored locally on your device.",
                   isSmallScreen,
                 ),
@@ -107,8 +107,8 @@ class PrivacyPolicyScreen extends StatelessWidget {
                 const SizedBox(height: 24),
                 _buildSection(
                   "Contact",
-                  "If you have any questions about this Privacy Policy, please contact us through "
-                      "the app settings or support channels.",
+                  "If you have any questions about this Privacy Policy, please contact us at:\n\n"
+                      "zenithsyntax@gmail.com",
                   isSmallScreen,
                 ),
                 const SizedBox(height: 24),

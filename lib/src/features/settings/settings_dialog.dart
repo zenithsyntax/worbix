@@ -163,7 +163,10 @@ class SettingsDialog extends ConsumerWidget {
                 icon: Icons.delete_outline,
                 title: "Clear Data",
                 onTap: () {
-                  // Get root navigator and context before popping
+                  // Capture provider reference and root context before popping
+                  final progressNotifier = ref.read(
+                    userProgressProvider.notifier,
+                  );
                   final rootNavigator = Navigator.of(
                     context,
                     rootNavigator: true,
@@ -191,9 +194,7 @@ class SettingsDialog extends ConsumerWidget {
                             ),
                             TextButton(
                               onPressed: () {
-                                ref
-                                    .read(userProgressProvider.notifier)
-                                    .clearData();
+                                progressNotifier.clearData();
                                 Navigator.of(dialogContext).pop();
                                 if (rootContext.mounted) {
                                   ScaffoldMessenger.of(
