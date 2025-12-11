@@ -109,6 +109,11 @@ class GameplayController extends StateNotifier<GameplayState> {
   void onTileTap(int index) {
       if (!_canPlay) return;
 
+      // Get answer length to limit selection
+      if (state.level == null) return;
+      final q = state.level!.questions[state.currentQuestionIndex];
+      final answerLength = q.answer.length;
+
       // 0-35 index
       final r = index ~/ 6;
       final c = index % 6;
@@ -135,6 +140,15 @@ class GameplayController extends StateNotifier<GameplayState> {
               state = state.copyWith(selectedIndices: [index]);
            }
            return;
+      }
+      
+      // Check if already at maximum selection length (answer length)
+      // Allow deselection/undoing, but prevent adding new tiles if at max
+      if (state.selectedIndices.length >= answerLength) {
+          // Already at max length, don't allow adding more tiles
+          // Allow resetting to a new tile though
+          state = state.copyWith(selectedIndices: [index]);
+          return;
       }
       
       final lastIndex = state.selectedIndices.last;
