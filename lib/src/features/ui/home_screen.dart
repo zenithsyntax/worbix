@@ -418,19 +418,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   .read(adManagerProvider)
                                   .showRewarded(
                                     (reward) {
-                                      // Reward earned - add 10 coins and unlock the level
+                                      // Reward earned - add 10 coins only (do not unlock level)
                                       ref
                                           .read(userProgressProvider.notifier)
                                           .addCoins(10);
+                                      // Check if coins are enough to unlock next sequential level
                                       ref
                                           .read(userProgressProvider.notifier)
-                                          .unlockLevel(level.id);
+                                          .checkAutoUnlock();
                                       // Hide loading snackbar and show success
                                       scaffoldMessenger.hideCurrentSnackBar();
                                       scaffoldMessenger.showSnackBar(
                                         SnackBar(
                                           content: Text(
-                                            "Level ${level.id} unlocked! +10 coins",
+                                            "+10 coins earned!",
                                           ),
                                           backgroundColor: Colors.green,
                                           duration: const Duration(seconds: 2),
@@ -438,24 +439,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       );
                                     },
                                     onAdDismissed: () {
-                                      // Ad was watched - add 10 coins and unlock the level
-                                      ref
-                                          .read(userProgressProvider.notifier)
-                                          .addCoins(10);
-                                      ref
-                                          .read(userProgressProvider.notifier)
-                                          .unlockLevel(level.id);
-                                      // Hide loading snackbar and show success
-                                      scaffoldMessenger.hideCurrentSnackBar();
-                                      scaffoldMessenger.showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            "Level ${level.id} unlocked! +10 coins",
-                                          ),
-                                          backgroundColor: Colors.green,
-                                          duration: const Duration(seconds: 2),
-                                        ),
-                                      );
+                                      // Ad dismissed - no action needed, reward already handled in reward callback
                                     },
                                     onAdNotReady: () {
                                       // Hide loading snackbar and show error with retry option
@@ -487,18 +471,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                                   .notifier,
                                                             )
                                                             .addCoins(10);
+                                                        // Check if coins are enough to unlock next sequential level
                                                         ref
                                                             .read(
                                                               userProgressProvider
                                                                   .notifier,
                                                             )
-                                                            .unlockLevel(
-                                                              level.id,
-                                                            );
+                                                            .checkAutoUnlock();
                                                         scaffoldMessenger.showSnackBar(
                                                           SnackBar(
                                                             content: Text(
-                                                              "Level ${level.id} unlocked! +10 coins",
+                                                              "+10 coins earned!",
                                                             ),
                                                             backgroundColor:
                                                                 Colors.green,
@@ -510,33 +493,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                         );
                                                       },
                                                       onAdDismissed: () {
-                                                        ref
-                                                            .read(
-                                                              userProgressProvider
-                                                                  .notifier,
-                                                            )
-                                                            .addCoins(10);
-                                                        ref
-                                                            .read(
-                                                              userProgressProvider
-                                                                  .notifier,
-                                                            )
-                                                            .unlockLevel(
-                                                              level.id,
-                                                            );
-                                                        scaffoldMessenger.showSnackBar(
-                                                          SnackBar(
-                                                            content: Text(
-                                                              "Level ${level.id} unlocked! +10 coins",
-                                                            ),
-                                                            backgroundColor:
-                                                                Colors.green,
-                                                            duration:
-                                                                const Duration(
-                                                                  seconds: 2,
-                                                                ),
-                                                          ),
-                                                        );
+                                                        // Ad dismissed - no action needed, reward already handled in reward callback
                                                       },
                                                       onAdNotReady: () {
                                                         scaffoldMessenger

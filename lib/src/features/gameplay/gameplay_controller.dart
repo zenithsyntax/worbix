@@ -234,13 +234,20 @@ class GameplayController extends StateNotifier<GameplayState> {
       } 
   }
 
-  void nextQuestion() {
+  Future<void> nextQuestion() async {
       if (state.level == null) return;
       
       if (state.currentQuestionIndex + 1 >= state.level!.questions.length) {
           // Level Complete
-           // Ensure unlock check runs one more time after level completion
-           ref.read(userProgressProvider.notifier).checkAutoUnlock();
+           // Get all question IDs for this level
+           final allQuestionIds = state.level!.questions.map((q) => q.qId).toList();
+           // Unlock next level only if current level is fully completed and user has enough coins
+           await ref.read(userProgressProvider.notifier).unlockNextLevelOnCompletion(
+               state.level!.id,
+               allQuestionIds,
+           );
+           // Also check auto-unlock for coin-based unlocking (in case user has enough coins for multiple levels)
+           await ref.read(userProgressProvider.notifier).checkAutoUnlock();
            
            state = state.copyWith(
                status: GameStatus.won,

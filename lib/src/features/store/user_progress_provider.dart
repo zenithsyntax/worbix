@@ -83,6 +83,9 @@ class UserProgressNotifier extends Notifier<UserProgress> {
       );
       await _save();
       
+      // Check if next level should unlock (10 questions completed + enough coins)
+      await _checkAndUnlockNextLevel(levelId);
+      
       // Auto-unlock check (based on total coins earned from all questions)
       await checkAutoUnlock();
   }
@@ -110,18 +113,31 @@ class UserProgressNotifier extends Notifier<UserProgress> {
       // Logic: Next level cost = (id - 1) * 50.
       // e.g. Level 2 cost 50. Level 3 cost 100.
       // We check if currentCoins >= cost of (maxLevel + 1).
+      // Also requires at least 10 questions completed in previous level
       
       int currentMax = state.maxLevelUnlocked;
       bool changed = false;
+      const requiredQuestions = 10;
       
       // Safety break to prevent infinite loops if cost is 0 or logic creates issues, though cost increases.
       for (int i = 0; i < 100; i++) {
            int nextLevelId = currentMax + 1;
            int cost = (nextLevelId - 1) * 50;
            
+           // Check if user has enough coins
            if (state.totalCoins >= cost) {
-               currentMax = nextLevelId;
-               changed = true;
+               // Also check if previous level has at least 10 questions completed
+               final previousLevelId = currentMax;
+               final completed = state.completedQuestions[previousLevelId] ?? [];
+               final completedCount = completed.length;
+               
+               if (completedCount >= requiredQuestions) {
+                   currentMax = nextLevelId;
+                   changed = true;
+               } else {
+                   // Don't unlock if previous level doesn't have 10 questions completed
+                   break;
+               }
            } else {
                break;
            }
@@ -130,6 +146,34 @@ class UserProgressNotifier extends Notifier<UserProgress> {
       if (changed) {
           state = state.copyWith(maxLevelUnlocked: currentMax);
           await _save();
+      }
+  }
+  
+  // Unlock next level when player has completed at least 10 questions in previous level
+  // This ensures level N+1 only unlocks after playing 10 questions in level N AND having enough coins
+  Future<void> unlockNextLevelOnCompletion(int completedLevelId, List<int> allQuestionIds) async {
+      await _checkAndUnlockNextLevel(completedLevelId);
+  }
+  
+  // Check if player has completed at least 10 questions in a level and unlock next level if conditions are met
+  Future<void> _checkAndUnlockNextLevel(int levelId) async {
+      // Check if at least 10 questions in the level are completed
+      final completed = state.completedQuestions[levelId] ?? [];
+      final completedCount = completed.length;
+      const requiredQuestions = 10;
+      
+      if (completedCount >= requiredQuestions) {
+          // Player has completed at least 10 questions, unlock next level if user has enough coins
+          final nextLevelId = levelId + 1;
+          final cost = (nextLevelId - 1) * 50;
+          
+          // Only unlock if:
+          // 1. Next level is not already unlocked
+          // 2. User has enough coins
+          if (nextLevelId > state.maxLevelUnlocked && state.totalCoins >= cost) {
+              state = state.copyWith(maxLevelUnlocked: nextLevelId);
+              await _save();
+          }
       }
   }
   
