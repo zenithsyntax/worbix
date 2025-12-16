@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'src/app/app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
+  // Lock screen orientation to portrait only
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
   // Configure test device IDs for development
   if (kDebugMode) {
     final configuration = RequestConfiguration(
-      testDeviceIds: ['D8A458A384886F4C41F86ED2A2C2F8D3'], // Your test device ID
+      testDeviceIds: [
+        'D8A458A384886F4C41F86ED2A2C2F8D3',
+      ], // Your test device ID
     );
     MobileAds.instance.updateRequestConfiguration(configuration);
   }
-  
+
   // Initialize Ads
   // We don't await this so it doesn't block startup
   await MobileAds.instance.initialize();
