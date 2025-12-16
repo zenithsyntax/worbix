@@ -3,7 +3,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AdManager {
-  // Test Ad Unit IDs (for development)
+  // Test Ad Unit IDs (for development) r
   static const String testBannerAdUnitId =
       'ca-app-pub-3940256099942544/6300978111';
   static const String testInterstitialAdUnitId =
