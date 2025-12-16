@@ -3,10 +3,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:screen_protector/screen_protector.dart';
 import 'src/app/app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Prevent screenshots and screen recording
+  await ScreenProtector.protectDataLeakageOn();
 
   // Lock screen orientation to portrait only
   await SystemChrome.setPreferredOrientations([
