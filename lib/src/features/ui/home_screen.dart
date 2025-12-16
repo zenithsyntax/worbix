@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import '../levels/level_repository.dart';
 import '../store/user_progress_provider.dart';
 import '../store/user_progress_model.dart';
@@ -20,6 +21,8 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  bool _isNoInternetDialogShowing = false;
+
   @override
   void initState() {
     super.initState();
@@ -29,7 +32,260 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         const AssetImage('assets/home_page_backgorund.png'),
         context,
       );
+      // Check internet connectivity
+      _checkInternetConnection();
+      // Listen for connectivity changes
+      _listenToConnectivityChanges();
     });
+  }
+
+  bool _hasNoInternet(List<ConnectivityResult> results) {
+    // Only show popup when there's absolutely no network connection
+    // Don't show for slow/low internet - only when completely disconnected
+    return results.isEmpty ||
+        (results.length == 1 && results.first == ConnectivityResult.none);
+  }
+
+  void _listenToConnectivityChanges() {
+    Connectivity().onConnectivityChanged.listen((
+      List<ConnectivityResult> results,
+    ) {
+      if (_hasNoInternet(results)) {
+        // Completely no internet connection (0 internet)
+        if (mounted && !_isNoInternetDialogShowing) {
+          _showNoInternetDialog();
+        }
+      } else {
+        // Internet connection exists (even if slow) - automatically close the dialog
+        if (mounted && _isNoInternetDialogShowing) {
+          _isNoInternetDialogShowing = false;
+          Navigator.of(context).pop();
+        }
+      }
+    });
+  }
+
+  Future<void> _checkInternetConnection() async {
+    final connectivityResult = await Connectivity().checkConnectivity();
+    // Only show popup when there's completely no network connection (0 internet)
+    // Don't show for slow/low internet connections
+    if (_hasNoInternet(connectivityResult)) {
+      // No internet connection at all
+      if (mounted) {
+        _showNoInternetDialog();
+      }
+    }
+  }
+
+  void _showNoInternetDialog() {
+    if (_isNoInternetDialogShowing) return; // Prevent multiple dialogs
+
+    _isNoInternetDialogShowing = true;
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        final screenSize = MediaQuery.of(context).size;
+        final screenWidth = screenSize.width;
+        final screenHeight = screenSize.height;
+        final isSmallScreen = screenWidth < 360 || screenHeight < 640;
+        final isMediumScreen = screenWidth >= 360 && screenWidth < 600;
+
+        double titleFontSize = isSmallScreen ? 20 : (isMediumScreen ? 24 : 26);
+        double messageFontSize = isSmallScreen
+            ? 14
+            : (isMediumScreen ? 16 : 18);
+        double buttonFontSize = isSmallScreen ? 16 : (isMediumScreen ? 18 : 20);
+
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            padding: EdgeInsets.all(isSmallScreen ? 6 : 8),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFFFFF8E1), // Cream
+                  Color(0xFFFFE0B2), // Light orange
+                  Color(0xFFFFCC80), // Orange
+                ],
+              ),
+              borderRadius: BorderRadius.circular(30),
+              border: Border.all(
+                color: const Color(0xFFFF6B00), // Dark orange for stroke
+                width: 6,
+              ),
+            ),
+            child: Container(
+              padding: EdgeInsets.all(isSmallScreen ? 16 : 24),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFFFFF8E1), // Cream
+                    Color(0xFFFFE0B2), // Light orange
+                    Color(0xFFFFCC80), // Orange
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Icon and Title
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      vertical: isSmallScreen ? 8 : 12,
+                      horizontal: isSmallScreen ? 12 : 16,
+                    ),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color(0xFFFFB74D), // Orange
+                          Color(0xFFFF9800), // Darker orange
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: const Color(0xFFFF6B00),
+                        width: 4,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(isSmallScreen ? 6 : 8),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFE0B2),
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: const Color(0xFFFF6B00),
+                              width: 3,
+                            ),
+                          ),
+                          child: Icon(
+                            Icons.wifi_off,
+                            color: const Color(0xFFFF6B00),
+                            size: isSmallScreen ? 24 : 32,
+                          ),
+                        ),
+                        SizedBox(width: isSmallScreen ? 8 : 12),
+                        Flexible(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              "No Internet Connection",
+                              style: GoogleFonts.bangers(
+                                fontSize: titleFontSize,
+                                color: Colors.white,
+                                letterSpacing: 1.5,
+                                shadows: [
+                                  Shadow(
+                                    color: const Color(
+                                      0xFFFF6B00,
+                                    ).withOpacity(0.5),
+                                    offset: const Offset(2, 2),
+                                    blurRadius: 0,
+                                  ),
+                                ],
+                              ),
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: isSmallScreen ? 16 : 24),
+                  // Message
+                  Container(
+                    padding: EdgeInsets.all(isSmallScreen ? 12 : 20),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFF8E1),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: const Color(0xFFFFB74D),
+                        width: 4,
+                      ),
+                    ),
+                    child: Text(
+                      "Please check your internet connection and try again.",
+                      style: GoogleFonts.nunito(
+                        fontSize: messageFontSize,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFFFF6B00),
+                        height: 1.4,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  SizedBox(height: isSmallScreen ? 16 : 24),
+                  // Retry Button
+                  Container(
+                    width: double.infinity,
+                    height: isSmallScreen ? 50 : 60,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Color(0xFFFFB74D), Color(0xFFFF9800)],
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: const Color(0xFFFF6B00),
+                        width: 4,
+                      ),
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () async {
+                          _isNoInternetDialogShowing = false;
+                          Navigator.of(context).pop();
+                          await _checkInternetConnection();
+                        },
+                        borderRadius: BorderRadius.circular(20),
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.refresh,
+                                color: Colors.white,
+                                size: isSmallScreen ? 22 : 28,
+                              ),
+                              SizedBox(width: isSmallScreen ? 6 : 8),
+                              FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  "Retry",
+                                  style: GoogleFonts.permanentMarker(
+                                    fontSize: buttonFontSize,
+                                    color: Colors.white,
+                                    letterSpacing: 1.2,
+                                  ),
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -771,12 +1027,17 @@ class _RoadmapViewState extends State<RoadmapView> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final isTablet = screenWidth >= 600;
+
+    // Calculate responsive icon size
+    final iconSize = _calculateIconSize(screenWidth, screenHeight, isTablet);
 
     // Calculate path positions for levels
     final nodePositions = _calculateNodePositions(
       widget.levels.length,
       screenWidth,
       screenHeight,
+      iconSize,
     );
 
     // Calculate total height needed
@@ -814,8 +1075,8 @@ class _RoadmapViewState extends State<RoadmapView> {
                   widget.userProgress.totalCoins >= level.unlockCost;
 
               return Positioned(
-                left: position.dx - 55,
-                top: position.dy - 55,
+                left: position.dx - (iconSize / 2),
+                top: position.dy - (iconSize / 2),
                 child:
                     LevelNode(
                           level: level,
@@ -825,6 +1086,7 @@ class _RoadmapViewState extends State<RoadmapView> {
                               level.id ==
                                   widget.userProgress.maxLevelUnlocked + 1,
                           onTap: () => widget.onLevelTap(level),
+                          iconSize: iconSize,
                         )
                         .animate(delay: (100 * index).ms)
                         .scale(duration: 500.ms, curve: Curves.easeOutBack)
@@ -837,14 +1099,45 @@ class _RoadmapViewState extends State<RoadmapView> {
     );
   }
 
+  // Calculate responsive icon size based on screen dimensions
+  double _calculateIconSize(
+    double screenWidth,
+    double screenHeight,
+    bool isTablet,
+  ) {
+    // Base size for mobile phones
+    double baseSize = 110.0;
+
+    // For tablets, scale up proportionally
+    if (isTablet) {
+      // Scale based on screen width, but keep it reasonable
+      final scaleFactor = math.min(
+        screenWidth / 360.0,
+        1.5,
+      ); // Max 1.5x for tablets
+      baseSize = 110.0 * scaleFactor;
+    } else {
+      // For smaller phones, scale down slightly
+      if (screenWidth < 360) {
+        baseSize = 100.0;
+      } else if (screenWidth < 400) {
+        baseSize = 105.0;
+      }
+    }
+
+    return baseSize;
+  }
+
   List<Offset> _calculateNodePositions(
     int levelCount,
     double screenWidth,
     double screenHeight,
+    double iconSize,
   ) {
     final positions = <Offset>[];
-    // Increased spacing between nodes
-    final nodeSpacing = math.max(130.0, screenHeight / (levelCount + 1));
+    // Fixed spacing between nodes for consistency across all screen types
+    // This ensures the same distance between icons on mobile and tablets
+    final nodeSpacing = 160.0;
     final pathWidth = screenWidth * 0.65;
     final startX = screenWidth * 0.175;
     final topPadding = 180.0;
@@ -923,8 +1216,8 @@ class _RoadmapViewState extends State<RoadmapView> {
   }
 
   double _calculateTotalHeight(int levelCount, double screenHeight) {
-    // Increased spacing to match node spacing with extra for vertical waves
-    final nodeSpacing = math.max(130.0, screenHeight / (levelCount + 1));
+    // Fixed spacing to match node spacing with extra for vertical waves
+    final nodeSpacing = 160.0;
     // Add extra height for vertical snake undulation
     return 180 + (nodeSpacing * levelCount * 1.2);
   }
@@ -1191,6 +1484,7 @@ class LevelNode extends StatelessWidget {
   final bool isLocked;
   final bool hasEnoughCoins;
   final VoidCallback onTap;
+  final double iconSize;
 
   const LevelNode({
     super.key,
@@ -1198,15 +1492,20 @@ class LevelNode extends StatelessWidget {
     required this.isLocked,
     required this.hasEnoughCoins,
     required this.onTap,
+    this.iconSize = 110.0,
   });
 
   @override
   Widget build(BuildContext context) {
+    // Calculate responsive font size based on icon size
+    final fontSize = iconSize * 0.4;
+    final iconIconSize = iconSize * 0.4;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 110,
-        height: 110,
+        width: iconSize,
+        height: iconSize,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           gradient: isLocked
@@ -1245,14 +1544,18 @@ class LevelNode extends StatelessWidget {
         ),
         child: Center(
           child: isLocked
-              ? Icon(Icons.lock, color: Colors.white.withOpacity(0.7), size: 44)
+              ? Icon(
+                  Icons.lock,
+                  color: Colors.white.withOpacity(0.7),
+                  size: iconIconSize,
+                )
               : Text(
                   "${level.id}",
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
-                    fontSize: 44,
+                    fontSize: fontSize,
                     fontWeight: FontWeight.bold,
-                    shadows: [
+                    shadows: const [
                       Shadow(
                         color: Colors.black26,
                         offset: Offset(1, 1),

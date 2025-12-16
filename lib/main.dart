@@ -38,5 +38,8 @@ void main() async {
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(dynamic message) async {
   // Dummy handler to prevent crash if native code calls it unexpectedly
-  print("Ignoring background message: $message");
+  // Only log in debug mode
+  if (kDebugMode) {
+    debugPrint("Ignoring background message: $message");
+  }
 }

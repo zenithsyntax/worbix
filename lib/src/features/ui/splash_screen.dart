@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../levels/level_repository.dart';
 import '../store/user_progress_provider.dart';
@@ -12,6 +13,9 @@ class SplashScreen extends ConsumerStatefulWidget {
 }
 
 class _SplashScreenState extends ConsumerState<SplashScreen> {
+  bool _hasError = false;
+  String? _errorMessage;
+
   @override
   void initState() {
     super.initState();
@@ -31,9 +35,25 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
         );
       }
     } catch (e) {
-      // Handle error (show retry)
-      debugPrint('Init error: $e');
+      // Handle error - show retry option to user
+      if (kDebugMode) {
+        debugPrint('Init error: $e');
+      }
+      if (mounted) {
+        setState(() {
+          _hasError = true;
+          _errorMessage = 'Failed to load app data. Please try again.';
+        });
+      }
     }
+  }
+
+  Future<void> _retry() async {
+    setState(() {
+      _hasError = false;
+      _errorMessage = null;
+    });
+    await _init();
   }
 
   @override
@@ -50,7 +70,23 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
               fit: BoxFit.contain,
             ),
             const SizedBox(height: 20),
-            const CircularProgressIndicator(),
+            if (_hasError) ...[
+              Text(
+                _errorMessage ?? 'An error occurred',
+                style: const TextStyle(color: Colors.red, fontSize: 16),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _retry,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange,
+                  foregroundColor: Colors.white,
+                ),
+                child: const Text('Retry'),
+              ),
+            ] else
+              const CircularProgressIndicator(),
           ],
         ),
       ),

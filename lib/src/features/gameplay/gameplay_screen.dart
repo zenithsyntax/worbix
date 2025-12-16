@@ -25,6 +25,107 @@ class GameplayScreen extends ConsumerStatefulWidget {
 
 class _GameplayScreenState extends ConsumerState<GameplayScreen> {
   late ConfettiController _confettiController;
+  OverlayEntry? _floatingSnackBarOverlay;
+  bool _isHintAdLoading = false;
+
+  void _showFloatingSnackBar(
+    String message, {
+    Color? backgroundColor,
+    IconData? icon,
+    Duration duration = const Duration(seconds: 2),
+  }) {
+    // Remove existing overlay if present
+    _hideFloatingSnackBar();
+
+    final overlay = Overlay.of(context);
+    final screenSize = MediaQuery.of(context).size;
+
+    _floatingSnackBarOverlay = OverlayEntry(
+      builder: (context) => Positioned(
+        top: 60,
+        left: screenSize.width * 0.05,
+        right: screenSize.width * 0.05,
+        child: Material(
+          color: Colors.transparent,
+          elevation: 0,
+          child:
+              Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 16,
+                    ),
+                    decoration: BoxDecoration(
+                      color: backgroundColor ?? const Color(0xFF323232),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.15),
+                          blurRadius: 20,
+                          offset: const Offset(0, 8),
+                          spreadRadius: 0,
+                        ),
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.08),
+                          blurRadius: 6,
+                          offset: const Offset(0, 2),
+                          spreadRadius: 0,
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (icon != null) ...[
+                          Icon(
+                            icon,
+                            color: Colors.white.withOpacity(0.9),
+                            size: 20,
+                          ),
+                          const SizedBox(width: 12),
+                        ],
+                        Flexible(
+                          child: Text(
+                            message,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
+                              letterSpacing: 0.2,
+                              height: 1.4,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                  .animate()
+                  .slideY(
+                    begin: -0.5,
+                    end: 0,
+                    duration: 300.ms,
+                    curve: Curves.easeOutCubic,
+                  )
+                  .fadeIn(duration: 250.ms, curve: Curves.easeOut),
+        ),
+      ),
+    );
+
+    overlay.insert(_floatingSnackBarOverlay!);
+
+    // Auto-remove after duration
+    Future.delayed(duration, () {
+      _hideFloatingSnackBar();
+    });
+  }
+
+  void _hideFloatingSnackBar() {
+    if (_floatingSnackBarOverlay != null) {
+      _floatingSnackBarOverlay!.remove();
+      _floatingSnackBarOverlay = null;
+    }
+  }
 
   String _getLockedMessage({
     required bool hasEnoughCoins,
@@ -519,6 +620,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
   @override
   void dispose() {
     _confettiController.dispose();
+    _hideFloatingSnackBar();
     super.dispose();
   }
 
@@ -555,13 +657,12 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
 
       // Listen for time expiration (when isTimeExpired changes from false to true)
       if (prev?.isTimeExpired != next.isTimeExpired && next.isTimeExpired) {
-        // Show simple "Time Over" message - gameplay continues
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text("Time Over"),
-            duration: const Duration(seconds: 2),
-            backgroundColor: Colors.red,
-          ),
+        // Show floating "Time Over" message - gameplay continues
+        _showFloatingSnackBar(
+          "Time Over!",
+          backgroundColor: const Color(0xFFD32F2F),
+          icon: Icons.timer_off,
+          duration: const Duration(seconds: 2),
         );
       }
     });
@@ -711,10 +812,11 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                 [];
 
                             if (completed.isEmpty) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("No questions completed yet!"),
-                                ),
+                              _showFloatingSnackBar(
+                                "No questions completed yet!",
+                                backgroundColor: const Color(0xFF1976D2),
+                                icon: Icons.info_outline,
+                                duration: const Duration(seconds: 2),
                               );
                               return;
                             }
@@ -1249,11 +1351,12 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                           height: 60,
                           margin: const EdgeInsets.only(left: 8),
                           decoration: BoxDecoration(
-                            color: state.hintsUsed >= 1
+                            color: (state.hintsUsed >= 1 || _isHintAdLoading)
                                 ? Colors.grey.shade400
                                 : const Color(0xFFFFB74D),
                             borderRadius: BorderRadius.circular(20),
-                            boxShadow: state.hintsUsed >= 1
+                            boxShadow:
+                                (state.hintsUsed >= 1 || _isHintAdLoading)
                                 ? []
                                 : [
                                     BoxShadow(
@@ -1266,20 +1369,20 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                           child: Material(
                             color: Colors.transparent,
                             child: InkWell(
-                              onTap: state.hintsUsed >= 1
+                              onTap: (state.hintsUsed >= 1 || _isHintAdLoading)
                                   ? null
                                   : () {
                                       // Check if hint limit reached (only 1 hint per question)
                                       if (state.hintsUsed >= 1) {
                                         if (mounted) {
-                                          ScaffoldMessenger.of(
-                                            context,
-                                          ).showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                "You have used all available hints for this question!",
-                                              ),
-                                              duration: Duration(seconds: 2),
+                                          _showFloatingSnackBar(
+                                            "You have used all available hints for this question!",
+                                            backgroundColor: const Color(
+                                              0xFF1976D2,
+                                            ),
+                                            icon: Icons.block,
+                                            duration: const Duration(
+                                              seconds: 2,
                                             ),
                                           );
                                         }
@@ -1293,14 +1396,14 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                       if (path.length < 3) {
                                         // If word is too short, show a message
                                         if (mounted) {
-                                          ScaffoldMessenger.of(
-                                            context,
-                                          ).showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                "Word is too short for hint!",
-                                              ),
-                                              duration: Duration(seconds: 2),
+                                          _showFloatingSnackBar(
+                                            "Word is too short for hint!",
+                                            backgroundColor: const Color(
+                                              0xFF1976D2,
+                                            ),
+                                            icon: Icons.info_outline,
+                                            duration: const Duration(
+                                              seconds: 2,
                                             ),
                                           );
                                         }
@@ -1344,18 +1447,14 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                       void showHint() {
                                         if (!mounted) return;
 
-                                        // Show snackbar with single letter
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              "Hint: Letter '$hintLetter' is marked!",
-                                            ),
-                                            duration: const Duration(
-                                              seconds: 2,
-                                            ),
+                                        // Show floating snackbar with single letter
+                                        _showFloatingSnackBar(
+                                          "Hint: Letter '$hintLetter' is marked!",
+                                          backgroundColor: const Color(
+                                            0xFF00796B,
                                           ),
+                                          icon: Icons.lightbulb,
+                                          duration: const Duration(seconds: 2),
                                         );
 
                                         // Auto-select the hint letter at the correct position
@@ -1365,7 +1464,10 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                         );
                                       }
 
-                                      // Pause timer when ad is shown
+                                      // Set loading state and pause timer
+                                      setState(() {
+                                        _isHintAdLoading = true;
+                                      });
                                       controller.pauseTimer();
 
                                       // Show rewarded ad first
@@ -1379,26 +1481,34 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                               );
                                             },
                                             onAdDismissed: () {
-                                              // Resume timer when ad is dismissed
+                                              // Reset loading state and resume timer when ad is dismissed
+                                              if (mounted) {
+                                                setState(() {
+                                                  _isHintAdLoading = false;
+                                                });
+                                              }
                                               controller.resumeTimer();
                                               // Hint shown when ad is dismissed (user watched it)
                                               showHint();
                                             },
                                             onAdNotReady: () {
-                                              // Resume timer if ad is not ready
+                                              // Reset loading state and resume timer if ad is not ready
+                                              if (mounted) {
+                                                setState(() {
+                                                  _isHintAdLoading = false;
+                                                });
+                                              }
                                               controller.resumeTimer();
                                               // If ad is not ready, show a message
                                               if (mounted) {
-                                                ScaffoldMessenger.of(
-                                                  context,
-                                                ).showSnackBar(
-                                                  const SnackBar(
-                                                    content: Text(
-                                                      "Ad is loading. Please try again in a moment.",
-                                                    ),
-                                                    duration: Duration(
-                                                      seconds: 2,
-                                                    ),
+                                                _showFloatingSnackBar(
+                                                  "Ad is loading. Please try again in a moment.",
+                                                  backgroundColor: const Color(
+                                                    0xFF616161,
+                                                  ),
+                                                  icon: Icons.hourglass_empty,
+                                                  duration: const Duration(
+                                                    seconds: 2,
                                                   ),
                                                 );
                                               }
@@ -1409,20 +1519,35 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(
-                                    Icons.lightbulb_outline,
-                                    color: state.hintsUsed >= 1
-                                        ? Colors.grey.shade600
-                                        : Colors.white,
-                                    size: 24,
-                                  ),
+                                  if (_isHintAdLoading)
+                                    const SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2.5,
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                              Colors.white,
+                                            ),
+                                      ),
+                                    )
+                                  else
+                                    Icon(
+                                      Icons.lightbulb_outline,
+                                      color: state.hintsUsed >= 1
+                                          ? Colors.grey.shade600
+                                          : Colors.white,
+                                      size: 24,
+                                    ),
                                   const SizedBox(width: 8),
                                   Text(
-                                    "Hint",
+                                    _isHintAdLoading ? "Loading..." : "Hint",
                                     style: GoogleFonts.comicNeue(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
-                                      color: state.hintsUsed >= 1
+                                      color:
+                                          (state.hintsUsed >= 1 ||
+                                              _isHintAdLoading)
                                           ? Colors.grey.shade600
                                           : Colors.white,
                                       letterSpacing: 0.5,

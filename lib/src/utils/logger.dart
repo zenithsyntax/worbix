@@ -1,6 +1,10 @@
+import 'package:flutter/foundation.dart';
+
 class Logger {
   static void log(String message) {
-    // In production, use a proper logger package or tree shaking
-    print('[Worbix] $message');
+    // Only log in debug mode - automatically stripped in release builds
+    if (kDebugMode) {
+      debugPrint('[Worbix] $message');
+    }
   }
 }
