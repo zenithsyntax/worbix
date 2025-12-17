@@ -1138,8 +1138,10 @@ class _RoadmapViewState extends State<RoadmapView> {
     // Fixed spacing between nodes for consistency across all screen types
     // This ensures the same distance between icons on mobile and tablets
     final nodeSpacing = 160.0;
-    final pathWidth = screenWidth * 0.65;
-    final startX = screenWidth * 0.175;
+    // Account for icon size when calculating path width to prevent edge cutoff
+    final iconPadding = iconSize / 2;
+    final pathWidth = (screenWidth - (iconPadding * 2)) * 0.65;
+    final startX = iconPadding + (screenWidth - (iconPadding * 2)) * 0.175;
     final topPadding = 180.0;
 
     for (int i = 0; i < levelCount; i++) {
@@ -1196,6 +1198,12 @@ class _RoadmapViewState extends State<RoadmapView> {
           primaryCurve +
           (secondaryWave * smoothBlend) +
           (tertiaryWave * 0.8);
+
+      // Clamp x position to ensure icons stay within screen bounds
+      // Icons are positioned at (x - iconSize/2), so we need padding
+      final minX = iconSize / 2;
+      final maxX = screenWidth - (iconSize / 2);
+      x = x.clamp(minX, maxX);
 
       // Add vertical undulation for more realistic snake movement
       // Vertical wave creates up/down movement like a snake slithering
