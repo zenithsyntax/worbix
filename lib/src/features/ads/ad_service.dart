@@ -91,8 +91,6 @@ class AdService {
       // Let's clear the old callback and set a new one that calls the original logic + user logic.
       // Or simplier: just use a completion callback passed here.
 
-      final oldCallback = _interstitialAd!.fullScreenContentCallback;
-
       _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
         onAdDismissedFullScreenContent: (ad) {
           onAdDismissed();

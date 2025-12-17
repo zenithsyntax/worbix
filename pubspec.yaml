@@ -1,5 +1,5 @@
 name: worbix
-description: "A new Flutter project."
+description: "Worbix - A child-friendly word puzzle game. Solve word puzzles across 20 challenging levels with 6x6 grids."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev

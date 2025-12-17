@@ -1,5 +1,9 @@
-package com.example.worbix
+package com.worbix.app
 
 import io.flutter.embedding.android.FlutterActivity
 
 class MainActivity : FlutterActivity()
+
+
+
+
