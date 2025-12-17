@@ -14,15 +14,15 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  // Configure test device IDs for development
-  if (kDebugMode) {
-    final configuration = RequestConfiguration(
-      testDeviceIds: [
-        'D8A458A384886F4C41F86ED2A2C2F8D3',
-      ], // Your test device ID
-    );
-    MobileAds.instance.updateRequestConfiguration(configuration);
-  }
+  // Configure ad request settings for COPPA compliance
+  // Required when targeting children under 13
+  // This global configuration applies to ALL ads (banner, interstitial, rewarded)
+  // in both home screen and gameplay screen automatically
+  final configuration = RequestConfiguration(
+    tagForChildDirectedTreatment: TagForChildDirectedTreatment.yes,
+    tagForUnderAgeOfConsent: TagForUnderAgeOfConsent.yes,
+  );
+  MobileAds.instance.updateRequestConfiguration(configuration);
 
   // Initialize Ads
   // We don't await this so it doesn't block startup

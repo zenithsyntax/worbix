@@ -16,12 +16,12 @@ class AdService {
   static const String productionInterstitialAdUnitId =
       'ca-app-pub-9698718721404755/4637083696';
 
-  // Use test ads in debug mode
-  static bool get useTestAds => kDebugMode;
+  // Use production ads (test ads removed for production)
+  static bool get useTestAds => false;
 
   String get _adUnitId {
     if (useTestAds) {
-      // Use test ads in debug mode
+      // Test ads (not used in production)
       if (Platform.isAndroid) {
         return testInterstitialAdUnitIdAndroid;
       } else if (Platform.isIOS) {
@@ -30,7 +30,7 @@ class AdService {
         return '';
       }
     } else {
-      // Use production ads in release mode
+      // Production ads - always used now
       return productionInterstitialAdUnitId;
     }
   }

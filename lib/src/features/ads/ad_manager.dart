@@ -19,8 +19,8 @@ class AdManager {
   static const String rewardedAdUnitId =
       'ca-app-pub-9698718721404755/8520488387'; // Hint rewarded ad
 
-  // Use test ads in debug mode or when production ads fail
-  static bool get useTestAds => kDebugMode;
+  // Use production ads (test ads removed for production)
+  static bool get useTestAds => false;
 
   String get _bannerAdUnitId =>
       useTestAds ? testBannerAdUnitId : bannerAdUnitId;

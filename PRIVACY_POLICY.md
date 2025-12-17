@@ -109,6 +109,93 @@ We implement reasonable security measures to protect your information. However, 
 - **Advertising Data**: Google AdMob retains data according to Google's privacy policy and data retention practices
 - **Analytics Data**: We may retain aggregated, anonymized analytics data for improvement purposes
 
+## Data Deletion
+
+### How to Delete Your Data
+
+You have several options to delete your data:
+
+#### Option 1: Delete Data Within the App (Recommended)
+
+You can delete all local game data directly within the App:
+
+1. Open the Worbix app
+2. Tap the **Settings** icon (gear icon) in the top right corner
+3. Select **"Clear Data"**
+4. Confirm your choice when prompted
+
+**What Gets Deleted:**
+- All game progress (completed levels, questions, scores)
+- All coins and unlocked levels
+- All app preferences and settings
+- All locally stored game state
+
+**Note**: This action cannot be undone. Once you clear data, all your progress will be permanently deleted from your device.
+
+#### Option 2: Uninstall the App
+
+Uninstalling the App will remove all local data stored on your device, including:
+- All game progress
+- All preferences and settings
+- All locally stored information
+
+#### Option 3: Clear App Data via Device Settings
+
+You can also clear app data through your device settings:
+
+**Android:**
+1. Go to Settings > Apps > Worbix
+2. Tap "Storage" or "Storage & cache"
+3. Tap "Clear Data" or "Clear Storage"
+
+**iOS:**
+1. Go to Settings > General > iPhone Storage
+2. Find Worbix
+3. Tap "Offload App" or "Delete App"
+
+### Data That Cannot Be Deleted Through the App
+
+The following data is collected and managed by third-party services and cannot be deleted through the App:
+
+**Google Mobile Ads (AdMob) Data:**
+- Device identifiers (Android Advertising ID)
+- IP addresses
+- App usage and advertising interaction data
+
+**How to Manage AdMob Data:**
+
+**Android:**
+1. Go to Settings > Google > Ads
+2. Tap "Reset advertising ID" to reset your advertising identifier
+3. Tap "Opt out of Ads Personalization" to disable personalized ads
+
+**iOS:**
+1. Go to Settings > Privacy > Apple Advertising
+2. Toggle "Limit Ad Tracking" to ON
+
+For more information about Google's data practices and how to manage your data, visit: https://policies.google.com/privacy
+
+**Google Fonts Data:**
+- IP addresses and font file requests collected by Google Fonts
+
+This data is managed by Google according to their privacy policy.
+
+### Requesting Data Deletion
+
+If you need assistance with data deletion or have questions about what data we collect, please contact us at:
+
+**Email**: zenithsyntax@gmail.com  
+**App Name**: Worbix  
+**Developer**: Alvin Regi
+
+We will respond to your request within a reasonable timeframe and assist you with any data deletion requests.
+
+### Data Deletion Timeline
+
+- **Local App Data**: Deleted immediately when you use the "Clear Data" feature or uninstall the App
+- **AdMob Data**: Managed by Google according to their data retention policies (typically retained for up to 14 months)
+- **Google Fonts Data**: Managed by Google according to their privacy policy
+
 ## Your Rights and Choices
 
 Depending on your location, you may have certain rights regarding your information:
@@ -157,9 +244,9 @@ If you are located in the European Economic Area (EEA) or United Kingdom (UK), y
 
 If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us at:
 
-**Email**: [YOUR_EMAIL_ADDRESS]  
+**Email**: zenithsyntax@gmail.com  
 **App Name**: Worbix  
-**Developer**: [YOUR_DEVELOPER_NAME]
+**Developer**: Alvin Regi
 
 ---
 
@@ -171,7 +258,7 @@ This App uses Google Mobile Ads (AdMob) for advertising purposes. AdMob may coll
 - **Data Collection**: Device identifiers, app interactions, and advertising data (collected by Google AdMob)
 - **Data Sharing**: Shared with Google AdMob for advertising purposes
 - **Data Security**: Data is encrypted in transit
-- **Data Deletion**: Users can delete local data by uninstalling the App
+- **Data Deletion**: Users can delete local data through Settings > Clear Data within the App, or by uninstalling the App. See the "Data Deletion" section above for detailed instructions.
 - **Children's Privacy**: App is designed for all ages; no personal information collected from children
 
 ---
