@@ -1044,6 +1044,8 @@ class _RoadmapViewState extends State<RoadmapView> {
     final totalHeight = _calculateTotalHeight(
       widget.levels.length,
       screenHeight,
+      screenWidth,
+      iconSize,
     );
 
     return SingleChildScrollView(
@@ -1223,11 +1225,44 @@ class _RoadmapViewState extends State<RoadmapView> {
     return positions;
   }
 
-  double _calculateTotalHeight(int levelCount, double screenHeight) {
-    // Fixed spacing to match node spacing with extra for vertical waves
+  double _calculateTotalHeight(
+    int levelCount,
+    double screenHeight,
+    double screenWidth,
+    double iconSize,
+  ) {
+    if (levelCount == 0) return screenHeight;
+
+    // Calculate the actual Y position of the last level using the same logic as _calculateNodePositions
     final nodeSpacing = 160.0;
-    // Add extra height for vertical snake undulation
-    return 180 + (nodeSpacing * levelCount * 1.2);
+    final topPadding = 180.0;
+
+    double lastLevelY;
+    if (levelCount == 1) {
+      lastLevelY = topPadding;
+    } else if (levelCount == 2) {
+      lastLevelY = topPadding + (nodeSpacing * 0.5);
+    } else if (levelCount == 3) {
+      lastLevelY = topPadding + (nodeSpacing * 0.5) + (nodeSpacing * 1.3);
+    } else {
+      lastLevelY =
+          topPadding +
+          (nodeSpacing * 0.5) +
+          (nodeSpacing * 1.3) +
+          (nodeSpacing * (levelCount - 2) * 1.0);
+    }
+
+    // Add vertical wave offset (max possible from the wave calculation)
+    final maxVerticalWave = nodeSpacing * 0.18; // From verticalWave calculation
+    final maxDepthOffset =
+        nodeSpacing * 0.08 * 0.6; // From depthOffset calculation
+    final maxVerticalOffset = maxVerticalWave + maxDepthOffset;
+    lastLevelY += maxVerticalOffset;
+
+    // Add bottom padding (icon size / 2 + some margin) instead of excessive multiplier
+    final bottomPadding = (iconSize / 2) + 40; // Small padding after last icon
+
+    return lastLevelY + bottomPadding;
   }
 
   List<Widget> _buildDecorativeElements(
