@@ -1157,16 +1157,16 @@ class _RoadmapViewState extends State<RoadmapView> {
       if (i == 0) {
         baseY = topPadding;
       } else if (i == 1) {
-        // Second level - much closer to first level (reduced spacing)
-        baseY = topPadding + (nodeSpacing * 0.5);
+        // Second level - slightly more space from first level
+        baseY = topPadding + (nodeSpacing * 0.7);
       } else if (i == 2) {
         // Third level - extra space after second level
-        baseY = topPadding + (nodeSpacing * 0.5) + (nodeSpacing * 1.3);
+        baseY = topPadding + (nodeSpacing * 0.7) + (nodeSpacing * 1.3);
       } else {
         // Increased spacing for remaining levels
         baseY =
             topPadding +
-            (nodeSpacing * 0.5) +
+            (nodeSpacing * 0.7) +
             (nodeSpacing * 1.3) +
             (nodeSpacing * (i - 2) * 1.0);
       }
@@ -1241,13 +1241,13 @@ class _RoadmapViewState extends State<RoadmapView> {
     if (levelCount == 1) {
       lastLevelY = topPadding;
     } else if (levelCount == 2) {
-      lastLevelY = topPadding + (nodeSpacing * 0.5);
+      lastLevelY = topPadding + (nodeSpacing * 0.7);
     } else if (levelCount == 3) {
-      lastLevelY = topPadding + (nodeSpacing * 0.5) + (nodeSpacing * 1.3);
+      lastLevelY = topPadding + (nodeSpacing * 0.7) + (nodeSpacing * 1.3);
     } else {
       lastLevelY =
           topPadding +
-          (nodeSpacing * 0.5) +
+          (nodeSpacing * 0.7) +
           (nodeSpacing * 1.3) +
           (nodeSpacing * (levelCount - 2) * 1.0);
     }
