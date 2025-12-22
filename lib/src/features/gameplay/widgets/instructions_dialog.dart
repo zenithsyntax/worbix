@@ -6,7 +6,16 @@ class InstructionsDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scale = MediaQuery.of(context).size.shortestSide / 375.0;
+    final size = MediaQuery.of(context).size;
+    final scale = size.shortestSide / 375.0;
+    final isSmallScreen = size.width < 360 || size.height < 600;
+
+    // Responsive font sizes based on screen size
+    final titleFontSize = isSmallScreen ? 24.0 * scale : 28.0 * scale;
+    final stepFontSize = isSmallScreen ? 13.0 * scale : 16.0 * scale;
+    final buttonFontSize = isSmallScreen ? 18.0 * scale : 20.0 * scale;
+    final iconSize = isSmallScreen ? 20.0 * scale : 24.0 * scale;
+    final titleIconSize = isSmallScreen ? 22.0 * scale : 32.0 * scale;
 
     return Dialog(
       backgroundColor: Colors.transparent,
@@ -49,7 +58,7 @@ class InstructionsDialog extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(
                   vertical: 12.0 * scale,
-                  horizontal: 16.0 * scale,
+                  horizontal: isSmallScreen ? 8.0 * scale : 16.0 * scale,
                 ),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
@@ -68,9 +77,12 @@ class InstructionsDialog extends StatelessWidget {
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      padding: EdgeInsets.all(8.0 * scale),
+                      padding: EdgeInsets.all(
+                        isSmallScreen ? 6.0 * scale : 8.0 * scale,
+                      ),
                       decoration: BoxDecoration(
                         color: const Color(0xFFFFE0B2),
                         shape: BoxShape.circle,
@@ -82,26 +94,29 @@ class InstructionsDialog extends StatelessWidget {
                       child: Icon(
                         Icons.help_outline,
                         color: const Color(0xFFFF6B00),
-                        size: 32.0 * scale,
+                        size: titleIconSize,
                       ),
                     ),
-                    SizedBox(width: 12.0 * scale),
+                    SizedBox(width: isSmallScreen ? 8.0 * scale : 12.0 * scale),
                     Flexible(
-                      child: Text(
-                        "How to Play",
-                        style: GoogleFonts.bangers(
-                          fontSize: 28.0 * scale,
-                          color: Colors.white,
-                          letterSpacing: 1.5,
-                          shadows: [
-                            Shadow(
-                              color: const Color(0xFFFF6B00).withOpacity(0.5),
-                              offset: const Offset(2, 2),
-                              blurRadius: 0,
-                            ),
-                          ],
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          "How to Play",
+                          style: GoogleFonts.bangers(
+                            fontSize: titleFontSize,
+                            color: Colors.white,
+                            letterSpacing: 1.5,
+                            shadows: [
+                              Shadow(
+                                color: const Color(0xFFFF6B00).withOpacity(0.5),
+                                offset: const Offset(2, 2),
+                                blurRadius: 0,
+                              ),
+                            ],
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],
@@ -123,10 +138,34 @@ class InstructionsDialog extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        _step(Icons.touch_app, 'Connect adjacent letters.', scale),
-                        _step(Icons.subdirectory_arrow_right, 'Form the answer word.', scale),
-                        _step(Icons.timer, 'Solve faster to earn more coins!', scale),
-                        _step(Icons.loop, 'Cannot cross your own path.', scale),
+                        _step(
+                          Icons.touch_app,
+                          'Connect adjacent letters.',
+                          scale,
+                          stepFontSize,
+                          iconSize,
+                        ),
+                        _step(
+                          Icons.subdirectory_arrow_right,
+                          'Form the answer word.',
+                          scale,
+                          stepFontSize,
+                          iconSize,
+                        ),
+                        _step(
+                          Icons.timer,
+                          'Solve faster to earn more coins!',
+                          scale,
+                          stepFontSize,
+                          iconSize,
+                        ),
+                        _step(
+                          Icons.loop,
+                          'Cannot cross your own path.',
+                          scale,
+                          stepFontSize,
+                          iconSize,
+                        ),
                       ],
                     ),
                   ),
@@ -157,7 +196,7 @@ class InstructionsDialog extends StatelessWidget {
                       child: Text(
                         "Got it!",
                         style: GoogleFonts.permanentMarker(
-                          fontSize: 20.0 * scale,
+                          fontSize: buttonFontSize,
                           color: Colors.white,
                           letterSpacing: 1.2,
                         ),
@@ -173,7 +212,13 @@ class InstructionsDialog extends StatelessWidget {
     );
   }
 
-  Widget _step(IconData icon, String text, double scale) {
+  Widget _step(
+    IconData icon,
+    String text,
+    double scale,
+    double fontSize,
+    double iconSize,
+  ) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.0 * scale),
       child: Row(
@@ -188,14 +233,14 @@ class InstructionsDialog extends StatelessWidget {
                 width: 2.0 * scale,
               ),
             ),
-            child: Icon(icon, color: const Color(0xFFFF6B00), size: 24.0 * scale),
+            child: Icon(icon, color: const Color(0xFFFF6B00), size: iconSize),
           ),
           SizedBox(width: 12.0 * scale),
           Expanded(
             child: Text(
               text,
               style: GoogleFonts.comicNeue(
-                fontSize: 16.0 * scale,
+                fontSize: fontSize,
                 fontWeight: FontWeight.bold,
                 color: const Color(0xFFFF6B00),
               ),

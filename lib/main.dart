@@ -19,8 +19,9 @@ void main() async {
   // This global configuration applies to ALL ads (banner, interstitial, rewarded)
   // in both home screen and gameplay screen automatically
   final configuration = RequestConfiguration(
-    tagForChildDirectedTreatment: TagForChildDirectedTreatment.yes,
-    tagForUnderAgeOfConsent: TagForUnderAgeOfConsent.yes,
+    tagForChildDirectedTreatment: TagForChildDirectedTreatment.no,
+    tagForUnderAgeOfConsent: TagForUnderAgeOfConsent.no,
+    maxAdContentRating: MaxAdContentRating.pg,
   );
   MobileAds.instance.updateRequestConfiguration(configuration);
 

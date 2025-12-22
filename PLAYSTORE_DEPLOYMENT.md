@@ -98,11 +98,44 @@ Before uploading to Play Store, ensure:
 - [ ] **Version Number**: Update version in `pubspec.yaml` (format: `major.minor.patch+buildNumber`)
 - [ ] **App Icons**: Verify app icons are generated (run `flutter pub run flutter_launcher_icons`)
 - [ ] **AdMob IDs**: Verify production AdMob IDs are set in `lib/src/features/ads/ad_manager.dart`
+- [ ] **App-ads.txt**: Ensure your Developer Website hosts an `app-ads.txt` file (see below)
 - [ ] **Privacy Policy**: Ensure privacy policy URL is accessible (required for apps with ads)
 - [ ] **Test Build**: Test the release build thoroughly on a real device
 - [ ] **Screenshots**: Prepare screenshots for Play Store listing (required sizes vary by device type)
 - [ ] **App Description**: Prepare short and full descriptions for Play Store
 - [ ] **Content Rating**: Complete content rating questionnaire in Play Console
+
+## 🌐 AdMob & App-ads.txt (Critical for Revenue)
+
+Even if your app is **Android-only**, AdMob requires you to list a "Developer Website" in your Google Play listing to verify ownership.
+
+1.  **The Requirement**: AdMob crawls the website listed in your Play Console to find `https://your-website.com/app-ads.txt`.
+2.  **The File**: A file containing your unique publisher ID (already created in `web/app-ads.txt`).
+
+### How to "Host" This File (Free Options)
+
+You don't need a complex website. You just need a public URL.
+
+**Option A: GitHub Pages (Easiest if using GitHub)**
+1.  Push your code to GitHub.
+2.  Go to Repo Settings > Pages.
+3.  Source: Choose `deploy from a branch`.
+4.  Folder: Select `/root` (if you put the file there) or upload the `web` folder contents to a specialized `gh-pages` branch.
+5.  **Result**: `https://username.github.io/worbix/app-ads.txt`
+
+**Option B: Firebase Hosting (Recommended)**
+1.  Run `npm install -g firebase-tools`
+2.  Run `firebase login` then `firebase init hosting` (Choose `build/web` as public dir).
+3.  Run `flutter build web --release`.
+4.  Run `firebase deploy`.
+5.  **Result**: `https://your-project.web.app/app-ads.txt`
+
+**Option C: Google Sites (No Code)**
+1.  Create a blank site on [Google Sites](https://sites.google.com).
+2.  Add a text box or embed with the content of `app-ads.txt`.
+3.  (Note: Google Sites is trickier for the exact `.txt` URL, Option A or B is better).
+
+**Final Step**: Enter this URL in Google Play Console > Store Listing > Contact Details > Website.
 
 ## 🎯 Play Store Console Setup
 

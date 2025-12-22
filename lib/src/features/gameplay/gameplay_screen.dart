@@ -219,376 +219,503 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
       context: context,
       barrierDismissible: false,
       barrierColor: Colors.black.withOpacity(0.5),
-      builder: (_) => Dialog(
-        backgroundColor: Colors.transparent,
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: screenWidth * 0.9,
-            maxHeight: screenSize.height * 0.85,
-          ),
-          child: SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.all(outerPadding),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color(0xFFFFF8E1), // Cream
-                    Color(0xFFFFE0B2), // Light orange
-                    Color(0xFFFFCC80), // Orange
-                  ],
-                ),
-                borderRadius: BorderRadius.circular(30),
-                border: Border.all(
-                  color: const Color(0xFFFF6B00), // Dark orange for stroke
-                  width: borderWidth,
-                ),
+      builder: (_) => Consumer(
+        builder: (context, ref, child) {
+          final progress = ref.watch(userProgressProvider);
+          // Re-evaluate unlock conditions continuously
+          final currentCoins = progress.totalCoins;
+          final canUnlock = currentCoins >= cost;
+          final nextLevelUnlocked = progress.maxLevelUnlocked >= nextId;
+
+          return Dialog(
+            backgroundColor: Colors.transparent,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: screenWidth * 0.9,
+                maxHeight: screenSize.height * 0.85,
               ),
-              child: Container(
-                padding: EdgeInsets.all(innerPadding),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      Color(0xFFFFF8E1), // Cream
-                      Color(0xFFFFE0B2), // Light orange
-                      Color(0xFFFFCC80), // Orange
-                    ],
+              child: SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.all(outerPadding),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xFFFFF8E1), // Cream
+                        Color(0xFFFFE0B2), // Light orange
+                        Color(0xFFFFCC80), // Orange
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(30),
+                    border: Border.all(
+                      color: const Color(0xFFFF6B00), // Dark orange for stroke
+                      width: borderWidth,
+                    ),
                   ),
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // 3D Title with star icon
-                    Container(
-                      constraints: const BoxConstraints(
-                        maxWidth: double.infinity,
-                      ),
-                      padding: EdgeInsets.symmetric(
-                        vertical: isSmallScreen ? 8.0 : 12.0,
-                        horizontal: isSmallScreen ? 12.0 : 16.0,
-                      ),
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Color(0xFFFFB74D), // Orange
-                            Color(0xFFFF9800), // Darker orange
-                          ],
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: const Color(0xFFFF6B00),
-                          width: borderWidth,
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(isSmallScreen ? 6.0 : 8.0),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFFE0B2),
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: const Color(0xFFFF6B00),
-                                width: smallBorderWidth,
-                              ),
-                            ),
-                            child: Icon(
-                              Icons.star,
-                              color: const Color(0xFFFF6B00),
-                              size: iconSize,
-                            ),
-                          ),
-                          SizedBox(width: isSmallScreen ? 6.0 : 8.0),
-                          Flexible(
-                            child: FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child: Text(
-                                "Level Complete!",
-                                style: GoogleFonts.bangers(
-                                  fontSize: titleFontSize,
-                                  color: Colors.white,
-                                  letterSpacing: 1.0,
-                                  shadows: [
-                                    Shadow(
-                                      color: const Color(
-                                        0xFFFF6B00,
-                                      ).withOpacity(0.5),
-                                      offset: const Offset(2, 2),
-                                      blurRadius: 0,
-                                    ),
-                                  ],
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
+                  child: Container(
+                    padding: EdgeInsets.all(innerPadding),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color(0xFFFFF8E1), // Cream
+                          Color(0xFFFFE0B2), // Light orange
+                          Color(0xFFFFCC80), // Orange
                         ],
                       ),
+                      borderRadius: BorderRadius.circular(24),
                     ),
-                    SizedBox(height: spacing),
-                    // Content with 3D effect
-                    Container(
-                      padding: EdgeInsets.all(contentPadding),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFF8E1),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: const Color(0xFFFFB74D),
-                          width: borderWidth,
-                        ),
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              "You found the word!",
-                              style: GoogleFonts.comicNeue(
-                                fontSize: bodyFontSize,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xFFFF6B00),
-                                height: 1.4,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // 3D Title with star icon
+                        Container(
+                          constraints: const BoxConstraints(
+                            maxWidth: double.infinity,
                           ),
-                          SizedBox(height: isSmallScreen ? 12.0 : 16.0),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              vertical: isSmallScreen ? 8.0 : 12.0,
-                              horizontal: isSmallScreen ? 12.0 : 16.0,
-                            ),
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                colors: [Color(0xFFFFE0B2), Color(0xFFFFCC80)],
-                              ),
-                              borderRadius: BorderRadius.circular(15),
-                              border: Border.all(
-                                color: const Color(0xFFFFB74D),
-                                width: smallBorderWidth,
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.all(
-                                    isSmallScreen ? 4.0 : 6.0,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFFFD54F),
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: const Color(0xFFFF6B00),
-                                      width: 2,
-                                    ),
-                                  ),
-                                  child: Icon(
-                                    Icons.monetization_on,
-                                    color: const Color(0xFFFF6B00),
-                                    size: smallIconSize,
-                                  ),
-                                ),
-                                SizedBox(width: isSmallScreen ? 6.0 : 8.0),
-                                Flexible(
-                                  child: FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      "Coins: ${state.currentCoins}",
-                                      style: GoogleFonts.nunito(
-                                        fontSize: infoFontSize,
-                                        fontWeight: FontWeight.bold,
-                                        color: const Color(0xFFFF6B00),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                          padding: EdgeInsets.symmetric(
+                            vertical: isSmallScreen ? 8.0 : 12.0,
+                            horizontal: isSmallScreen ? 12.0 : 16.0,
+                          ),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                Color(0xFFFFB74D), // Orange
+                                Color(0xFFFF9800), // Darker orange
                               ],
                             ),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: const Color(0xFFFF6B00),
+                              width: borderWidth,
+                            ),
                           ),
-                          SizedBox(height: isSmallScreen ? 12.0 : 16.0),
-                          if (finalIsUnlocked)
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                vertical: isSmallScreen ? 8.0 : 12.0,
-                                horizontal: isSmallScreen ? 12.0 : 16.0,
-                              ),
-                              decoration: BoxDecoration(
-                                gradient: const LinearGradient(
-                                  colors: [
-                                    Color(0xFFC8E6C9),
-                                    Color(0xFFA5D6A7),
-                                  ],
-                                ),
-                                borderRadius: BorderRadius.circular(15),
-                                border: Border.all(
-                                  color: Colors.green,
-                                  width: smallBorderWidth,
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.lock_open,
-                                    color: Colors.green,
-                                    size: smallIconSize,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(isSmallScreen ? 6.0 : 8.0),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFFE0B2),
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: const Color(0xFFFF6B00),
+                                    width: smallBorderWidth,
                                   ),
-                                  SizedBox(width: isSmallScreen ? 6.0 : 8.0),
-                                  Flexible(
-                                    child: FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      child: Text(
-                                        "Next Level Unlocked!",
-                                        style: GoogleFonts.nunito(
-                                          fontSize: infoFontSize,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.green.shade800,
+                                ),
+                                child: Icon(
+                                  Icons.star,
+                                  color: const Color(0xFFFF6B00),
+                                  size: iconSize,
+                                ),
+                              ),
+                              SizedBox(width: isSmallScreen ? 6.0 : 8.0),
+                              Flexible(
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    "Level Complete!",
+                                    style: GoogleFonts.bangers(
+                                      fontSize: titleFontSize,
+                                      color: Colors.white,
+                                      letterSpacing: 1.0,
+                                      shadows: [
+                                        Shadow(
+                                          color: const Color(
+                                            0xFFFF6B00,
+                                          ).withOpacity(0.5),
+                                          offset: const Offset(2, 2),
+                                          blurRadius: 0,
+                                        ),
+                                      ],
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: spacing),
+                        // Content with 3D effect
+                        Container(
+                          padding: EdgeInsets.all(contentPadding),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFF8E1),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: const Color(0xFFFFB74D),
+                              width: borderWidth,
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  "You found the word!",
+                                  style: GoogleFonts.comicNeue(
+                                    fontSize: bodyFontSize,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0xFFFF6B00),
+                                    height: 1.4,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              SizedBox(height: isSmallScreen ? 12.0 : 16.0),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: isSmallScreen ? 8.0 : 12.0,
+                                  horizontal: isSmallScreen ? 12.0 : 16.0,
+                                ),
+                                decoration: BoxDecoration(
+                                  gradient: const LinearGradient(
+                                    colors: [Color(0xFFFFE0B2), Color(0xFFFFCC80)],
+                                  ),
+                                  borderRadius: BorderRadius.circular(15),
+                                  border: Border.all(
+                                    color: const Color(0xFFFFB74D),
+                                    width: smallBorderWidth,
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(
+                                        isSmallScreen ? 4.0 : 6.0,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFFFD54F),
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: const Color(0xFFFF6B00),
+                                          width: 2,
+                                        ),
+                                      ),
+                                      child: Icon(
+                                        Icons.monetization_on,
+                                        color: const Color(0xFFFF6B00),
+                                        size: smallIconSize,
+                                      ),
+                                    ),
+                                    SizedBox(width: isSmallScreen ? 6.0 : 8.0),
+                                    Flexible(
+                                      child: FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        child: Text(
+                                          "Coins: $currentCoins",
+                                          style: GoogleFonts.nunito(
+                                            fontSize: infoFontSize,
+                                            fontWeight: FontWeight.bold,
+                                            color: const Color(0xFFFF6B00),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          else
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                vertical: isSmallScreen ? 8.0 : 12.0,
-                                horizontal: isSmallScreen ? 12.0 : 16.0,
-                              ),
-                              decoration: BoxDecoration(
-                                gradient: const LinearGradient(
-                                  colors: [
-                                    Color(0xFFFFCDD2),
-                                    Color(0xFFFFB3BA),
                                   ],
                                 ),
-                                borderRadius: BorderRadius.circular(15),
-                                border: Border.all(
-                                  color: Colors.red,
-                                  width: smallBorderWidth,
-                                ),
                               ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Row(
+                              SizedBox(height: isSmallScreen ? 12.0 : 16.0),
+                              if (nextLevelUnlocked || canUnlock)
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: isSmallScreen ? 8.0 : 12.0,
+                                    horizontal: isSmallScreen ? 12.0 : 16.0,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    gradient: const LinearGradient(
+                                      colors: [
+                                        Color(0xFFC8E6C9),
+                                        Color(0xFFA5D6A7),
+                                      ],
+                                    ),
+                                    borderRadius: BorderRadius.circular(15),
+                                    border: Border.all(
+                                      color: Colors.green,
+                                      width: smallBorderWidth,
+                                    ),
+                                  ),
+                                  child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Icon(
-                                        Icons.lock,
-                                        color: Colors.red,
+                                        Icons.lock_open,
+                                        color: Colors.green,
                                         size: smallIconSize,
                                       ),
-                                      SizedBox(
-                                        width: isSmallScreen ? 6.0 : 8.0,
-                                      ),
+                                      SizedBox(width: isSmallScreen ? 6.0 : 8.0),
                                       Flexible(
                                         child: FittedBox(
                                           fit: BoxFit.scaleDown,
                                           child: Text(
-                                            "Next Level Locked",
+                                            "Next Level Unlocked!",
                                             style: GoogleFonts.nunito(
                                               fontSize: infoFontSize,
                                               fontWeight: FontWeight.bold,
-                                              color: Colors.red.shade800,
+                                              color: Colors.green.shade800,
                                             ),
                                           ),
                                         ),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: isSmallScreen ? 6.0 : 8.0),
-                                  FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      _getLockedMessage(
-                                        hasEnoughCoins: hasEnoughCoins,
-                                        hasEnoughQuestions: hasEnoughQuestions,
-                                        cost: cost,
-                                        totalCoins: finalProgress.totalCoins,
-                                        completedCount: completedCount,
-                                      ),
-                                      style: GoogleFonts.comicNeue(
-                                        fontSize: smallFontSize,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.red.shade800,
-                                      ),
-                                      textAlign: TextAlign.center,
+                                )
+                              else
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: isSmallScreen ? 8.0 : 12.0,
+                                    horizontal: isSmallScreen ? 12.0 : 16.0,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    gradient: const LinearGradient(
+                                      colors: [
+                                        Color(0xFFFFCDD2),
+                                        Color(0xFFFFB3BA),
+                                      ],
+                                    ),
+                                    borderRadius: BorderRadius.circular(15),
+                                    border: Border.all(
+                                      color: Colors.red,
+                                      width: smallBorderWidth,
                                     ),
                                   ),
-                                ],
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.lock,
+                                            color: Colors.red,
+                                            size: smallIconSize,
+                                          ),
+                                          SizedBox(
+                                            width: isSmallScreen ? 6.0 : 8.0,
+                                          ),
+                                          Flexible(
+                                            child: FittedBox(
+                                              fit: BoxFit.scaleDown,
+                                              child: Text(
+                                                "Next Level Locked",
+                                                style: GoogleFonts.nunito(
+                                                  fontSize: infoFontSize,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.red.shade800,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: isSmallScreen ? 6.0 : 8.0),
+                                      FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        child: Text(
+                                          _getLockedMessage(
+                                            hasEnoughCoins: canUnlock,
+                                            hasEnoughQuestions: hasEnoughQuestions,
+                                            cost: cost,
+                                            totalCoins: currentCoins,
+                                            completedCount: completedCount,
+                                          ),
+                                          style: GoogleFonts.comicNeue(
+                                            fontSize: smallFontSize,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.red.shade800,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: spacing),
+                        
+                        // Action Buttons Logic
+                        if (!nextLevelUnlocked && !canUnlock) ...[
+                          // Option 1: Watch Ad
+                          Container(
+                            height: buttonHeight * 0.9,
+                            margin: EdgeInsets.only(bottom: 12.0 * scale),
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [Color(0xFF66BB6A), Color(0xFF43A047)], // Green
                               ),
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: const Color(0xFF2E7D32),
+                                width: borderWidth,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  offset: const Offset(0, 4),
+                                  blurRadius: 4,
+                                ),
+                              ],
                             ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: spacing),
-                    // Continue button with 3D effect
-                    Container(
-                      height: buttonHeight,
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [Color(0xFFFFB74D), Color(0xFFFF9800)],
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: const Color(0xFFFF6B00),
-                          width: borderWidth,
-                        ),
-                      ),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.of(context).pop();
-                            // Show ad after level completion, then go back to home
-                            adService.showInterstitialAd(
-                              onAdDismissed: () {
-                                if (context.mounted) {
-                                  Navigator.of(context).pop();
-                                }
-                              },
-                            );
-                          },
-                          borderRadius: BorderRadius.circular(20),
-                          child: Center(
-                            child: FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child: Text(
-                                "Continue",
-                                style: GoogleFonts.permanentMarker(
-                                  fontSize: buttonFontSize,
-                                  color: Colors.white,
-                                  letterSpacing: 1.2,
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: () {
+                                  adService.showRewardedAd(
+                                    (reward) {
+                                      // Add 10 coins as reward
+                                      ref.read(userProgressProvider.notifier).addCoins(10);
+                                      _showFloatingSnackBar(
+                                        "Earned +10 Coins!",
+                                        icon: Icons.monetization_on,
+                                        backgroundColor: Colors.green,
+                                      );
+                                    },
+                                    onAdNotReady: () {
+                                      _showFloatingSnackBar(
+                                        "Ad not ready. Try again!",
+                                        icon: Icons.error_outline,
+                                        backgroundColor: Colors.red,
+                                      );
+                                    },
+                                  );
+                                },
+                                borderRadius: BorderRadius.circular(20),
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(Icons.play_circle_filled, color: Colors.white),
+                                      SizedBox(width: 8.0 * scale),
+                                      Flexible( // Added Flexible to prevent overflow
+                                        child: FittedBox(
+                                          fit: BoxFit.scaleDown,
+                                          child: Text(
+                                            "Watch Ad (+10 Coins)",
+                                            style: GoogleFonts.permanentMarker(
+                                              fontSize: buttonFontSize * 0.9,
+                                              color: Colors.white,
+                                              letterSpacing: 1.0,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ),
+                          
+                          // Option 2: Replay Previous
+                          Container(
+                            height: buttonHeight * 0.9,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [Color(0xFF42A5F5), Color(0xFF1E88E5)], // Blue
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: const Color(0xFF1565C0),
+                                width: borderWidth,
+                              ),
+                            ),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.of(context).pop(); // Just close dialog
+                                  // User is back at gameplay, can open menu to replay
+                                  // Ideally, we could show the replay menu directly
+                                },
+                                borderRadius: BorderRadius.circular(20),
+                                child: Center(
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      "Replay Previous",
+                                      style: GoogleFonts.permanentMarker(
+                                        fontSize: buttonFontSize * 0.9,
+                                        color: Colors.white,
+                                        letterSpacing: 1.0,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ] else
+                          // Standard Continue Button (Shown if unlocked or enough coins)
+                          Container(
+                            height: buttonHeight,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [Color(0xFFFFB74D), Color(0xFFFF9800)],
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: const Color(0xFFFF6B00),
+                                width: borderWidth,
+                              ),
+                            ),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.of(context).pop();
+                                  // Show ad after level completion, then go back to home
+                                  adService.showInterstitialAd(
+                                    onAdDismissed: () {
+                                      if (context.mounted) {
+                                        Navigator.of(context).pop();
+                                      }
+                                    },
+                                  );
+                                },
+                                borderRadius: BorderRadius.circular(20),
+                                child: Center(
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      "Continue",
+                                      style: GoogleFonts.permanentMarker(
+                                        fontSize: buttonFontSize,
+                                        color: Colors.white,
+                                        letterSpacing: 1.2,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ).animate().scale(duration: 300.ms, curve: Curves.elasticOut),
     );
   }
@@ -728,8 +855,15 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                   final scale = size.shortestSide / 375.0;
                   
                   return Container(
-                    padding: EdgeInsets.all(8.0 * scale),
-                    height: size.height * 0.8, // Limit height
+                    padding: EdgeInsets.only(
+                      left: 8.0 * scale,
+                      right: 8.0 * scale,
+                      top: 8.0 * scale,
+                      bottom: MediaQuery.of(context).padding.bottom + 8.0 * scale,
+                    ),
+                    constraints: BoxConstraints(
+                      maxHeight: size.height * 0.8, // Limit max height
+                    ),
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
                         begin: Alignment.topLeft,
@@ -749,6 +883,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                       ),
                     ),
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         // Drag handle
                         Container(
@@ -760,7 +895,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                             borderRadius: BorderRadius.circular(2 * scale),
                           ),
                         ),
-                        Expanded(
+                        Flexible(
                           child: SingleChildScrollView(
                             child: Container(
                                 padding: EdgeInsets.all(24.0 * scale),
