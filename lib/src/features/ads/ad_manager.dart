@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AdManager {
-  // Test Ad Unit IDs (for development) r
+class AdManager extends ChangeNotifier {
+  // Test Ad Unit IDs (for development)
   static const String testBannerAdUnitId =
       'ca-app-pub-3940256099942544/6300978111';
   static const String testInterstitialAdUnitId =
@@ -20,7 +20,8 @@ class AdManager {
       'ca-app-pub-9698718721404755/8520488387'; // Hint rewarded ad
 
   // Use production ads (test ads removed for production)
-  static bool get useTestAds => false;
+  // Use kDebugMode to automatically switch
+  static bool get useTestAds => kDebugMode;
 
   String get _bannerAdUnitId =>
       useTestAds ? testBannerAdUnitId : bannerAdUnitId;
@@ -33,31 +34,46 @@ class AdManager {
   InterstitialAd? _interstitialAd;
   RewardedAd? _rewardedAd;
 
+  bool _isBannerAdLoaded = false;
   bool _isRewardedAdLoading = false;
   bool _isInterstitialAdLoading = false;
 
   // Banner
   Future<void> loadBanner() async {
-    _bannerAd = BannerAd(
+    // Dispose previous if any
+    _bannerAd?.dispose();
+    _bannerAd = null;
+    _isBannerAdLoaded = false;
+    notifyListeners();
+
+    BannerAd(
       adUnitId: _bannerAdUnitId,
       size: AdSize.banner,
       request: const AdRequest(),
       listener: BannerAdListener(
-        onAdLoaded: (_) => debugPrint('Banner loaded'),
+        onAdLoaded: (ad) {
+          debugPrint('Banner loaded');
+          _bannerAd = ad as BannerAd;
+          _isBannerAdLoaded = true;
+          notifyListeners();
+        },
         onAdFailedToLoad: (ad, error) {
           ad.dispose();
+          _bannerAd = null;
+          _isBannerAdLoaded = false;
           debugPrint('Banner failed to load: $error');
-          // Retry after delay if using production ads
-          if (!useTestAds && error.code == 3) {
-            Future.delayed(const Duration(seconds: 5), () => loadBanner());
-          }
+          notifyListeners();
+          
+          // Retry logic
+           if (!useTestAds && error.code == 3) {
+             Future.delayed(const Duration(seconds: 5), () => loadBanner());
+           }
         },
       ),
-    );
-    await _bannerAd?.load();
+    ).load();
   }
 
-  BannerAd? get bannerAd => _bannerAd;
+  BannerAd? get bannerAd => _isBannerAdLoaded ? _bannerAd : null;
 
   // Interstitial
   void loadInterstitial() {
@@ -76,7 +92,6 @@ class AdManager {
         onAdFailedToLoad: (error) {
           _isInterstitialAdLoading = false;
           debugPrint('Interstitial failed: $error');
-          // Retry after delay if using production ads
           if (!useTestAds && error.code == 3) {
             Future.delayed(
               const Duration(seconds: 5),
@@ -88,22 +103,25 @@ class AdManager {
     );
   }
 
-  void showInterstitial() {
+  void showInterstitial({VoidCallback? onAdDismissed}) {
     if (_interstitialAd != null) {
       _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
         onAdDismissedFullScreenContent: (ad) {
           ad.dispose();
           loadInterstitial(); // Reload next
+          onAdDismissed?.call();
         },
         onAdFailedToShowFullScreenContent: (ad, err) {
           ad.dispose();
           loadInterstitial();
+          onAdDismissed?.call();
         },
       );
       _interstitialAd!.show();
       _interstitialAd = null;
     } else {
       loadInterstitial(); // Try load for next time
+      onAdDismissed?.call();
     }
   }
 
@@ -126,8 +144,6 @@ class AdManager {
           debugPrint(
             'Rewarded failed: $error - Code: ${error.code}, Message: ${error.message}',
           );
-          // Retry after delay for network errors or other retryable errors
-          // Error code 3 = ERROR_CODE_NO_FILL, but we should retry for other errors too
           if (error.code == 3 || error.code == 0 || error.code == 2) {
             Future.delayed(const Duration(seconds: 3), () => loadRewarded());
           }
@@ -142,9 +158,7 @@ class AdManager {
     Function()? onAdNotReady,
   }) {
     if (_rewardedAd == null) {
-      if (onAdNotReady != null) {
-        onAdNotReady();
-      }
+      onAdNotReady?.call();
       return;
     }
 
@@ -152,19 +166,13 @@ class AdManager {
       onAdDismissedFullScreenContent: (ad) {
         ad.dispose();
         loadRewarded();
-        // When ad is dismissed, user watched it - trigger callback
-        if (onAdDismissed != null) {
-          onAdDismissed();
-        }
+        onAdDismissed?.call();
       },
       onAdFailedToShowFullScreenContent: (ad, err) {
         ad.dispose();
         loadRewarded();
         debugPrint('Rewarded ad failed to show: $err');
-        // If ad fails to show, call the fallback
-        if (onAdNotReady != null) {
-          onAdNotReady();
-        }
+        onAdNotReady?.call();
       },
     );
     _rewardedAd!.show(
@@ -187,14 +195,11 @@ class AdManager {
         onAdNotReady: onAdNotReady,
       );
     } else {
-      // If ad is loading, wait a bit and check again
       if (_isRewardedAdLoading) {
         debugPrint('Rewarded ad is loading, waiting...');
-        // Wait up to 5 seconds for the ad to load (increased from 3 seconds)
         for (int i = 0; i < 10; i++) {
           await Future.delayed(const Duration(milliseconds: 500));
           if (_rewardedAd != null) {
-            // Ad loaded, show it
             _showRewardedAd(
               onReward,
               onAdDismissed: onAdDismissed,
@@ -205,10 +210,8 @@ class AdManager {
         }
       }
 
-      // Try to load if not already loading
       if (!_isRewardedAdLoading) {
         loadRewarded();
-        // Wait a bit more after triggering load
         await Future.delayed(const Duration(seconds: 2));
         if (_rewardedAd != null) {
           _showRewardedAd(
@@ -221,16 +224,14 @@ class AdManager {
       }
 
       debugPrint('Rewarded ad not ready after waiting');
-      // If ad is not ready, call the fallback callback
-      if (onAdNotReady != null) {
-        onAdNotReady();
-      }
+      onAdNotReady?.call();
     }
   }
 }
 
-final adManagerProvider = Provider<AdManager>((ref) {
+final adManagerProvider = ChangeNotifierProvider<AdManager>((ref) {
   final manager = AdManager();
+  // Don't auto-load here if we want to control it better, but initializing is fine
   manager.loadBanner();
   manager.loadInterstitial();
   manager.loadRewarded();

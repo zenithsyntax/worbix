@@ -169,88 +169,92 @@ class _QuestionCompletionDialogState extends State<QuestionCompletionDialog> {
                     ),
                     const SizedBox(height: 24),
                     // Content with 3D effect
-                    Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFF8E1),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: const Color(0xFFFFB74D),
-                          width: 4,
-                        ),
-                      ),
-                      child: Column(
-                        children: [
-                          Text(
-                            "Question ${widget.questionNumber} Completed!",
-                            style: GoogleFonts.comicNeue(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0xFFFF6B00),
-                              height: 1.4,
+                    Flexible(
+                      child: SingleChildScrollView(
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFF8E1),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: const Color(0xFFFFB74D),
+                              width: 4,
                             ),
-                            textAlign: TextAlign.center,
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                            "You solved the puzzle!",
-                            style: GoogleFonts.comicNeue(
-                              fontSize: 16,
-                              color: const Color(0xFFFF6B00),
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 16),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 12,
-                              horizontal: 16,
-                            ),
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                colors: [Color(0xFFFFE0B2), Color(0xFFFFCC80)],
+                          child: Column(
+                            children: [
+                              Text(
+                                "Question ${widget.questionNumber} Completed!",
+                                style: GoogleFonts.comicNeue(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFFFF6B00),
+                                  height: 1.4,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
-                              borderRadius: BorderRadius.circular(15),
-                              border: Border.all(
-                                color: const Color(0xFFFFB74D),
-                                width: 3,
+                              const SizedBox(height: 8),
+                              Text(
+                                "You solved the puzzle!",
+                                style: GoogleFonts.comicNeue(
+                                  fontSize: 16,
+                                  color: const Color(0xFFFF6B00),
+                                ),
+                                textAlign: TextAlign.center,
                               ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(6),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFFFD54F),
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: const Color(0xFFFF6B00),
-                                      width: 2,
+                              const SizedBox(height: 16),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                  horizontal: 16,
+                                ),
+                                decoration: BoxDecoration(
+                                  gradient: const LinearGradient(
+                                    colors: [Color(0xFFFFE0B2), Color(0xFFFFCC80)],
+                                  ),
+                                  borderRadius: BorderRadius.circular(15),
+                                  border: Border.all(
+                                    color: const Color(0xFFFFB74D),
+                                    width: 3,
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(6),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFFFD54F),
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: const Color(0xFFFF6B00),
+                                          width: 2,
+                                        ),
+                                      ),
+                                      child: const Icon(
+                                        Icons.monetization_on,
+                                        color: Color(0xFFFF6B00),
+                                        size: 24,
+                                      ),
                                     ),
-                                  ),
-                                  child: const Icon(
-                                    Icons.monetization_on,
-                                    color: Color(0xFFFF6B00),
-                                    size: 24,
-                                  ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      "+${widget.coinsEarned}",
+                                      style: GoogleFonts.nunito(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                        color: const Color(0xFFFF6B00),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  "+${widget.coinsEarned}",
-                                  style: GoogleFonts.nunito(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                    color: const Color(0xFFFF6B00),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ).animate().scale(
-                            duration: 500.ms,
-                            curve: Curves.elasticOut,
+                              ).animate().scale(
+                                duration: 500.ms,
+                                curve: Curves.elasticOut,
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                     ),
                     const SizedBox(height: 24),

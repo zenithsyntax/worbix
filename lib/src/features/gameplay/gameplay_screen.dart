@@ -12,6 +12,7 @@ import '../ads/ad_manager.dart';
 import '../ads/ad_service.dart';
 import '../store/user_progress_provider.dart';
 import '../levels/level_repository.dart';
+import '../levels/level_model.dart';
 import 'widgets/question_completion_dialog.dart';
 import 'widgets/instructions_dialog.dart';
 
@@ -182,34 +183,37 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
 
     if (!mounted) return;
 
-    final screenSize = MediaQuery.of(context).size;
-    final screenWidth = screenSize.width;
-    final isTablet = screenWidth > 600;
-    final isSmallScreen = screenWidth < 360;
+    final size = MediaQuery.of(context).size;
+    final scale = size.shortestSide / 375.0; // Baseline: 375dp (Standard Phone)
+    
+    // Compatibility aliases for existing code
+    final screenSize = size;
+    final screenWidth = size.width;
+    final isSmallScreen = size.width < 360 || size.height < 600;
 
     // Responsive font sizes
-    final titleFontSize = isTablet ? 28.0 : (isSmallScreen ? 18.0 : 22.0);
-    final bodyFontSize = isTablet ? 22.0 : (isSmallScreen ? 16.0 : 20.0);
-    final infoFontSize = isTablet ? 19.0 : (isSmallScreen ? 15.0 : 17.0);
-    final smallFontSize = isTablet ? 16.0 : (isSmallScreen ? 12.0 : 14.0);
-    final buttonFontSize = isTablet ? 24.0 : (isSmallScreen ? 18.0 : 20.0);
+    final titleFontSize = 24.0 * scale;
+    final bodyFontSize = 20.0 * scale;
+    final infoFontSize = 17.0 * scale;
+    final smallFontSize = 14.0 * scale;
+    final buttonFontSize = 20.0 * scale;
 
     // Responsive padding
-    final outerPadding = isTablet ? 12.0 : (isSmallScreen ? 4.0 : 8.0);
-    final innerPadding = isTablet ? 32.0 : (isSmallScreen ? 16.0 : 24.0);
-    final contentPadding = isTablet ? 24.0 : (isSmallScreen ? 12.0 : 20.0);
-    final spacing = isTablet ? 32.0 : (isSmallScreen ? 16.0 : 24.0);
+    final outerPadding = 12.0 * scale;
+    final innerPadding = 24.0 * scale;
+    final contentPadding = 20.0 * scale;
+    final spacing = 24.0 * scale;
 
     // Responsive icon sizes
-    final iconSize = isTablet ? 32.0 : (isSmallScreen ? 20.0 : 28.0);
-    final smallIconSize = isTablet ? 28.0 : (isSmallScreen ? 20.0 : 24.0);
+    final iconSize = 32.0 * scale;
+    final smallIconSize = 24.0 * scale;
 
     // Responsive border width
-    final borderWidth = isTablet ? 5.0 : (isSmallScreen ? 3.0 : 4.0);
-    final smallBorderWidth = isTablet ? 4.0 : (isSmallScreen ? 2.0 : 3.0);
+    final borderWidth = 4.0 * scale;
+    final smallBorderWidth = 2.5 * scale;
 
     // Responsive button height
-    final buttonHeight = isTablet ? 70.0 : (isSmallScreen ? 50.0 : 60.0);
+    final buttonHeight = 60.0 * scale;
 
     showDialog(
       context: context,
@@ -677,6 +681,12 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
 
     if (state.level == null) return const Scaffold();
 
+    final screenSize = MediaQuery.of(context).size;
+    final screenWidth = screenSize.width;
+    final isTablet = screenWidth > 600;
+    final isSmallScreen = screenWidth < 360 || screenSize.height < 600;
+    final buttonHeight = isTablet ? 70.0 : (isSmallScreen ? 50.0 : 60.0);
+
     final q = state.level!.questions[state.currentQuestionIndex];
 
     return Scaffold(
@@ -712,28 +722,14 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
               showModalBottomSheet(
                 context: context,
                 backgroundColor: Colors.transparent,
-                builder: (_) => Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Color(0xFFFFF8E1),
-                        Color(0xFFFFE0B2),
-                        Color(0xFFFFCC80),
-                      ],
-                    ),
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(30),
-                    ),
-                    border: Border.all(
-                      color: const Color(0xFFFF6B00),
-                      width: 6,
-                    ),
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.all(24),
+                isScrollControlled: true, // Allow it to take required height
+                builder: (context) {
+                  final size = MediaQuery.of(context).size;
+                  final scale = size.shortestSide / 375.0;
+                  
+                  return Container(
+                    padding: EdgeInsets.all(8.0 * scale),
+                    height: size.height * 0.8, // Limit height
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
                         begin: Alignment.topLeft,
@@ -744,49 +740,83 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                           Color(0xFFFFCC80),
                         ],
                       ),
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(24),
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(30.0 * scale),
+                      ),
+                      border: Border.all(
+                        color: const Color(0xFFFF6B00),
+                        width: 6.0 * scale,
                       ),
                     ),
                     child: Column(
-                      mainAxisSize: MainAxisSize.min,
                       children: [
+                        // Drag handle
                         Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 12,
-                            horizontal: 16,
-                          ),
+                          width: 40 * scale,
+                          height: 4 * scale,
+                          margin: EdgeInsets.only(bottom: 16 * scale),
                           decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [Color(0xFFFFB74D), Color(0xFFFF9800)],
-                            ),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: const Color(0xFFFF6B00),
-                              width: 4,
-                            ),
-                          ),
-                          child: Text(
-                            "Menu",
-                            style: GoogleFonts.bangers(
-                              fontSize: 24,
-                              color: Colors.white,
-                              letterSpacing: 1.5,
-                              shadows: [
-                                Shadow(
-                                  color: const Color(
-                                    0xFFFF6B00,
-                                  ).withOpacity(0.5),
-                                  offset: const Offset(2, 2),
-                                  blurRadius: 0,
-                                ),
-                              ],
-                            ),
+                            color: const Color(0xFFFF6B00).withOpacity(0.4),
+                            borderRadius: BorderRadius.circular(2 * scale),
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: Container(
+                                padding: EdgeInsets.all(24.0 * scale),
+                                decoration: BoxDecoration(
+                                  gradient: const LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      Color(0xFFFFF8E1),
+                                      Color(0xFFFFE0B2),
+                                      Color(0xFFFFCC80),
+                                    ],
+                                  ),
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(24.0 * scale),
+                                  ),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 12.0 * scale,
+                                        horizontal: 16.0 * scale,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        gradient: const LinearGradient(
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                          colors: [Color(0xFFFFB74D), Color(0xFFFF9800)],
+                                        ),
+                                        borderRadius: BorderRadius.circular(20.0 * scale),
+                                        border: Border.all(
+                                          color: const Color(0xFFFF6B00),
+                                          width: 4.0 * scale,
+                                        ),
+                                      ),
+                                      child: Text(
+                                        "Menu",
+                                        style: GoogleFonts.bangers(
+                                          fontSize: 32.0 * scale,
+                                          color: Colors.white,
+                                          letterSpacing: 1.5,
+                                          shadows: [
+                                            Shadow(
+                                              color: const Color(
+                                                0xFFFF6B00,
+                                              ).withOpacity(0.5),
+                                              offset: const Offset(2, 2),
+                                              blurRadius: 0,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                        SizedBox(height: 16 * scale),
                         _buildMenuButton(
                           icon: Icons.help_outline,
                           text: "Instructions",
@@ -798,7 +828,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                             );
                           },
                         ),
-                        const SizedBox(height: 12),
+                        SizedBox(height: 12 * scale),
                         _buildMenuButton(
                           icon: Icons.replay,
                           text: "Replay Previous",
@@ -825,6 +855,9 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
 
                             // Show selection dialog
                             final screenSize = MediaQuery.of(context).size;
+                            // Calculate scale for the dialog
+                            final scale = screenSize.shortestSide / 375.0;
+
                             await showDialog(
                               context: context,
                               barrierColor: Colors.black.withOpacity(0.5),
@@ -836,7 +869,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                     maxHeight: screenSize.height * 0.8,
                                   ),
                                   child: Container(
-                                    padding: const EdgeInsets.all(8),
+                                    padding: EdgeInsets.all(8.0 * scale),
                                     decoration: BoxDecoration(
                                       gradient: const LinearGradient(
                                         begin: Alignment.topLeft,
@@ -847,14 +880,14 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                           Color(0xFFFFCC80), // Orange
                                         ],
                                       ),
-                                      borderRadius: BorderRadius.circular(30),
+                                      borderRadius: BorderRadius.circular(30.0 * scale),
                                       border: Border.all(
                                         color: const Color(0xFFFF6B00),
-                                        width: 6,
+                                        width: 6.0 * scale,
                                       ),
                                     ),
                                     child: Container(
-                                      padding: const EdgeInsets.all(24),
+                                      padding: EdgeInsets.all(24.0 * scale),
                                       decoration: BoxDecoration(
                                         gradient: const LinearGradient(
                                           begin: Alignment.topLeft,
@@ -865,15 +898,15 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                             Color(0xFFFFCC80),
                                           ],
                                         ),
-                                        borderRadius: BorderRadius.circular(24),
+                                        borderRadius: BorderRadius.circular(24.0 * scale),
                                       ),
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Container(
-                                            padding: const EdgeInsets.symmetric(
-                                              vertical: 12,
-                                              horizontal: 16,
+                                            padding: EdgeInsets.symmetric(
+                                              vertical: 12.0 * scale,
+                                              horizontal: 16.0 * scale,
                                             ),
                                             decoration: BoxDecoration(
                                               gradient: const LinearGradient(
@@ -885,16 +918,16 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                                 ],
                                               ),
                                               borderRadius:
-                                                  BorderRadius.circular(20),
+                                                  BorderRadius.circular(20.0 * scale),
                                               border: Border.all(
                                                 color: const Color(0xFFFF6B00),
-                                                width: 4,
+                                                width: 4.0 * scale,
                                               ),
                                             ),
                                             child: Text(
                                               "Replay Question",
                                               style: GoogleFonts.bangers(
-                                                fontSize: 24,
+                                                fontSize: 32.0 * scale,
                                                 color: Colors.white,
                                                 letterSpacing: 1.5,
                                                 shadows: [
@@ -909,7 +942,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                               ),
                                             ),
                                           ),
-                                          const SizedBox(height: 16),
+                                          SizedBox(height: 16.0 * scale),
                                           Flexible(
                                             child: SingleChildScrollView(
                                               child: Column(
@@ -984,7 +1017,11 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                                             child: Text(
                                                               "Question $qId",
                                                               style: GoogleFonts.comicNeue(
-                                                                fontSize: 18,
+                                                                fontSize: isTablet
+                                                                    ? 24
+                                                                    : (isSmallScreen
+                                                                        ? 16
+                                                                        : 18),
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
@@ -1012,7 +1049,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                             );
                           },
                         ),
-                        const SizedBox(height: 12),
+                        SizedBox(height: 12 * scale),
                         _buildMenuButton(
                           icon: Icons.exit_to_app,
                           text: "Exit Level",
@@ -1028,14 +1065,19 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                             );
                           },
                         ),
-                        const SizedBox(height: 16),
+                        SizedBox(height: 16 * scale),
                       ],
                     ),
                   ),
                 ),
-              );
-            },
+              ),
+            ],
           ),
+        );
+      },
+    );
+    },
+  ),
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: Center(
@@ -1082,493 +1124,415 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                 opacity: const AlwaysStoppedAnimation<double>(0.7),
               ),
             ),
-            Column(
-              children: [
-                // Clue Section
-                Container(
-                  margin: const EdgeInsets.all(16),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.surface,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  width: double.infinity,
-                  child: Column(
-                    children: [
-                      Text(
-                        "Question ${state.currentQuestionIndex + 1}/${state.level!.questions.length}",
-                        style: TextStyle(
-                          color: theme.colorScheme.secondary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        q.question,
-                        style: theme.textTheme.headlineSmall?.copyWith(
-                          fontSize: 22,
-                          color: theme.colorScheme.onSurface,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 16),
-                      // Answer Blanks with Animation
-                      Row(
+            
+            if (MediaQuery.of(context).orientation == Orientation.landscape)
+              // LANDSCAPE LAYOUT (Side-by-side)
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Left Side: Clues, Timer, Buttons (Scrollable if needed)
+                  Expanded(
+                    flex: 4, 
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(q.answer.length, (index) {
-                          String char = "";
-                          bool filled = false;
-
-                          // Check if there's a hint at this position
-                          if (state.hintPositions.containsKey(index)) {
-                            int tapIdx = state.hintPositions[index]!;
-                            int r = tapIdx ~/ 6;
-                            int c = tapIdx % 6;
-                            char = state.currentGrid[r][c];
-                            filled = true;
-                          } else if (index < state.selectedIndices.length) {
-                            // Otherwise check selected indices
-                            int tapIdx = state.selectedIndices[index];
-                            int r = tapIdx ~/ 6;
-                            int c = tapIdx % 6;
-                            char = state.currentGrid[r][c];
-                            filled = true;
-                          }
-                          return Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 4),
-                            width: 40,
-                            height: 50,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                  width: 3,
-                                  color: filled
-                                      ? const Color(0xFFFF6B00)
-                                      : Colors.grey.shade300,
-                                ),
-                              ),
-                            ),
-                            child:
-                                Text(
-                                      char,
-                                      style: TextStyle(
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.bold,
-                                        color: const Color(0xFFFF6B00),
-                                      ),
-                                    )
-                                    .animate(target: filled ? 1 : 0)
-                                    .scale(
-                                      duration: 200.ms,
-                                      curve: Curves.easeOutBack,
-                                    ),
-                          );
-                        }),
-                      ),
-                    ],
-                  ),
-                ),
-
-                // Timer Bar
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: LinearProgressIndicator(
-                    value: state.timeLeft / state.level!.timeLimit,
-                    borderRadius: BorderRadius.circular(10),
-                    minHeight: 12,
-                    backgroundColor: Colors.grey.shade200,
-                    color: state.timeLeft < 10
-                        ? Colors.red
-                        : theme.colorScheme.tertiary,
-                  ).animate(target: state.timeLeft < 10 ? 1 : 0).shake(hz: 2),
-                ),
-
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        final gridWidth = constraints.maxWidth;
-                        final tileSize = (gridWidth - (5 * 8)) / 6;
-
-                        return Stack(
-                          children: [
-                            // Draw connecting line behind the boxes
-                            IgnorePointer(
-                              child: CustomPaint(
-                                size: Size(
-                                  constraints.maxWidth,
-                                  constraints.maxHeight,
-                                ),
-                                painter: SelectionPathPainter(
-                                  selectedIndices: state.selectedIndices,
-                                  tileSize: tileSize,
-                                  spacing: 8.0,
-                                  color: const Color(0xFFFF6B00),
-                                ),
-                              ),
-                            ),
-                            // Letter boxes on top
-                            GridView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: 36,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 6,
-                                    crossAxisSpacing: 8,
-                                    mainAxisSpacing: 8,
+                        children: [
+                             // Clue Section
+                            Container(
+                              margin: const EdgeInsets.all(12),
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.surface,
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.05),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
                                   ),
-                              itemBuilder: (context, index) {
-                                final r = index ~/ 6;
-                                final c = index % 6;
-                                final letter = state.currentGrid[r][c];
-                                final isSelected = state.selectedIndices
-                                    .contains(index);
-
-                                return GestureDetector(
-                                  onTap: () => controller.onTileTap(index),
-                                  child:
-                                      AnimatedContainer(
-                                        duration: const Duration(
-                                          milliseconds: 150,
-                                        ),
-                                        curve: Curves.easeOut,
-                                        decoration: BoxDecoration(
-                                          color: isSelected
-                                              ? const Color(0xFFFFF8E1)
-                                              : Colors.white,
-                                          borderRadius: BorderRadius.circular(
-                                            12,
-                                          ),
-                                          border: Border.all(
-                                            width: 3,
-                                            color: isSelected
-                                                ? const Color(0xFFFF6B00)
-                                                : Colors.grey.shade200,
-                                          ),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: isSelected
-                                                  ? const Color(
-                                                      0xFFFF6B00,
-                                                    ).withOpacity(0.4)
-                                                  : Colors.black.withOpacity(
-                                                      0.05,
-                                                    ),
-                                              blurRadius: isSelected ? 8 : 4,
-                                              offset: const Offset(0, 4),
-                                            ),
-                                          ],
-                                        ),
+                                ],
+                              ),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "Question ${state.currentQuestionIndex + 1}/${state.level!.questions.length}",
+                                    style: TextStyle(
+                                      color: theme.colorScheme.secondary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    q.question,
+                                    style: theme.textTheme.headlineSmall?.copyWith(
+                                      fontSize: isTablet ? 32 : 18, 
+                                      color: theme.colorScheme.onSurface,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(height: 12),
+                                  // Answer Blanks
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: List.generate(q.answer.length, (index) {
+                                      String char = "";
+                                      bool filled = false;
+                                      if (state.hintPositions.containsKey(index)) {
+                                          int tapIdx = state.hintPositions[index]!;
+                                          int r = tapIdx ~/ 6;
+                                          int c = tapIdx % 6;
+                                          char = state.currentGrid[r][c];
+                                          filled = true;
+                                      } else if (index < state.selectedIndices.length) {
+                                          int tapIdx = state.selectedIndices[index];
+                                          int r = tapIdx ~/ 6;
+                                          int c = tapIdx % 6;
+                                          char = state.currentGrid[r][c];
+                                          filled = true;
+                                      }
+                                      return Container(
+                                        margin: const EdgeInsets.symmetric(horizontal: 4),
+                                        width: isTablet ? 50 : 32,
+                                        height: isTablet ? 60 : 40,
                                         alignment: Alignment.center,
-                                        child: Text(
-                                          letter.toUpperCase(),
-                                          style: TextStyle(
-                                            fontSize: 22,
-                                            fontWeight: FontWeight.w900,
-                                            color: isSelected
-                                                ? const Color(0xFFFF6B00)
-                                                : Colors.grey.shade700,
+                                        decoration: BoxDecoration(
+                                          border: Border(
+                                            bottom: BorderSide(
+                                              width: 3,
+                                              color: filled ? const Color(0xFFFF6B00) : Colors.grey.shade300,
+                                            ),
                                           ),
                                         ),
-                                      ).animate().scale(
-                                        delay: (30 * index).ms,
-                                        duration: 400.ms,
-                                        curve: Curves.easeOutBack,
-                                      ),
-                                );
-                              },
+                                        child: Text(
+                                          char,
+                                          style: TextStyle(
+                                            fontSize: isTablet ? 32 : 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: const Color(0xFFFF6B00),
+                                          ),
+                                        ).animate(target: filled ? 1 : 0).scale(duration: 200.ms, curve: Curves.easeOutBack),
+                                      );
+                                    }),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        );
-                      },
+
+                            // Timer Bar
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                              child: LinearProgressIndicator(
+                                value: state.timeLeft / state.level!.timeLimit,
+                                borderRadius: BorderRadius.circular(10),
+                                minHeight: 12,
+                                backgroundColor: Colors.grey.shade200,
+                                color: state.timeLeft < 10
+                                    ? Colors.red
+                                    : theme.colorScheme.tertiary,
+                              ).animate(target: state.timeLeft < 10 ? 1 : 0).shake(hz: 2),
+                            ),
+
+                            // Action Buttons
+                            Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  // Reset Button
+                                  Expanded(child: _buildActionButton(
+                                      text: "Reset",
+                                      icon: Icons.refresh_rounded,
+                                      color: const Color(0xFFFFE0B2),
+                                      textColor: const Color(0xFFFF6B00),
+                                      height: buttonHeight,
+                                      onTap: () => controller.clearSelection(),
+                                  )),
+                                  const SizedBox(width: 8),
+                                  // Hint Button
+                                  Expanded(child: _buildActionButton(
+                                      text: _isHintAdLoading ? "Loading..." : "Hint",
+                                      icon: _isHintAdLoading ? null : Icons.lightbulb_outline,
+                                      color: (state.hintsUsed >= 1 || _isHintAdLoading) ? Colors.grey.shade400 : const Color(0xFFFFB74D),
+                                      textColor: (state.hintsUsed >= 1 || _isHintAdLoading) ? Colors.grey.shade600 : Colors.white,
+                                      height: buttonHeight,
+                                      isLoading: _isHintAdLoading,
+                                      onTap: () => _handleHintTap(state, q, controller),
+                                  )),
+                                ],
+                              ),
+                            ),
+                            if (ref.watch(adManagerProvider).bannerAd != null)
+                              SizedBox(
+                                height: 50,
+                                child: AdWidget(ad: ref.watch(adManagerProvider).bannerAd!),
+                              ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
 
-                // Action Buttons
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      // Reset Button
-                      Expanded(
-                        child: Container(
-                          height: 60,
-                          margin: const EdgeInsets.only(right: 8),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFFE0B2),
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                blurRadius: 8,
-                                offset: const Offset(0, 4),
+                  // Right Side: Grid (Maximize space)
+                  Expanded(
+                    flex: 6,
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: LayoutBuilder(
+                          builder: (context, constraints) {
+                             // Use min of width/height to ensure square grid fits
+                            final availableSize = min(constraints.maxWidth, constraints.maxHeight);
+                             // Center text
+                            final horizontalPadding = (constraints.maxWidth - availableSize) / 2;
+                            final verticalPadding = (constraints.maxHeight - availableSize) / 2;
+                            final tileSize = (availableSize - (5 * 8)) / 6;
+
+                            return Padding(
+                               padding: EdgeInsets.symmetric(
+                                horizontal: max(0, horizontalPadding),
+                                vertical: max(0, verticalPadding),
                               ),
-                            ],
-                          ),
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () => controller.clearSelection(),
-                              borderRadius: BorderRadius.circular(20),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                              child: Stack(
                                 children: [
-                                  const Icon(
-                                    Icons.refresh_rounded,
-                                    color: Color(0xFFFF6B00),
-                                    size: 24,
+                                  IgnorePointer(
+                                    child: CustomPaint(
+                                      size: Size(constraints.maxWidth, constraints.maxHeight),
+                                      painter: SelectionPathPainter(
+                                        selectedIndices: state.selectedIndices,
+                                        tileSize: tileSize,
+                                        spacing: 8.0,
+                                        color: const Color(0xFFFF6B00),
+                                      ),
+                                    ),
                                   ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    "Reset",
-                                    style: GoogleFonts.comicNeue(
-                                      fontSize: 18,
+                                  GridView.builder(
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemCount: 36,
+                                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 6,
+                                      crossAxisSpacing: 8,
+                                      mainAxisSpacing: 8,
+                                    ),
+                                    itemBuilder: (context, index) {
+                                      return _buildGridTile(index, state, controller, tileSize);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            else
+              // PORTRAIT LAYOUT (Existing Column)
+              Column(
+                children: [
+                  // Clue Section
+                  Container(
+                    margin: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.surface,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    width: double.infinity,
+                    child: Column(
+                      children: [
+                        Text(
+                          "Question ${state.currentQuestionIndex + 1}/${state.level!.questions.length}",
+                          style: TextStyle(
+                            color: theme.colorScheme.secondary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          q.question,
+                          style: theme.textTheme.headlineSmall?.copyWith(
+                            fontSize: isTablet
+                                ? 32
+                                : (isSmallScreen ? 18 : 22),
+                            color: theme.colorScheme.onSurface,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 16),
+                        // Answer Blanks with Animation
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: List.generate(q.answer.length, (index) {
+                            String char = "";
+                            bool filled = false;
+                            if (state.hintPositions.containsKey(index)) {
+                                int tapIdx = state.hintPositions[index]!;
+                                int r = tapIdx ~/ 6;
+                                int c = tapIdx % 6;
+                                char = state.currentGrid[r][c];
+                                filled = true;
+                            } else if (index < state.selectedIndices.length) {
+                                int tapIdx = state.selectedIndices[index];
+                                int r = tapIdx ~/ 6;
+                                int c = tapIdx % 6;
+                                char = state.currentGrid[r][c];
+                                filled = true;
+                            }
+                            return Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 4),
+                              width: isTablet ? 60 : (isSmallScreen ? 32 : 40),
+                              height: isTablet ? 70 : (isSmallScreen ? 40 : 50),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    width: isSmallScreen ? 2 : 3,
+                                    color: filled
+                                        ? const Color(0xFFFF6B00)
+                                        : Colors.grey.shade300,
+                                  ),
+                                ),
+                              ),
+                              child: Text(
+                                    char,
+                                    style: TextStyle(
+                                      fontSize: isTablet
+                                          ? 40
+                                          : (isSmallScreen ? 20 : 28),
                                       fontWeight: FontWeight.bold,
                                       color: const Color(0xFFFF6B00),
-                                      letterSpacing: 0.5,
                                     ),
+                                  ).animate(target: filled ? 1 : 0).scale(
+                                    duration: 200.ms,
+                                    curve: Curves.easeOutBack,
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
+                            );
+                          }),
                         ),
-                      ),
-                      // Hint Button
-                      Expanded(
-                        child: Container(
-                          height: 60,
-                          margin: const EdgeInsets.only(left: 8),
-                          decoration: BoxDecoration(
-                            color: (state.hintsUsed >= 1 || _isHintAdLoading)
-                                ? Colors.grey.shade400
-                                : const Color(0xFFFFB74D),
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow:
-                                (state.hintsUsed >= 1 || _isHintAdLoading)
-                                ? []
-                                : [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.2),
-                                      blurRadius: 8,
-                                      offset: const Offset(0, 4),
-                                    ),
-                                  ],
-                          ),
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: (state.hintsUsed >= 1 || _isHintAdLoading)
-                                  ? null
-                                  : () {
-                                      // Check if hint limit reached (only 1 hint per question)
-                                      if (state.hintsUsed >= 1) {
-                                        if (mounted) {
-                                          _showFloatingSnackBar(
-                                            "You have used all available hints for this question!",
-                                            backgroundColor: const Color(
-                                              0xFF1976D2,
-                                            ),
-                                            icon: Icons.block,
-                                            duration: const Duration(
-                                              seconds: 2,
-                                            ),
-                                          );
-                                        }
-                                        return;
-                                      }
+                      ],
+                    ),
+                  ),
 
-                                      // Get hint data - middle letters only (exclude first and last)
-                                      final path = q.answerPlacement.path;
+                  // Timer Bar
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: LinearProgressIndicator(
+                      value: state.timeLeft / state.level!.timeLimit,
+                      borderRadius: BorderRadius.circular(10),
+                      minHeight: 12,
+                      backgroundColor: Colors.grey.shade200,
+                      color: state.timeLeft < 10
+                          ? Colors.red
+                          : theme.colorScheme.tertiary,
+                    ).animate(target: state.timeLeft < 10 ? 1 : 0).shake(hz: 2),
+                  ),
 
-                                      // Need at least 3 letters to have middle letters
-                                      if (path.length < 3) {
-                                        // If word is too short, show a message
-                                        if (mounted) {
-                                          _showFloatingSnackBar(
-                                            "Word is too short for hint!",
-                                            backgroundColor: const Color(
-                                              0xFF1976D2,
-                                            ),
-                                            icon: Icons.info_outline,
-                                            duration: const Duration(
-                                              seconds: 2,
-                                            ),
-                                          );
-                                        }
-                                        return;
-                                      }
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          // Calculate available size (min of width/height to keep it square)
+                          final availableSize = min(
+                            constraints.maxWidth,
+                            constraints.maxHeight,
+                          );
+                          // Center the grid
+                          final horizontalPadding =
+                              (constraints.maxWidth - availableSize) / 2;
+                          final verticalPadding =
+                              (constraints.maxHeight - availableSize) / 2;
 
-                                      // Get middle letters (exclude first and last)
-                                      final middleLetters = path.sublist(
-                                        1,
-                                        path.length - 1,
-                                      );
+                          final tileSize = (availableSize - (5 * 8)) / 6;
 
-                                      if (middleLetters.isEmpty) return;
-
-                                      // Randomly select ONE middle letter
-                                      final random = Random();
-                                      final middleLetterIndex = random.nextInt(
-                                        middleLetters.length,
-                                      );
-                                      final selectedHintLetter =
-                                          middleLetters[middleLetterIndex];
-
-                                      // Find the position of this letter in the original path
-                                      // middleLetters starts at index 1 of path, so we need to add 1
-                                      final hintPositionInPath =
-                                          1 + middleLetterIndex;
-
-                                      // Get the letter for the snackbar message
-                                      final row = selectedHintLetter['row']!;
-                                      final col = selectedHintLetter['col']!;
-                                      final hintLetter = q.grid[row][col]
-                                          .toUpperCase();
-
-                                      // Create a list with all path positions up to and including the hint
-                                      final pathUpToHint = path.sublist(
-                                        0,
-                                        hintPositionInPath + 1,
-                                      );
-
-                                      // Function to show hint
-                                      void showHint() {
-                                        if (!mounted) return;
-
-                                        // Show floating snackbar with single letter
-                                        _showFloatingSnackBar(
-                                          "Hint: Letter '$hintLetter' is marked!",
-                                          backgroundColor: const Color(
-                                            0xFF00796B,
-                                          ),
-                                          icon: Icons.lightbulb,
-                                          duration: const Duration(seconds: 2),
-                                        );
-
-                                        // Auto-select the hint letter at the correct position
-                                        controller.selectHintLetterAtPosition(
-                                          pathUpToHint,
-                                          hintPositionInPath,
-                                        );
-                                      }
-
-                                      // Set loading state and pause timer
-                                      setState(() {
-                                        _isHintAdLoading = true;
-                                      });
-                                      controller.pauseTimer();
-
-                                      // Show rewarded ad first
-                                      ref
-                                          .read(adManagerProvider)
-                                          .showRewarded(
-                                            (reward) {
-                                              // Reward earned callback (for tracking)
-                                              debugPrint(
-                                                'Reward earned: ${reward.amount} ${reward.type}',
-                                              );
-                                            },
-                                            onAdDismissed: () {
-                                              // Reset loading state and resume timer when ad is dismissed
-                                              if (mounted) {
-                                                setState(() {
-                                                  _isHintAdLoading = false;
-                                                });
-                                              }
-                                              controller.resumeTimer();
-                                              // Hint shown when ad is dismissed (user watched it)
-                                              showHint();
-                                            },
-                                            onAdNotReady: () {
-                                              // Reset loading state and resume timer if ad is not ready
-                                              if (mounted) {
-                                                setState(() {
-                                                  _isHintAdLoading = false;
-                                                });
-                                              }
-                                              controller.resumeTimer();
-                                              // If ad is not ready, show a message
-                                              if (mounted) {
-                                                _showFloatingSnackBar(
-                                                  "Ad is loading. Please try again in a moment.",
-                                                  backgroundColor: const Color(
-                                                    0xFF616161,
-                                                  ),
-                                                  icon: Icons.hourglass_empty,
-                                                  duration: const Duration(
-                                                    seconds: 2,
-                                                  ),
-                                                );
-                                              }
-                                            },
-                                          );
-                                    },
-                              borderRadius: BorderRadius.circular(20),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  if (_isHintAdLoading)
-                                    const SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2.5,
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                              Colors.white,
-                                            ),
-                                      ),
-                                    )
-                                  else
-                                    Icon(
-                                      Icons.lightbulb_outline,
-                                      color: state.hintsUsed >= 1
-                                          ? Colors.grey.shade600
-                                          : Colors.white,
-                                      size: 24,
-                                    ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    _isHintAdLoading ? "Loading..." : "Hint",
-                                    style: GoogleFonts.comicNeue(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color:
-                                          (state.hintsUsed >= 1 ||
-                                              _isHintAdLoading)
-                                          ? Colors.grey.shade600
-                                          : Colors.white,
-                                      letterSpacing: 0.5,
-                                    ),
+                          return Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: max(0, horizontalPadding),
+                              vertical: max(0, verticalPadding),
+                            ),
+                            child: Stack(
+                              children: [
+                                // Draw connecting line behind the boxes
+                              IgnorePointer(
+                                child: CustomPaint(
+                                  size: Size(
+                                    constraints.maxWidth,
+                                    constraints.maxHeight,
                                   ),
-                                ],
+                                  painter: SelectionPathPainter(
+                                    selectedIndices: state.selectedIndices,
+                                    tileSize: tileSize,
+                                    spacing: 8.0,
+                                    color: const Color(0xFFFF6B00),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
+                              // Letter boxes on top
+                              GridView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: 36,
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 6,
+                                      crossAxisSpacing: 8,
+                                      mainAxisSpacing: 8,
+                                    ),
+                                itemBuilder: (context, index) {
+                                   return _buildGridTile(index, state, controller, tileSize);
+                                },
+                              ),
+                            ],
+                          ));
+                        },
                       ),
-                    ],
+                    ),
                   ),
-                ),
-                if (ref.watch(adManagerProvider).bannerAd != null)
-                  SizedBox(
-                    height: 50,
-                    child: AdWidget(ad: ref.watch(adManagerProvider).bannerAd!),
+
+                  // Action Buttons
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        // Reset Button
+                        Expanded(child: _buildActionButton(
+                           text: "Reset",
+                           icon: Icons.refresh_rounded,
+                           color: const Color(0xFFFFE0B2),
+                           textColor: const Color(0xFFFF6B00),
+                           height: buttonHeight,
+                           onTap: () => controller.clearSelection(),
+                        )),
+                        const SizedBox(width: 8),
+                         // Hint Button
+                        Expanded(child: _buildActionButton(
+                           text: _isHintAdLoading ? "Loading..." : "Hint",
+                           icon: _isHintAdLoading ? null : Icons.lightbulb_outline,
+                           color: (state.hintsUsed >= 1 || _isHintAdLoading) ? Colors.grey.shade400 : const Color(0xFFFFB74D),
+                           textColor: (state.hintsUsed >= 1 || _isHintAdLoading) ? Colors.grey.shade600 : Colors.white,
+                           height: buttonHeight,
+                           isLoading: _isHintAdLoading,
+                           onTap: () => _handleHintTap(state, q, controller),
+                        )),
+                      ],
+                    ),
                   ),
-              ],
-            ),
+                  if (ref.watch(adManagerProvider).bannerAd != null)
+                    SizedBox(
+                      height: 50,
+                      child: AdWidget(ad: ref.watch(adManagerProvider).bannerAd!),
+                    ),
+                ],
+              ),
 
             Align(
               alignment: Alignment.topCenter,
@@ -1591,13 +1555,171 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
     );
   }
 
+  // HELPER METHODS FOR CLEANER CODE
+  
+  Widget _buildGridTile(int index, GameplayState state, GameplayController controller, double tileSize) {
+        final r = index ~/ 6;
+        final c = index % 6;
+        final letter = state.currentGrid[r][c];
+        final isSelected = state.selectedIndices.contains(index);
+
+        // Determine font size based on screen
+        final screenSize = MediaQuery.of(context).size;
+        final isTablet = screenSize.width > 600;
+        final isSmall = screenSize.width < 360 || screenSize.height < 600;
+
+        return GestureDetector(
+          onTap: () => controller.onTileTap(index),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            curve: Curves.easeOut,
+            decoration: BoxDecoration(
+              color: isSelected ? const Color(0xFFFFF8E1) : Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                width: 3,
+                color: isSelected ? const Color(0xFFFF6B00) : Colors.grey.shade200,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: isSelected
+                      ? const Color(0xFFFF6B00).withOpacity(0.4)
+                      : Colors.black.withOpacity(0.05),
+                  blurRadius: isSelected ? 8 : 4,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              letter.toUpperCase(),
+              style: TextStyle(
+                fontSize: tileSize * 0.5, // Responsive: 50% of tile size
+                fontWeight: FontWeight.w900,
+                color: isSelected ? const Color(0xFFFF6B00) : Colors.grey.shade700,
+              ),
+            ),
+          ).animate().scale(delay: (30 * index).ms, duration: 400.ms, curve: Curves.easeOutBack),
+        );
+  }
+
+  Widget _buildActionButton({
+    required String text,
+    IconData? icon,
+    required Color color,
+    required Color textColor,
+    required double height,
+    required VoidCallback? onTap,
+    bool isLoading = false,
+  }) {
+      return Container(
+        height: height,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: (onTap == null) ? [] : [
+             BoxShadow(
+               color: Colors.black.withOpacity(0.2),
+               blurRadius: 8,
+               offset: const Offset(0, 4),
+             ),
+          ],
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (isLoading)
+                   const SizedBox(
+                     width: 20, height: 20,
+                     child: CircularProgressIndicator(strokeWidth: 2.5, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
+                   )
+                else if (icon != null)
+                   Icon(icon, color: textColor, size: 24),
+                
+                if (!isLoading && icon != null) const SizedBox(width: 8),
+                Text(
+                  text,
+                  style: GoogleFonts.comicNeue(
+                    fontSize: height * 0.35, // Responsive: 35% of button height
+                    fontWeight: FontWeight.bold,
+                    color: textColor,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+  }
+
+  void _handleHintTap(GameplayState state, Question q, GameplayController controller) {
+      if (state.hintsUsed >= 1) {
+        if (mounted) _showFloatingSnackBar("You have used all available hints!", backgroundColor: const Color(0xFF1976D2), icon: Icons.block);
+        return;
+      }
+
+      final path = q.answerPlacement.path;
+      if (path.length < 3) {
+        if (mounted) _showFloatingSnackBar("Word is too short for hint!", backgroundColor: const Color(0xFF1976D2), icon: Icons.info_outline);
+        return;
+      }
+
+      final middleLetters = path.sublist(1, path.length - 1);
+      if (middleLetters.isEmpty) return;
+
+      final random = Random();
+      final middleLetterIndex = random.nextInt(middleLetters.length);
+      final selectedHintLetter = middleLetters[middleLetterIndex];
+      final hintPositionInPath = 1 + middleLetterIndex;
+      final row = selectedHintLetter['row']!;
+      final col = selectedHintLetter['col']!;
+      final hintLetter = q.grid[row][col].toUpperCase();
+      final pathUpToHint = path.sublist(0, hintPositionInPath + 1);
+
+      void showHint() {
+        if (!mounted) return;
+        _showFloatingSnackBar("Hint: Letter '$hintLetter' is marked!", backgroundColor: const Color(0xFF00796B), icon: Icons.lightbulb);
+        controller.selectHintLetterAtPosition(pathUpToHint, hintPositionInPath);
+      }
+
+      setState(() { _isHintAdLoading = true; });
+      controller.pauseTimer();
+
+      ref.read(adManagerProvider).showRewarded(
+        (reward) { debugPrint('Reward earned: ${reward.amount} ${reward.type}'); },
+        onAdDismissed: () {
+          if (mounted) setState(() { _isHintAdLoading = false; });
+          controller.resumeTimer();
+          showHint();
+        },
+        onAdNotReady: () {
+          if (mounted) setState(() { _isHintAdLoading = false; });
+          controller.resumeTimer();
+          if (mounted) _showFloatingSnackBar("Ad is loading. Please try again.", backgroundColor: const Color(0xFF616161), icon: Icons.hourglass_empty);
+        },
+      );
+  }
+
   Widget _buildMenuButton({
     required IconData icon,
     required String text,
     required VoidCallback onTap,
   }) {
+    final screenSize = MediaQuery.of(context).size;
+    final scale = screenSize.shortestSide / 375.0;
+    
+    final height = 60.0 * scale;
+    final iconSize = 28.0 * scale;
+    final fontSize = 20.0 * scale;
+
     return Container(
-      height: 60,
+      height: height,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
@@ -1615,12 +1737,12 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
           child: Row(
             children: [
               const SizedBox(width: 16),
-              Icon(icon, color: const Color(0xFFFF6B00), size: 28),
+              Icon(icon, color: const Color(0xFFFF6B00), size: iconSize),
               const SizedBox(width: 16),
               Text(
                 text,
                 style: GoogleFonts.bubblegumSans(
-                  fontSize: 20,
+                  fontSize: fontSize,
                   color: const Color(0xFFFF6B00),
                   letterSpacing: 1.2,
                 ),

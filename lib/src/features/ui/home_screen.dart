@@ -204,25 +204,29 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                   SizedBox(height: isSmallScreen ? 16 : 24),
                   // Message
-                  Container(
-                    padding: EdgeInsets.all(isSmallScreen ? 12 : 20),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFF8E1),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: const Color(0xFFFFB74D),
-                        width: 4,
+                  Flexible(
+                    child: SingleChildScrollView(
+                      child: Container(
+                        padding: EdgeInsets.all(isSmallScreen ? 12 : 20),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFF8E1),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: const Color(0xFFFFB74D),
+                            width: 4,
+                          ),
+                        ),
+                        child: Text(
+                          "Please check your internet connection and try again.",
+                          style: GoogleFonts.nunito(
+                            fontSize: messageFontSize,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFFFF6B00),
+                            height: 1.4,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                    ),
-                    child: Text(
-                      "Please check your internet connection and try again.",
-                      style: GoogleFonts.nunito(
-                        fontSize: messageFontSize,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xFFFF6B00),
-                        height: 1.4,
-                      ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
                   SizedBox(height: isSmallScreen ? 16 : 24),
@@ -292,6 +296,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final levelsAsync = ref.watch(levelsProvider);
     final userProgress = ref.watch(userProgressProvider);
+    final screenSize = MediaQuery.of(context).size;
+    final isSmallScreen = screenSize.width < 360 || screenSize.height < 600;
+
+    // Responsive sizes
+    final logoHeight = isSmallScreen ? 32.0 : 40.0;
+    final coinFontSize = isSmallScreen ? 14.0 : 18.0;
+    final iconSize = isSmallScreen ? 20.0 : 24.0;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -300,7 +311,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         elevation: 0,
         title: Image.asset(
           'assets/worbix-wordmark.png',
-          height: 40,
+          height: logoHeight,
           fit: BoxFit.contain,
         ),
         centerTitle: false,
@@ -308,7 +319,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 8),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            padding: EdgeInsets.symmetric(
+                horizontal: isSmallScreen ? 8 : 12,
+                vertical: isSmallScreen ? 4 : 6),
             decoration: BoxDecoration(
               color: Colors.orange.withOpacity(0.4),
               borderRadius: BorderRadius.circular(20),
@@ -320,18 +333,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(
+                Icon(
                   Icons.monetization_on,
                   color: Colors.yellowAccent,
-                  size: 24,
+                  size: iconSize,
                 ),
                 const SizedBox(width: 6),
                 Text(
                   "${userProgress.totalCoins}",
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
-                    fontSize: 18,
+                    fontSize: coinFontSize,
                     shadows: [
                       Shadow(
                         color: Colors.orange,
@@ -355,7 +368,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
             child: IconButton(
-              icon: const Icon(Icons.settings, color: Colors.white, size: 24),
+              icon: Icon(Icons.settings, color: Colors.white, size: iconSize),
               onPressed: () {
                 showDialog(
                   context: context,
@@ -561,185 +574,189 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                   SizedBox(height: isSmallScreen ? 16 : 24),
                   // Content with 3D effect - Unlock Criteria
-                  Container(
-                    padding: EdgeInsets.all(isSmallScreen ? 12 : 20),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFF8E1),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: const Color(0xFFFFB74D),
-                        width: 4,
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        // Unlock Criteria Title
-                        FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text(
-                            "To Unlock Level ${level.id}:",
-                            style: GoogleFonts.comicNeue(
-                              fontSize: criteriaFontSize + 2,
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0xFFFF6B00),
-                              height: 1.3,
-                            ),
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
+                  Flexible(
+                    child: SingleChildScrollView(
+                      child: Container(
+                        padding: EdgeInsets.all(isSmallScreen ? 12 : 20),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFF8E1),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: const Color(0xFFFFB74D),
+                            width: 4,
                           ),
                         ),
-                        SizedBox(height: isSmallScreen ? 12 : 16),
-                        // Criteria 1: Complete 10 questions
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: isSmallScreen ? 8 : 10,
-                            horizontal: isSmallScreen ? 10 : 12,
-                          ),
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [Color(0xFFE3F2FD), Color(0xFFBBDEFB)],
-                            ),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: const Color(0xFF2196F3),
-                              width: 2,
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.check_circle_outline,
-                                color: const Color(0xFF2196F3),
-                                size: isSmallScreen ? 18 : 20,
-                              ),
-                              SizedBox(width: isSmallScreen ? 6 : 8),
-                              Flexible(
-                                child: FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  child: Text(
-                                    "Complete 10 questions in Level $previousLevelId",
-                                    style: GoogleFonts.nunito(
-                                      fontSize: criteriaFontSize,
-                                      fontWeight: FontWeight.bold,
-                                      color: const Color(0xFF1976D2),
-                                    ),
-                                    textAlign: TextAlign.center,
-                                    maxLines: 2,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: isSmallScreen ? 8 : 10),
-                        // Progress indicator for questions
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: isSmallScreen ? 6 : 8,
-                            horizontal: isSmallScreen ? 10 : 12,
-                          ),
-                          decoration: BoxDecoration(
-                            color: completedCount >= requiredQuestions
-                                ? Colors.green.shade50
-                                : Colors.orange.shade50,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: completedCount >= requiredQuestions
-                                  ? Colors.green
-                                  : Colors.orange,
-                              width: 2,
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                completedCount >= requiredQuestions
-                                    ? Icons.check_circle
-                                    : Icons.radio_button_unchecked,
-                                color: completedCount >= requiredQuestions
-                                    ? Colors.green
-                                    : Colors.orange,
-                                size: isSmallScreen ? 16 : 18,
-                              ),
-                              SizedBox(width: isSmallScreen ? 6 : 8),
-                              Flexible(
-                                child: FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  child: Text(
-                                    "Progress: $completedCount / $requiredQuestions questions",
-                                    style: GoogleFonts.nunito(
-                                      fontSize: criteriaFontSize - 1,
-                                      fontWeight: FontWeight.w600,
-                                      color: completedCount >= requiredQuestions
-                                          ? Colors.green.shade800
-                                          : Colors.orange.shade800,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                    maxLines: 1,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: isSmallScreen ? 10 : 12),
-                        // Criteria 2: Have enough coins
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: isSmallScreen ? 8 : 10,
-                            horizontal: isSmallScreen ? 10 : 12,
-                          ),
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [Color(0xFFFFE0B2), Color(0xFFFFCC80)],
-                            ),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: const Color(0xFFFFB74D),
-                              width: 2,
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                padding: EdgeInsets.all(isSmallScreen ? 4 : 6),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFFFD54F),
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: const Color(0xFFFF6B00),
-                                    width: 2,
-                                  ),
-                                ),
-                                child: Icon(
-                                  Icons.monetization_on,
+                        child: Column(
+                          children: [
+                            // Unlock Criteria Title
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                "To Unlock Level ${level.id}:",
+                                style: GoogleFonts.comicNeue(
+                                  fontSize: criteriaFontSize + 2,
+                                  fontWeight: FontWeight.bold,
                                   color: const Color(0xFFFF6B00),
-                                  size: isSmallScreen ? 18 : 20,
+                                  height: 1.3,
+                                ),
+                                textAlign: TextAlign.center,
+                                maxLines: 2,
+                              ),
+                            ),
+                            SizedBox(height: isSmallScreen ? 12 : 16),
+                            // Criteria 1: Complete 10 questions
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: isSmallScreen ? 8 : 10,
+                                horizontal: isSmallScreen ? 10 : 12,
+                              ),
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [Color(0xFFE3F2FD), Color(0xFFBBDEFB)],
+                                ),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: const Color(0xFF2196F3),
+                                  width: 2,
                                 ),
                               ),
-                              SizedBox(width: isSmallScreen ? 6 : 8),
-                              Flexible(
-                                child: FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  child: Text(
-                                    "Have $unlockCost coins (You have: $currentCoins)",
-                                    style: GoogleFonts.nunito(
-                                      fontSize: criteriaFontSize,
-                                      fontWeight: FontWeight.bold,
-                                      color: const Color(0xFFFF6B00),
-                                    ),
-                                    textAlign: TextAlign.center,
-                                    maxLines: 2,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.check_circle_outline,
+                                    color: const Color(0xFF2196F3),
+                                    size: isSmallScreen ? 18 : 20,
                                   ),
+                                  SizedBox(width: isSmallScreen ? 6 : 8),
+                                  Flexible(
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text(
+                                        "Complete 10 questions in Level $previousLevelId",
+                                        style: GoogleFonts.nunito(
+                                          fontSize: criteriaFontSize,
+                                          fontWeight: FontWeight.bold,
+                                          color: const Color(0xFF1976D2),
+                                        ),
+                                        textAlign: TextAlign.center,
+                                        maxLines: 2,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: isSmallScreen ? 8 : 10),
+                            // Progress indicator for questions
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: isSmallScreen ? 6 : 8,
+                                horizontal: isSmallScreen ? 10 : 12,
+                              ),
+                              decoration: BoxDecoration(
+                                color: completedCount >= requiredQuestions
+                                    ? Colors.green.shade50
+                                    : Colors.orange.shade50,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: completedCount >= requiredQuestions
+                                      ? Colors.green
+                                      : Colors.orange,
+                                  width: 2,
                                 ),
                               ),
-                            ],
-                          ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    completedCount >= requiredQuestions
+                                        ? Icons.check_circle
+                                        : Icons.radio_button_unchecked,
+                                    color: completedCount >= requiredQuestions
+                                        ? Colors.green
+                                        : Colors.orange,
+                                    size: isSmallScreen ? 16 : 18,
+                                  ),
+                                  SizedBox(width: isSmallScreen ? 6 : 8),
+                                  Flexible(
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text(
+                                        "Progress: $completedCount / $requiredQuestions questions",
+                                        style: GoogleFonts.nunito(
+                                          fontSize: criteriaFontSize - 1,
+                                          fontWeight: FontWeight.w600,
+                                          color: completedCount >= requiredQuestions
+                                              ? Colors.green.shade800
+                                              : Colors.orange.shade800,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                        maxLines: 1,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: isSmallScreen ? 10 : 12),
+                            // Criteria 2: Have enough coins
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: isSmallScreen ? 8 : 10,
+                                horizontal: isSmallScreen ? 10 : 12,
+                              ),
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [Color(0xFFFFE0B2), Color(0xFFFFCC80)],
+                                ),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: const Color(0xFFFFB74D),
+                                  width: 2,
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(isSmallScreen ? 4 : 6),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFFFD54F),
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: const Color(0xFFFF6B00),
+                                        width: 2,
+                                      ),
+                                    ),
+                                    child: Icon(
+                                      Icons.monetization_on,
+                                      color: const Color(0xFFFF6B00),
+                                      size: isSmallScreen ? 18 : 20,
+                                    ),
+                                  ),
+                                  SizedBox(width: isSmallScreen ? 6 : 8),
+                                  Flexible(
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text(
+                                        "Have $unlockCost coins (You have: $currentCoins)",
+                                        style: GoogleFonts.nunito(
+                                          fontSize: criteriaFontSize,
+                                          fontWeight: FontWeight.bold,
+                                          color: const Color(0xFFFF6B00),
+                                        ),
+                                        textAlign: TextAlign.center,
+                                        maxLines: 2,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                   SizedBox(height: isSmallScreen ? 16 : 24),
@@ -1028,9 +1045,20 @@ class _RoadmapViewState extends State<RoadmapView> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     final isTablet = screenWidth >= 600;
+    // Check for small screen (width < 360) OR landscape on phone (height < 600)
+    final isSmallScreen = screenWidth < 360 || screenHeight < 600;
 
     // Calculate responsive icon size
-    final iconSize = _calculateIconSize(screenWidth, screenHeight, isTablet);
+    final iconSize = _calculateIconSize(
+      screenWidth,
+      screenHeight,
+      isTablet,
+      isSmallScreen,
+    );
+
+    // Responsive node spacing
+    // Reduce spacing for small screens/landscape to avoid scrolling too much
+    final nodeSpacing = isTablet ? 200.0 : (isSmallScreen ? 130.0 : 160.0);
 
     // Calculate path positions for levels
     final nodePositions = _calculateNodePositions(
@@ -1038,6 +1066,7 @@ class _RoadmapViewState extends State<RoadmapView> {
       screenWidth,
       screenHeight,
       iconSize,
+      nodeSpacing,
     );
 
     // Calculate total height needed
@@ -1046,6 +1075,7 @@ class _RoadmapViewState extends State<RoadmapView> {
       screenHeight,
       screenWidth,
       iconSize,
+      nodeSpacing,
     );
 
     return SingleChildScrollView(
@@ -1106,6 +1136,7 @@ class _RoadmapViewState extends State<RoadmapView> {
     double screenWidth,
     double screenHeight,
     bool isTablet,
+    bool isSmallScreen,
   ) {
     // Base size for mobile phones
     double baseSize = 110.0;
@@ -1118,10 +1149,13 @@ class _RoadmapViewState extends State<RoadmapView> {
         1.5,
       ); // Max 1.5x for tablets
       baseSize = 110.0 * scaleFactor;
+    } else if (isSmallScreen) {
+      // Significantly reduce size for small screens/landscape
+      baseSize = 85.0;
     } else {
       // For smaller phones, scale down slightly
       if (screenWidth < 360) {
-        baseSize = 100.0;
+        baseSize = 95.0;
       } else if (screenWidth < 400) {
         baseSize = 105.0;
       }
@@ -1135,11 +1169,10 @@ class _RoadmapViewState extends State<RoadmapView> {
     double screenWidth,
     double screenHeight,
     double iconSize,
+    double nodeSpacing,
   ) {
     final positions = <Offset>[];
-    // Fixed spacing between nodes for consistency across all screen types
-    // This ensures the same distance between icons on mobile and tablets
-    final nodeSpacing = 160.0;
+    // Spacing between nodes is now passed as a parameter for responsiveness
     // Account for icon size when calculating path width to prevent edge cutoff
     final iconPadding = iconSize / 2;
     final pathWidth = (screenWidth - (iconPadding * 2)) * 0.65;
@@ -1230,11 +1263,12 @@ class _RoadmapViewState extends State<RoadmapView> {
     double screenHeight,
     double screenWidth,
     double iconSize,
+    double nodeSpacing,
   ) {
     if (levelCount == 0) return screenHeight;
 
     // Calculate the actual Y position of the last level using the same logic as _calculateNodePositions
-    final nodeSpacing = 160.0;
+    // Calculate the actual Y position of the last level using the same logic as _calculateNodePositions
     final topPadding = 180.0;
 
     double lastLevelY;
