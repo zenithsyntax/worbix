@@ -1020,7 +1020,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                             await showDialog(
                               context: context,
                               barrierColor: Colors.black.withOpacity(0.5),
-                              builder: (_) => Dialog(
+                              builder: (dialogContext) => Dialog(
                                 backgroundColor: Colors.transparent,
                                 child: ConstrainedBox(
                                   constraints: BoxConstraints(
@@ -1147,7 +1147,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                                         child: InkWell(
                                                           onTap: () {
                                                             Navigator.pop(
-                                                              context,
+                                                              dialogContext,
                                                             );
                                                             final idx = state
                                                                 .level!
