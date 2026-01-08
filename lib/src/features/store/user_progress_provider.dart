@@ -47,6 +47,8 @@ class UserProgressNotifier extends Notifier<UserProgress> {
     final newCoins = state.totalCoins + amount;
     state = state.copyWith(totalCoins: newCoins);
     await _save();
+    // Check if new coin balance unlocks any levels
+    await checkAutoUnlock();
   }
   
   Future<void> spendCoins(int amount) async {

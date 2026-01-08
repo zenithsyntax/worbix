@@ -662,18 +662,22 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                             ),
                           ),
                         ] else
-                          // Standard Continue Button (Shown if unlocked or enough coins)
+                          // Standard Continue / Next Level Button
                           Container(
                             height: buttonHeight,
                             decoration: BoxDecoration(
-                              gradient: const LinearGradient(
+                              gradient: LinearGradient(
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
-                                colors: [Color(0xFFFFB74D), Color(0xFFFF9800)],
+                                colors: (nextLevelUnlocked || canUnlock)
+                                    ? [ const Color(0xFF66BB6A), const Color(0xFF43A047) ] // Green for Next Level
+                                    : [ const Color(0xFFFFB74D), const Color(0xFFFF9800) ], // Orange for Continue/Menu
                               ),
                               borderRadius: BorderRadius.circular(20),
                               border: Border.all(
-                                color: const Color(0xFFFF6B00),
+                                color: (nextLevelUnlocked || canUnlock)
+                                    ? const Color(0xFF2E7D32)
+                                    : const Color(0xFFFF6B00),
                                 width: borderWidth,
                               ),
                             ),
@@ -681,12 +685,32 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                               color: Colors.transparent,
                               child: InkWell(
                                 onTap: () {
-                                  Navigator.of(context).pop();
-                                  // Show ad after level completion, then go back to home
+                                  // logic:
+                                  // 1. Show Ad (Interstitial)
+                                  // 2. On Update:
+                                  //    If (nextLevelUnlocked || canUnlock) -> Go to Next Level
+                                  //    Else -> Pop to Home
+                                  
                                   adService.showInterstitialAd(
                                     onAdDismissed: () {
-                                      if (context.mounted) {
-                                        Navigator.of(context).pop();
+                                      if (!context.mounted) return;
+                                      
+                                      // Close dialog first
+                                      Navigator.of(context).pop();
+                                      
+                                      if (nextLevelUnlocked || canUnlock) {
+                                          // Navigate to next level
+                                          // Replace current gameplay so back button goes to menu, not previous level
+                                          Navigator.of(context).pushReplacement(
+                                              MaterialPageRoute(
+                                                  builder: (context) => GameplayScreen(levelId: nextId),
+                                              ),
+                                          );
+                                      } else {
+                                          // Just go back to menu
+                                          if (Navigator.of(context).canPop()) {
+                                              Navigator.of(context).pop();
+                                          }
                                       }
                                     },
                                   );
@@ -696,7 +720,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                   child: FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Text(
-                                      "Continue",
+                                      (nextLevelUnlocked || canUnlock) ? "Next Level" : "Continue",
                                       style: GoogleFonts.permanentMarker(
                                         fontSize: buttonFontSize,
                                         color: Colors.white,
