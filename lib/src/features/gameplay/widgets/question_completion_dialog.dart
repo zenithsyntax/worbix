@@ -40,6 +40,41 @@ class _QuestionCompletionDialogState extends State<QuestionCompletionDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final scale = size.shortestSide / 375.0; // Baseline: 375dp (Standard Phone)
+
+    // Responsive Dimensions
+    final dialogMaxWidth = size.width * 0.9;
+    final dialogMaxHeight = size.height * 0.85;
+
+    // Responsive Font Sizes
+    final titleFontSize = 28.0 * scale;
+    final bodyFontSize = 20.0 * scale;
+    final subBodyFontSize = 16.0 * scale;
+    final coinFontSize = 24.0 * scale;
+    final buttonFontSize = 20.0 * scale;
+
+    // Responsive Padding & Spacing
+    final outerPadding = 8.0 * scale;
+    final innerPadding = 24.0 * scale;
+    final contentPadding = 20.0 * scale;
+    final titlePaddingV = 12.0 * scale;
+    final titlePaddingH = 16.0 * scale;
+    final coinContainerPaddingV = 12.0 * scale;
+    final coinContainerPaddingH = 16.0 * scale;
+    final spacingLarge = 24.0 * scale;
+    final spacingMedium = 16.0 * scale;
+    final spacingSmall = 8.0 * scale;
+
+    // Responsive Borders & Sizes
+    final outerBorderWidth = 6.0 * scale;
+    final innerBorderWidth = 4.0 * scale;
+    final coinBorderWidth = 3.0 * scale;
+    final coinIconBorderWidth = 2.0 * scale;
+    final buttonBorderWidth = 4.0 * scale;
+    final buttonHeight = 60.0 * scale;
+    final coinIconSize = 24.0 * scale;
+
     return Stack(
       children: [
         Align(
@@ -61,11 +96,11 @@ class _QuestionCompletionDialogState extends State<QuestionCompletionDialog> {
           backgroundColor: Colors.transparent,
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width * 0.9,
-              maxHeight: MediaQuery.of(context).size.height * 0.8,
+              maxWidth: dialogMaxWidth,
+              maxHeight: dialogMaxHeight,
             ),
             child: Container(
-              padding: const EdgeInsets.all(8),
+              padding: EdgeInsets.all(outerPadding),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   begin: Alignment.topLeft,
@@ -79,11 +114,11 @@ class _QuestionCompletionDialogState extends State<QuestionCompletionDialog> {
                 borderRadius: BorderRadius.circular(30),
                 border: Border.all(
                   color: const Color(0xFFFF6B00), // Dark orange for stroke
-                  width: 6,
+                  width: outerBorderWidth,
                 ),
               ),
               child: Container(
-                padding: const EdgeInsets.all(24),
+                padding: EdgeInsets.all(innerPadding),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     begin: Alignment.topLeft,
@@ -104,9 +139,9 @@ class _QuestionCompletionDialogState extends State<QuestionCompletionDialog> {
                       constraints: const BoxConstraints(
                         maxWidth: double.infinity,
                       ),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 12,
-                        horizontal: 16,
+                      padding: EdgeInsets.symmetric(
+                        vertical: titlePaddingV,
+                        horizontal: titlePaddingH,
                       ),
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
@@ -120,93 +155,80 @@ class _QuestionCompletionDialogState extends State<QuestionCompletionDialog> {
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
                           color: const Color(0xFFFF6B00),
-                          width: 4,
+                          width: innerBorderWidth,
                         ),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // Container(
-                          //   padding: const EdgeInsets.all(8),
-                          //   decoration: BoxDecoration(
-                          //     color: const Color(0xFFFFE0B2),
-                          //     shape: BoxShape.circle,
-                          //     border: Border.all(
-                          //       color: const Color(0xFFFF6B00),
-                          //       width: 3,
-                          //     ),
-                          //   ),
-                          //   child: const Text(
-                          //     "🎉",
-                          //     style: TextStyle(fontSize: 28),
-                          //   ),
-                          // ),
-                          // const SizedBox(width: 8),
                           Flexible(
-                            child: Text(
-                              "Congratulations!",
-                              style: GoogleFonts.bangers(
-                                fontSize: 28,
-                                color: Colors.white,
-                                letterSpacing: 1.0,
-                                shadows: [
-                                  Shadow(
-                                    color: const Color(
-                                      0xFFFF6B00,
-                                    ).withOpacity(0.5),
-                                    offset: const Offset(2, 2),
-                                    blurRadius: 0,
-                                  ),
-                                ],
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                "Congratulations!",
+                                style: GoogleFonts.bangers(
+                                  fontSize: titleFontSize,
+                                  color: Colors.white,
+                                  letterSpacing: 1.0,
+                                  shadows: [
+                                    Shadow(
+                                      color: const Color(
+                                        0xFFFF6B00,
+                                      ).withOpacity(0.5),
+                                      offset: const Offset(2, 2),
+                                      blurRadius: 0,
+                                    ),
+                                  ],
+                                ),
+                                textAlign: TextAlign.center,
                               ),
-                              textAlign: TextAlign.center,
-                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: spacingLarge),
                     // Content with 3D effect
                     Flexible(
-                      child: SingleChildScrollView(
+                      child: SingleChildScrollView( // Made scrollable for safety
                         child: Container(
-                          padding: const EdgeInsets.all(20),
+                          padding: EdgeInsets.all(contentPadding),
                           decoration: BoxDecoration(
                             color: const Color(0xFFFFF8E1),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
                               color: const Color(0xFFFFB74D),
-                              width: 4,
+                              width: innerBorderWidth,
                             ),
                           ),
                           child: Column(
+                            mainAxisSize: MainAxisSize.min, // Added min
                             children: [
                               Text(
                                 "Question ${widget.questionNumber} Completed!",
                                 style: GoogleFonts.comicNeue(
-                                  fontSize: 20,
+                                  fontSize: bodyFontSize,
                                   fontWeight: FontWeight.bold,
                                   color: const Color(0xFFFF6B00),
                                   height: 1.4,
                                 ),
                                 textAlign: TextAlign.center,
                               ),
-                              const SizedBox(height: 8),
+                              SizedBox(height: spacingSmall),
                               Text(
                                 "You solved the puzzle!",
                                 style: GoogleFonts.comicNeue(
-                                  fontSize: 16,
+                                  fontSize: subBodyFontSize,
                                   color: const Color(0xFFFF6B00),
                                 ),
                                 textAlign: TextAlign.center,
                               ),
-                              const SizedBox(height: 16),
+                              SizedBox(height: spacingMedium),
                               Container(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 12,
-                                  horizontal: 16,
+                                padding: EdgeInsets.symmetric(
+                                  vertical: coinContainerPaddingV,
+                                  horizontal: coinContainerPaddingH,
                                 ),
                                 decoration: BoxDecoration(
                                   gradient: const LinearGradient(
@@ -215,7 +237,7 @@ class _QuestionCompletionDialogState extends State<QuestionCompletionDialog> {
                                   borderRadius: BorderRadius.circular(15),
                                   border: Border.all(
                                     color: const Color(0xFFFFB74D),
-                                    width: 3,
+                                    width: coinBorderWidth,
                                   ),
                                 ),
                                 child: Row(
@@ -228,20 +250,20 @@ class _QuestionCompletionDialogState extends State<QuestionCompletionDialog> {
                                         shape: BoxShape.circle,
                                         border: Border.all(
                                           color: const Color(0xFFFF6B00),
-                                          width: 2,
+                                          width: coinIconBorderWidth,
                                         ),
                                       ),
-                                      child: const Icon(
+                                      child: Icon(
                                         Icons.monetization_on,
-                                        color: Color(0xFFFF6B00),
-                                        size: 24,
+                                        color: const Color(0xFFFF6B00),
+                                        size: coinIconSize,
                                       ),
                                     ),
-                                    const SizedBox(width: 8),
+                                    SizedBox(width: spacingSmall),
                                     Text(
                                       "+${widget.coinsEarned}",
                                       style: GoogleFonts.nunito(
-                                        fontSize: 24,
+                                        fontSize: coinFontSize,
                                         fontWeight: FontWeight.bold,
                                         color: const Color(0xFFFF6B00),
                                       ),
@@ -257,10 +279,10 @@ class _QuestionCompletionDialogState extends State<QuestionCompletionDialog> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: spacingLarge),
                     // Next Question button with 3D effect
                     Container(
-                      height: 60,
+                      height: buttonHeight,
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
                           begin: Alignment.topLeft,
@@ -270,7 +292,7 @@ class _QuestionCompletionDialogState extends State<QuestionCompletionDialog> {
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
                           color: const Color(0xFFFF6B00),
-                          width: 4,
+                          width: buttonBorderWidth,
                         ),
                       ),
                       child: Material(
@@ -285,7 +307,7 @@ class _QuestionCompletionDialogState extends State<QuestionCompletionDialog> {
                             child: Text(
                               "Next Question",
                               style: GoogleFonts.permanentMarker(
-                                fontSize: 20,
+                                fontSize: buttonFontSize,
                                 color: Colors.white,
                                 letterSpacing: 1.2,
                               ),

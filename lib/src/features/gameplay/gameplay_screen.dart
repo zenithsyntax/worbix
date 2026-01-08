@@ -834,9 +834,10 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
 
     final screenSize = MediaQuery.of(context).size;
     final screenWidth = screenSize.width;
+    final scale = screenSize.shortestSide / 375.0;
     final isTablet = screenWidth > 600;
     final isSmallScreen = screenWidth < 360 || screenSize.height < 600;
-    final buttonHeight = isTablet ? 70.0 : (isSmallScreen ? 50.0 : 60.0);
+    final buttonHeight = (isTablet ? 70.0 : (isSmallScreen ? 50.0 : 60.0)) * scale;
 
     final q = state.level!.questions[state.currentQuestionIndex];
 
@@ -1303,16 +1304,16 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                         children: [
                              // Clue Section
                             Container(
-                              margin: const EdgeInsets.all(12),
-                              padding: const EdgeInsets.all(12),
+                              margin: EdgeInsets.all(12 * scale),
+                              padding: EdgeInsets.all(12 * scale),
                               decoration: BoxDecoration(
                                 color: theme.colorScheme.surface,
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(20 * scale),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.05),
-                                    blurRadius: 10,
-                                    offset: const Offset(0, 4),
+                                    blurRadius: 10 * scale,
+                                    offset: Offset(0, 4 * scale),
                                   ),
                                 ],
                               ),
@@ -1323,18 +1324,19 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                     style: TextStyle(
                                       color: theme.colorScheme.secondary,
                                       fontWeight: FontWeight.bold,
+                                      fontSize: 14 * scale,
                                     ),
                                   ),
-                                  const SizedBox(height: 8),
+                                  SizedBox(height: 8 * scale),
                                   Text(
                                     q.question,
                                     style: theme.textTheme.headlineSmall?.copyWith(
-                                      fontSize: isTablet ? 32 : 18, 
+                                      fontSize: 22 * scale, 
                                       color: theme.colorScheme.onSurface,
                                     ),
                                     textAlign: TextAlign.center,
                                   ),
-                                  const SizedBox(height: 12),
+                                  SizedBox(height: 12 * scale),
                                   // Answer Blanks
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -1355,14 +1357,14 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                           filled = true;
                                       }
                                       return Container(
-                                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                                        width: isTablet ? 50 : 32,
-                                        height: isTablet ? 60 : 40,
+                                        margin: EdgeInsets.symmetric(horizontal: 4 * scale),
+                                        width: 32 * scale,
+                                        height: 40 * scale,
                                         alignment: Alignment.center,
                                         decoration: BoxDecoration(
                                           border: Border(
                                             bottom: BorderSide(
-                                              width: 3,
+                                              width: 3 * scale,
                                               color: filled ? const Color(0xFFFF6B00) : Colors.grey.shade300,
                                             ),
                                           ),
@@ -1370,7 +1372,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                         child: Text(
                                           char,
                                           style: TextStyle(
-                                            fontSize: isTablet ? 32 : 20,
+                                            fontSize: 20 * scale,
                                             fontWeight: FontWeight.bold,
                                             color: const Color(0xFFFF6B00),
                                           ),
@@ -1384,11 +1386,11 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
 
                             // Timer Bar
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                              padding: EdgeInsets.symmetric(horizontal: 24.0 * scale),
                               child: LinearProgressIndicator(
                                 value: state.timeLeft / state.level!.timeLimit,
-                                borderRadius: BorderRadius.circular(10),
-                                minHeight: 12,
+                                borderRadius: BorderRadius.circular(10 * scale),
+                                minHeight: 12 * scale,
                                 backgroundColor: Colors.grey.shade200,
                                 color: state.timeLeft < 10
                                     ? Colors.red
@@ -1448,7 +1450,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                              // Center text
                             final horizontalPadding = (constraints.maxWidth - availableSize) / 2;
                             final verticalPadding = (constraints.maxHeight - availableSize) / 2;
-                            final tileSize = (availableSize - (5 * 8)) / 6;
+                             final tileSize = (availableSize - (5 * 8 * scale)) / 6;
 
                             return Padding(
                                padding: EdgeInsets.symmetric(
@@ -1463,7 +1465,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                       painter: SelectionPathPainter(
                                         selectedIndices: state.selectedIndices,
                                         tileSize: tileSize,
-                                        spacing: 8.0,
+                                        spacing: 8.0 * scale,
                                         color: const Color(0xFFFF6B00),
                                       ),
                                     ),
@@ -1471,10 +1473,10 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                   GridView.builder(
                                     physics: const NeverScrollableScrollPhysics(),
                                     itemCount: 36,
-                                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 6,
-                                      crossAxisSpacing: 8,
-                                      mainAxisSpacing: 8,
+                                      crossAxisSpacing: 8 * scale,
+                                      mainAxisSpacing: 8 * scale,
                                     ),
                                     itemBuilder: (context, index) {
                                       return _buildGridTile(index, state, controller, tileSize);
@@ -1496,16 +1498,16 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                 children: [
                   // Clue Section
                   Container(
-                    margin: const EdgeInsets.all(16),
-                    padding: const EdgeInsets.all(16),
+                    margin: EdgeInsets.all(16 * scale),
+                    padding: EdgeInsets.all(16 * scale),
                     decoration: BoxDecoration(
                       color: theme.colorScheme.surface,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(20 * scale),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.05),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
+                          blurRadius: 10 * scale,
+                          offset: Offset(0, 4 * scale),
                         ),
                       ],
                     ),
@@ -1517,20 +1519,19 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                           style: TextStyle(
                             color: theme.colorScheme.secondary,
                             fontWeight: FontWeight.bold,
+                            fontSize: 14 * scale,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8 * scale),
                         Text(
                           q.question,
                           style: theme.textTheme.headlineSmall?.copyWith(
-                            fontSize: isTablet
-                                ? 32
-                                : (isSmallScreen ? 18 : 22),
+                            fontSize: 24 * scale,
                             color: theme.colorScheme.onSurface,
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        const SizedBox(height: 16),
+                        SizedBox(height: 16 * scale),
                         // Answer Blanks with Animation
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -1551,14 +1552,14 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                 filled = true;
                             }
                             return Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 4),
-                              width: isTablet ? 60 : (isSmallScreen ? 32 : 40),
-                              height: isTablet ? 70 : (isSmallScreen ? 40 : 50),
+                              margin: EdgeInsets.symmetric(horizontal: 4 * scale),
+                              width: 40 * scale,
+                              height: 50 * scale,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 border: Border(
                                   bottom: BorderSide(
-                                    width: isSmallScreen ? 2 : 3,
+                                    width: 3 * scale,
                                     color: filled
                                         ? const Color(0xFFFF6B00)
                                         : Colors.grey.shade300,
@@ -1568,9 +1569,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                               child: Text(
                                     char,
                                     style: TextStyle(
-                                      fontSize: isTablet
-                                          ? 40
-                                          : (isSmallScreen ? 20 : 28),
+                                      fontSize: 28 * scale,
                                       fontWeight: FontWeight.bold,
                                       color: const Color(0xFFFF6B00),
                                     ),
@@ -1587,11 +1586,11 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
 
                   // Timer Bar
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    padding: EdgeInsets.symmetric(horizontal: 24.0 * scale),
                     child: LinearProgressIndicator(
                       value: state.timeLeft / state.level!.timeLimit,
-                      borderRadius: BorderRadius.circular(10),
-                      minHeight: 12,
+                      borderRadius: BorderRadius.circular(10 * scale),
+                      minHeight: 12 * scale,
                       backgroundColor: Colors.grey.shade200,
                       color: state.timeLeft < 10
                           ? Colors.red
@@ -1615,7 +1614,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                           final verticalPadding =
                               (constraints.maxHeight - availableSize) / 2;
 
-                          final tileSize = (availableSize - (5 * 8)) / 6;
+                          final tileSize = (availableSize - (5 * 8 * scale)) / 6;
 
                           return Padding(
                             padding: EdgeInsets.symmetric(
@@ -1634,7 +1633,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                   painter: SelectionPathPainter(
                                     selectedIndices: state.selectedIndices,
                                     tileSize: tileSize,
-                                    spacing: 8.0,
+                                    spacing: 8.0 * scale,
                                     color: const Color(0xFFFF6B00),
                                   ),
                                 ),
@@ -1644,10 +1643,10 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: 36,
                                 gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                    SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 6,
-                                      crossAxisSpacing: 8,
-                                      mainAxisSpacing: 8,
+                                      crossAxisSpacing: 8 * scale,
+                                      mainAxisSpacing: 8 * scale,
                                     ),
                                 itemBuilder: (context, index) {
                                    return _buildGridTile(index, state, controller, tileSize);
@@ -1728,8 +1727,7 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
 
         // Determine font size based on screen
         final screenSize = MediaQuery.of(context).size;
-        final isTablet = screenSize.width > 600;
-        final isSmall = screenSize.width < 360 || screenSize.height < 600;
+        final scale = screenSize.shortestSide / 375.0;
 
         return GestureDetector(
           onTap: () => controller.onTileTap(index),
@@ -1738,9 +1736,9 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
             curve: Curves.easeOut,
             decoration: BoxDecoration(
               color: isSelected ? const Color(0xFFFFF8E1) : Colors.white,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(12 * scale),
               border: Border.all(
-                width: 3,
+                width: 3 * scale,
                 color: isSelected ? const Color(0xFFFF6B00) : Colors.grey.shade200,
               ),
               boxShadow: [
@@ -1748,8 +1746,8 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                   color: isSelected
                       ? const Color(0xFFFF6B00).withOpacity(0.4)
                       : Colors.black.withOpacity(0.05),
-                  blurRadius: isSelected ? 8 : 4,
-                  offset: const Offset(0, 4),
+                  blurRadius: (isSelected ? 8 : 4) * scale,
+                  offset: Offset(0, 4 * scale),
                 ),
               ],
             ),
@@ -1775,16 +1773,19 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
     required VoidCallback? onTap,
     bool isLoading = false,
   }) {
+      final screenSize = MediaQuery.of(context).size;
+      final scale = screenSize.shortestSide / 375.0;
+
       return Container(
         height: height,
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20 * scale),
           boxShadow: (onTap == null) ? [] : [
              BoxShadow(
                color: Colors.black.withOpacity(0.2),
-               blurRadius: 8,
-               offset: const Offset(0, 4),
+               blurRadius: 8 * scale,
+               offset: Offset(0, 4 * scale),
              ),
           ],
         ),
@@ -1792,19 +1793,19 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
           color: Colors.transparent,
           child: InkWell(
             onTap: onTap,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(20 * scale),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (isLoading)
-                   const SizedBox(
-                     width: 20, height: 20,
-                     child: CircularProgressIndicator(strokeWidth: 2.5, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
+                   SizedBox(
+                     width: 20 * scale, height: 20 * scale,
+                     child: CircularProgressIndicator(strokeWidth: 2.5 * scale, valueColor: const AlwaysStoppedAnimation<Color>(Colors.white)),
                    )
                 else if (icon != null)
-                   Icon(icon, color: textColor, size: 24),
+                   Icon(icon, color: textColor, size: 24 * scale),
                 
-                if (!isLoading && icon != null) const SizedBox(width: 8),
+                if (!isLoading && icon != null) SizedBox(width: 8 * scale),
                 Text(
                   text,
                   style: GoogleFonts.comicNeue(
@@ -1889,8 +1890,8 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
           end: Alignment.bottomRight,
           colors: [Color(0xFFFFE0B2), Color(0xFFFFCC80)],
         ),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFFFB74D), width: 4),
+        borderRadius: BorderRadius.circular(20 * scale),
+        border: Border.all(color: const Color(0xFFFFB74D), width: 4 * scale),
       ),
       child: Material(
         color: Colors.transparent,
