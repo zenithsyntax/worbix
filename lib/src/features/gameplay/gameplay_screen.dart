@@ -1157,7 +1157,9 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                                                       q.qId ==
                                                                       qId,
                                                                 );
+                                                            debugPrint("Replay: Clicked qId=$qId, found at index=$idx");
                                                             if (idx != -1) {
+                                                              debugPrint("Replay: Jumping to question index $idx");
                                                               ref
                                                                   .read(
                                                                     gameplayControllerProvider
@@ -1166,6 +1168,8 @@ class _GameplayScreenState extends ConsumerState<GameplayScreen> {
                                                                   .jumpToQuestion(
                                                                     idx,
                                                                   );
+                                                            } else {
+                                                              debugPrint("Replay: Error - Could not find question with qId=$qId in level ${state.level!.id}");
                                                             }
                                                           },
                                                           borderRadius:
