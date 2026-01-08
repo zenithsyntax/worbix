@@ -99,6 +99,8 @@ def main():
             old_levels = json.load(f)
             
         new_levels = []
+        current_unlock_cost = 0
+        
         for lvl in old_levels:
             new_qs = []
             for q in lvl['questions']:
@@ -125,9 +127,14 @@ def main():
                     'timeLimit': lvl['timeLimit'],
                     'orientation': '6x6',
                     'gridSize': 36,
+                    'unlockCoins': current_unlock_cost,
                     'questions': new_qs
                 }
                 new_levels.append(new_lvl)
+                
+                # Calculate next level unlock cost
+                level_total_coins = sum(q['coins'] for q in new_qs)
+                current_unlock_cost = current_unlock_cost + (level_total_coins - 10)
                 
         with open('assets/levels.json', 'w', encoding='utf-8') as f:
             json.dump(new_levels, f, indent=2)

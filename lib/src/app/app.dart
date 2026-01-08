@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import '../features/ui/splash_screen.dart';
 
 class WorbixApp extends StatelessWidget {
@@ -13,6 +13,7 @@ class WorbixApp extends StatelessWidget {
       title: 'Worbix',
       theme: ThemeData(
         useMaterial3: true,
+        fontFamily: 'Comic Neue',
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.orange, 
           primary: Colors.orange,
@@ -20,7 +21,8 @@ class WorbixApp extends StatelessWidget {
           tertiary: Colors.greenAccent,
           surface: Colors.orange.shade50,
         ),
-        textTheme: GoogleFonts.comicNeueTextTheme(Theme.of(context).textTheme).apply(
+        textTheme: Theme.of(context).textTheme.apply(
+          fontFamily: 'Comic Neue',
           bodyColor: Colors.brown.shade900,
           displayColor: Colors.deepOrange,
         ),
@@ -31,14 +33,14 @@ class WorbixApp extends StatelessWidget {
             elevation: 4,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            textStyle: GoogleFonts.comicNeue(fontSize: 20, fontWeight: FontWeight.bold),
+            textStyle: const TextStyle(fontFamily: 'Comic Neue', fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ),
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           backgroundColor: Colors.orange,
           centerTitle: true,
-          titleTextStyle: GoogleFonts.comicNeue(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
-          iconTheme: const IconThemeData(color: Colors.white),
+          titleTextStyle: TextStyle(fontFamily: 'Comic Neue', fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
+          iconTheme: IconThemeData(color: Colors.white),
           elevation: 0,
         )
       ),
